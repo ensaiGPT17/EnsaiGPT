@@ -1,4 +1,10 @@
-from src.App.API import run_app
+from src.view.run_view import Run
+
+
+def main():
+    app = Run()
+    app.start()
+
 
 if __name__ == "__main__":
-    app = run_app()
+    main()
