@@ -22,7 +22,7 @@ def test_create_user_success(user_service):
 
 def test_get_user_info_success(user_service):
     # GIVEN
-    user_service.create_user("alice", "mdp")
+    user_service.create_user("alice", "Mot*De*Passe*Alice123")
 
     # WHEN
     user = user_service.get_user_info(1)
