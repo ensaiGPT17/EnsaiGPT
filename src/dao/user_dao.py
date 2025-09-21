@@ -1,15 +1,18 @@
+from src.model.user import User
+
+
 class UserDAO:
     def __init__(self):
         pass
 
-    def get_user(self, id_user):
+    def get_user(self, id_user) -> User:
         pass
 
-    def get_user_by_username(self, username):
+    def get_user_by_username(self, username) -> User:
         """Permet d'avoir l'utilisateur grâce à son nom d'utilisateur"""
         pass
 
-    def add_user(self, id_user: int, username: str, hashed_password: str) -> bool:
+    def add_user(self, user: User) -> bool:
         pass
 
     def get_last_id(self) -> int:
