@@ -13,7 +13,7 @@ class UserService:
 
     def create_user(self, username: str, password: str):
         hashed = hash_password(password, None)
-        id_user = self.user_dao.get_last_id() + 1
+        id_user = self.user_dao.get_last_id() + 1  #id non utilisé
         success = self.user_dao.add_user(id_user, username, hashed)
         if success:
             return {"id_user": id_user, "username": username}
