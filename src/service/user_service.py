@@ -1,15 +1,18 @@
+from typing import Optional
 from src.model.user import User
 from src.dao.user_dao import UserDAO
-from password_service import hash_password
+from src.service.password_service import hash_password
 
 
 class UserService:
     def __init__(self, user_dao: UserDAO):
         self.user_dao = user_dao
 
-    def get_user_info(self, id_user: int) -> dict:
+    def get_user_info(self, id_user: int) -> Optional[dict]:
         """Permet d'avoir les informations de l'utilisateur"""
         user = self.user_dao.get_user(id_user)
+        if user is None:
+            return None
         return {"id_user": user.id_user, "username": user.username}
 
     def create_user(self, username: str, password: str) -> bool:
