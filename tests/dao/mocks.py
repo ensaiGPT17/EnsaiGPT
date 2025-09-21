@@ -34,7 +34,7 @@ class UserDAOMock(UserDAO):
     def get_last_id(self) -> int:
         """
         Donne le plus le dernier id associé à un utilisateur.
-        Retourne 0 si aucun utilisateur existe.
+        Retourne 0 si aucun utilisateur n'existe.
         """
         if len(self.users) == 0:
             return 0
