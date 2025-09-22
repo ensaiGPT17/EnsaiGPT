@@ -1,2 +1,2 @@
-def hash_password(password, salt):
+def hash_password(password, salt=None):
     return password

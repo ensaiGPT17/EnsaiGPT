@@ -13,6 +13,10 @@ class UserDAO:
         """Permet d'avoir l'utilisateur grâce à son nom d'utilisateur"""
         pass
 
+    def username_exists(self, username: str) -> bool:
+        """Permet de savoir si un nom d'utilisateur est deja pris."""
+        pass
+
     def add_user(self, user: User) -> bool:
         """
         Ajoute un utilisateur à la base de données.

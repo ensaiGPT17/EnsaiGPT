@@ -21,13 +21,17 @@ class UserDAOMock(UserDAO):
                 return user
         return None
 
+    def username_exists(self, username: str) -> bool:
+        """Permet de savoir si un nom d'utilisateur est deja pris."""
+        for user in self.users:
+            if username == user.username:
+                return True
+        return False
+
     def add_user(self, user: User) -> bool:
         """
         Ajoute un utilisateur à la base de données.
         """
-        for other in self.users:
-            if other.username == user.username:
-                return False
         self.users.append(user)
         return True
 
