@@ -29,3 +29,7 @@ class UserDAO:
         Retourne 0 si aucun utilisateur existe.
         """
         pass  #ici un SELECT id_user, ORDER BY id_user DESC, LIMIT 1
+
+    def count_users(self) -> int:
+        """Renvoie le nombre d'utilisateurs inscrits."""
+        pass

@@ -44,6 +44,7 @@ def test_create_user_duplicate(user_service):
     user_info = user_service.get_user_info(1)
     assert user_info["id_user"] == 1
     assert user_info["username"] == "Louis"
+    assert user_service.user_dao.count_users() == 1
 
 
 def test_create_two_user_success(user_service):

@@ -43,3 +43,7 @@ class UserDAOMock(UserDAO):
         if len(self.users) == 0:
             return 0
         return max(user.id_user for user in self.users)
+
+    def count_users(self) -> int:
+        """Renvoie le nombre d'utilisateurs inscrits."""
+        return len(self.users)
