@@ -21,6 +21,8 @@ class UserDAO:
         """
         Ajoute un utilisateur à la base de données.
         """
+        #new_id = self.get_max_id() + 1
+        #user.id_user = new_id
         pass
 
     def get_max_id(self) -> int:
