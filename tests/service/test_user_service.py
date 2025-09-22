@@ -7,6 +7,25 @@ from tests.dao.mocks import UserDAOMock
 def user_service():
     return UserService(UserDAOMock())
 
+def test_get_user_info_not_found(user_service):
+    # GIVEN : rien
+
+    # WHEN
+    result = user_service.get_user_info(1)
+
+    # THEN
+    assert result is None
+
+
+def test_get_user_info_by_username_not_found(user_service):
+    # GIVEN : rien
+
+    # WHEN
+    result = user_service.get_user_info_by_username("Inconnu")
+
+    # THEN
+    assert result is None
+
 
 def test_create_user_success(user_service):
     # GIVEN
@@ -18,18 +37,7 @@ def test_create_user_success(user_service):
 
     # THEN
     assert result is True
-
-
-def test_get_user_info_success(user_service):
-    # GIVEN
-    user_service.create_user("alice", "Mot*De*Passe*Alice123")
-
-    # WHEN
-    user = user_service.get_user_info(1)
-
-    # THEN
-    assert user["id_user"] == 1
-    assert user["username"] == "alice"
+    assert user_service.get_user_info_by_username("Louis")["username"] == "Louis"
 
 
 def test_create_user_duplicate(user_service):
@@ -41,10 +49,9 @@ def test_create_user_duplicate(user_service):
 
     # THEN
     assert result is False
-    user_info = user_service.get_user_info(1)
-    assert user_info["id_user"] == 1
-    assert user_info["username"] == "Louis"
-    assert user_service.get_user_info(2) is None
+    user_info = user_service.get_user_info_by_username("Louis")
+    assert user_info is not None
+    assert user_service.count_users() == 1
 
 
 def test_create_two_user_success(user_service):
@@ -56,12 +63,10 @@ def test_create_two_user_success(user_service):
 
     # THEN
     assert result is True
-    first_user_info = user_service.get_user_info(1)
-    second_user_info = user_service.get_user_info(2)
+    first_user_info = user_service.get_user_info_by_username("Louis")
+    second_user_info = user_service.get_user_info_by_username("louis")
     assert first_user_info["username"] == "Louis"
-    assert first_user_info["id_user"] == 1
     assert second_user_info["username"] == "louis"
-    assert second_user_info["id_user"] == 2
 
 
 def test_authenticate_success(user_service):
@@ -80,7 +85,7 @@ def test_authenticate_failure(user_service):
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
 
     # WHEN
-    result1 = user_service.authenticate("louis", "UnMotDePasseSecure*159")
+    result1 = user_service.authenticate("louis", "UnMotDePasseSecure*159")  #lowercase
     result2 = user_service.authenticate("Louis", "mauvais_mdp")
 
     # THEN

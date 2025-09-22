@@ -6,7 +6,7 @@ from src.dao.user_dao import UserDAO
 class UserDAOMock(UserDAO):
     def __init__(self):
         super().__init__()
-        self.users = []  #simule la base SQL
+        self.users = []  #simule la base SQL des utilisateurs
 
     def get_user(self, id_user) -> Optional[User]:
         for user in self.users:
@@ -22,7 +22,7 @@ class UserDAOMock(UserDAO):
         return None
 
     def username_exists(self, username: str) -> bool:
-        """Permet de savoir si un nom d'utilisateur est deja pris."""
+        """Permet de savoir si un certain nom d'utilisateur existe dans la base."""
         for user in self.users:
             if username == user.username:
                 return True
@@ -35,9 +35,9 @@ class UserDAOMock(UserDAO):
         self.users.append(user)
         return True
 
-    def get_last_id(self) -> int:
+    def get_max_id(self) -> int:
         """
-        Donne le plus le dernier id associé à un utilisateur.
+        Donne le plus grand id associé à un utilisateur.
         Retourne 0 si aucun utilisateur n'existe.
         """
         if len(self.users) == 0:
@@ -45,5 +45,5 @@ class UserDAOMock(UserDAO):
         return max(user.id_user for user in self.users)
 
     def count_users(self) -> int:
-        """Renvoie le nombre d'utilisateurs inscrits."""
+        """Renvoie le nombre d'utilisateurs dans la base de données."""
         return len(self.users)

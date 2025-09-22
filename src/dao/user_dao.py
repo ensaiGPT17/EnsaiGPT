@@ -23,13 +23,13 @@ class UserDAO:
         """
         pass
 
-    def get_last_id(self) -> int:
+    def get_max_id(self) -> int:
         """
-        Donne le plus le dernier id associé à un utilisateur.
-        Retourne 0 si aucun utilisateur existe.
+        Donne le plus grand id associé à un utilisateur.
+        Retourne 0 si aucun utilisateur n'existe.
         """
         pass  #ici un SELECT id_user, ORDER BY id_user DESC, LIMIT 1
 
     def count_users(self) -> int:
-        """Renvoie le nombre d'utilisateurs inscrits."""
+        """Renvoie le nombre d'utilisateurs dans la base de données."""
         pass

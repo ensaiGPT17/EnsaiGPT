@@ -15,11 +15,18 @@ class UserService:
             return None
         return {"id_user": user.id_user, "username": user.username}
 
+    def get_user_info_by_username(self, username: str) -> Optional[dict]:
+        """Permet d'avoir les informations de l'utilisateur par son username"""
+        user = self.user_dao.get_user_by_username(username)
+        if user is None:
+            return None
+        return {"id_user": user.id_user, "username": user.username}
+
     def create_user(self, username: str, password: str) -> bool:
         if self.user_dao.username_exists(username):
             return False
         hashed = hash_password(password)
-        id_user = self.user_dao.get_last_id() + 1
+        id_user = self.user_dao.get_max_id() + 1
         user = User(id_user, username, hashed)
         return self.user_dao.add_user(user)
 
@@ -29,3 +36,9 @@ class UserService:
             return False
         hashed = hash_password(password)
         return hashed == user.hashed_password
+
+    def count_users(self):  #surtout utile pour les tests
+        """
+        Renvoie le nombre d'utilisateurs inscrits.
+        """
+        return self.user_dao.count_users()
