@@ -17,7 +17,7 @@ class UserDAO:
         """Permet de savoir si un nom d'utilisateur est deja pris."""
         pass
 
-    def add_user(self, user: User) -> bool:
+    def insert_user(self, user: User) -> bool:
         """
         Ajoute un utilisateur à la base de données.
         """

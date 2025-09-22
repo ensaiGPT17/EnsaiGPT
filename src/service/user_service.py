@@ -27,7 +27,7 @@ class UserService:
             return False
         hashed = hash_password(password)
         user = User(0, username, hashed)
-        return self.user_dao.add_user(user)
+        return self.user_dao.insert_user(user)
 
     def authenticate(self, username: str, password: str) -> bool:
         user = self.user_dao.get_user_by_username(username)

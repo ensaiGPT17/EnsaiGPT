@@ -28,7 +28,7 @@ class UserDAOMock(UserDAO):
                 return True
         return False
 
-    def add_user(self, user: User) -> bool:
+    def insert_user(self, user: User) -> bool:
         new_id = self.get_max_id() + 1
         user.id_user = new_id
         self.users.append(user)
