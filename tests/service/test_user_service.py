@@ -7,6 +7,7 @@ from tests.dao.mocks import UserDAOMock
 def user_service():
     return UserService(UserDAOMock())
 
+
 def test_get_user_info_not_found(user_service):
     # GIVEN : rien
 

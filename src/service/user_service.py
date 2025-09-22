@@ -26,8 +26,7 @@ class UserService:
         if self.user_dao.username_exists(username):
             return False
         hashed = hash_password(password)
-        id_user = self.user_dao.get_max_id() + 1
-        user = User(id_user, username, hashed)
+        user = User(0, username, hashed)
         return self.user_dao.add_user(user)
 
     def authenticate(self, username: str, password: str) -> bool:
