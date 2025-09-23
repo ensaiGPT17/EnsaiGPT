@@ -43,7 +43,7 @@ class UserDAOMock(UserDAO):
                 return True
         return False
 
-    def get_all(self) -> list[User]:
+    def get_all(self):
         """Renvoie la liste des utilisateurs."""
         return self.users
 

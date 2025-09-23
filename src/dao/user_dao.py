@@ -29,7 +29,7 @@ class UserDAO:
         """Modifie un utilisateur de la bdd."""
         pass
 
-    def get_all(self) -> list[User]:
+    def get_all(self):
         """Renvoie la liste des utilisateurs."""
         pass
 
