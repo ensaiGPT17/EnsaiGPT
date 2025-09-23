@@ -6,7 +6,7 @@ from src.dao.user_dao import UserDAO
 class UserDAOMock(UserDAO):
     def __init__(self):
         super().__init__()
-        self.users = []  #simule la base SQL des utilisateurs
+        self.users: list[User] = []  #simule la base SQL des utilisateurs
 
     def get_user(self, id_user) -> Optional[User]:
         for user in self.users:
