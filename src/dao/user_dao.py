@@ -13,16 +13,28 @@ class UserDAO:
         """Permet d'avoir l'utilisateur grâce à son nom d'utilisateur"""
         pass
 
-    def username_exists(self, username: str) -> bool:
-        """Permet de savoir si un nom d'utilisateur est deja pris."""
-        pass
-
     def insert_user(self, user: User) -> bool:
         """
         Ajoute un utilisateur à la base de données.
         """
         #new_id = self.get_max_id() + 1
         #user.id_user = new_id
+        pass
+
+    def delete(self, id_user: int):
+        """Supprime un utilisateur de la bdd."""
+        pass
+
+    def update(self, id_user: int, user_updated: User):
+        """Modifie un utilisateur de la bdd."""
+        pass
+
+    def get_all(self) -> list[User]:
+        """Renvoie la liste des utilisateurs."""
+        pass
+
+    def username_exists(self, username: str) -> bool:
+        """Permet de savoir si un nom d'utilisateur est deja pris."""
         pass
 
     def get_max_id(self) -> int:

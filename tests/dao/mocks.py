@@ -21,18 +21,38 @@ class UserDAOMock(UserDAO):
                 return user
         return None
 
+    def insert_user(self, user: User) -> bool:
+        new_id = self.get_max_id() + 1
+        user.id_user = new_id
+        self.users.append(user)
+        return True
+
+    def delete(self, id_user: int):
+        """Supprime un utilisateur de la bdd."""
+        for i in range(len(self.users)):
+            if self.users[i].id_user == id_user:
+                del self.users[i]
+                return True
+        return False
+
+    def update(self, id_user: int, user_updated: User):
+        """Modifie un utilisateur de la bdd."""
+        for i in range(len(self.users)):
+            if self.users[i].id_user == id_user:
+                self.users[i] = user_updated
+                return True
+        return False
+
+    def get_all(self) -> list[User]:
+        """Renvoie la liste des utilisateurs."""
+        return self.users
+
     def username_exists(self, username: str) -> bool:
         """Permet de savoir si un certain nom d'utilisateur existe dans la base."""
         for user in self.users:
             if username == user.username:
                 return True
         return False
-
-    def insert_user(self, user: User) -> bool:
-        new_id = self.get_max_id() + 1
-        user.id_user = new_id
-        self.users.append(user)
-        return True
 
     def get_max_id(self) -> int:
         """
