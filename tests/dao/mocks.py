@@ -27,7 +27,7 @@ class UserDAOMock(UserDAO):
         self.users.append(user)
         return True
 
-    def delete(self, id_user: int):
+    def delete(self, id_user: int) -> bool:
         """Supprime un utilisateur de la bdd."""
         for i in range(len(self.users)):
             if self.users[i].id_user == id_user:
@@ -35,7 +35,7 @@ class UserDAOMock(UserDAO):
                 return True
         return False
 
-    def update(self, id_user: int, user_updated: User):
+    def update(self, id_user: int, user_updated: User) -> bool :
         """Modifie un utilisateur de la bdd."""
         for i in range(len(self.users)):
             if self.users[i].id_user == id_user:
