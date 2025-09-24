@@ -26,8 +26,10 @@ class UserService:
         if self.user_dao.username_exists(username):
             return False
         hashed = hash_password(password)
-        user = User(0, username, hashed)
-        return self.user_dao.insert_user(user)
+        user = self.user_dao.insert_user(User(0, username, hashed))
+        if user is None:
+            return False
+        return True
 
     def authenticate(self, username: str, password: str) -> bool:
         user = self.user_dao.get_user_by_username(username)
@@ -35,6 +37,9 @@ class UserService:
             return False
         hashed = hash_password(password)
         return hashed == user.hashed_password
+
+    def modify_password(self, username, password, new_password):
+        pass
 
     def count_users(self):  #surtout utile pour les tests
         """

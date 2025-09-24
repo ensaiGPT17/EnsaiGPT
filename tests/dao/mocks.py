@@ -21,11 +21,11 @@ class UserDAOMock(UserDAO):
                 return user
         return None
 
-    def insert_user(self, user: User) -> bool:
+    def insert_user(self, user: User) -> Optional[User]:
         new_id = self.get_max_id() + 1
         user.id_user = new_id
         self.users.append(user)
-        return True
+        return user
 
     def delete(self, id_user: int) -> bool:
         """Supprime un utilisateur de la bdd."""
@@ -35,13 +35,14 @@ class UserDAOMock(UserDAO):
                 return True
         return False
 
-    def update(self, id_user: int, user_updated: User) -> bool :
+    def update(self, id_user: int, user_updated: User) -> Optional[User]:
         """Modifie un utilisateur de la bdd."""
         for i in range(len(self.users)):
             if self.users[i].id_user == id_user:
+                user_updated.id_user = id_user
                 self.users[i] = user_updated
-                return True
-        return False
+                return user_updated
+        return None
 
     def get_all(self):
         """Renvoie la liste des utilisateurs."""
