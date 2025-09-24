@@ -13,7 +13,7 @@ class UserDAO:
         """Permet d'avoir l'utilisateur grâce à son nom d'utilisateur"""
         pass
 
-    def insert_user(self, user: User) -> bool:
+    def insert_user(self, user: User) -> Optional[User]:
         """
         Ajoute un utilisateur à la base de données.
         """
@@ -21,11 +21,11 @@ class UserDAO:
         #user.id_user = new_id
         pass
 
-    def delete(self, id_user: int):
+    def delete(self, id_user: int) -> bool:
         """Supprime un utilisateur de la bdd."""
         pass
 
-    def update(self, id_user: int, user_updated: User):
+    def update(self, id_user: int, user_updated: User) -> Optional[User]:
         """Modifie un utilisateur de la bdd."""
         pass
 
