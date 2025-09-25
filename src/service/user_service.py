@@ -38,8 +38,30 @@ class UserService:
         hashed = hash_password(password)
         return hashed == user.hashed_password
 
-    def modify_password(self, username, password, new_password):
-        pass
+    def modify_password(self, username: str, password: str, new_password: str) -> bool:
+        user = self.user_dao.get_user_by_username(username)
+        if not self.authenticate(username, password):
+            return False
+
+        user.hashed_password = hash_password(new_password)
+        user_updated = self.user_dao.update(user.id_user, user)
+        if user_updated is None:
+            return False
+        return True
+
+    def modify_username(self, username: str, new_username: str) -> bool:
+        user = self.user_dao.get_user_by_username(username)
+        new_username_user = self.user_dao.get_user_by_username(new_username)
+        if user is None:  #mauvais username
+            return False
+        if new_username_user is not None:  #l'autre username est deja pris
+            return False
+
+        user.username = new_username
+        user_updated = self.user_dao.update(user.id_user, user)
+        if user_updated is None:
+            return False
+        return True
 
     def count_users(self):  #surtout utile pour les tests
         """
