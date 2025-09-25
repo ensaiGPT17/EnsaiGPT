@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 class AbstractView(ABC):
     """Modèle de Vue"""
 
-    def __init__(self, message=""):
+    def __init__(self):
         logging.info(type(self).__name__)
 
     def clean_console(self):
