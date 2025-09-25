@@ -94,12 +94,12 @@ def test_authenticate_failure(user_service):
     assert result2 is False
 
 
-def test_modify_password_success(user_service):
+def test_change_password_success(user_service):
     #GIVEN
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
 
     #WHEN
-    result = user_service.modify_password("Louis", "UnMotDePasseSecure*159",
+    result = user_service.change_password("Louis", "UnMotDePasseSecure*159",
                                           "AutreMotDePasseSecure*159")
     result_auth = user_service.authenticate("Louis",  "AutreMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Louis", "UnMotDePasseSecure*159")
@@ -110,14 +110,14 @@ def test_modify_password_success(user_service):
     assert result_wrong_auth is False
 
 
-def test_modify_password_failure(user_service):
+def test_change_password_failure(user_service):
     #GIVEN
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
 
     #WHEN
-    result = user_service.modify_password("Louis", "mauvais_mdp",
+    result = user_service.change_password("Louis", "mauvais_mdp",
                                           "159*AutreMotDePasseSecure")
-    result2 = user_service.modify_password("Alice", "UnMotDePasseSecure*159",
+    result2 = user_service.change_password("Alice", "UnMotDePasseSecure*159",
                                            "159*AutreMotDePasseSecure")
     result_auth = user_service.authenticate("Louis",  "UnMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Louis", "159*AutreMotDePasseSecure")
@@ -129,12 +129,12 @@ def test_modify_password_failure(user_service):
     assert result2 is False
 
 
-def test_modify_username_success(user_service):
+def test_change_username_success(user_service):
     #GIVEN
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
 
     #WHEN
-    result = user_service.modify_username("Louis", "Bob")
+    result = user_service.change_username("Louis", "Bob")
     result_auth = user_service.authenticate("Bob",  "UnMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Louis", "UnMotDePasseSecure*159")
 
@@ -150,8 +150,8 @@ def test_modify_username_failure(user_service):
     user_service.create_user("Alice", "A159*MotDePasseSecure")
 
     #WHEN
-    result = user_service.modify_username("Louis", "Alice")
-    result2 = user_service.modify_username("Bob", "Bob2")
+    result = user_service.change_username("Louis", "Alice")
+    result2 = user_service.change_username("Bob", "Bob2")
     result_auth = user_service.authenticate("Louis",  "UnMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Bob2", "159*AutreMotDePasseSecure")
 

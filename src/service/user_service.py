@@ -38,7 +38,7 @@ class UserService:
         hashed = hash_password(password)
         return hashed == user.hashed_password
 
-    def modify_password(self, username: str, password: str, new_password: str) -> bool:
+    def change_password(self, username: str, password: str, new_password: str) -> bool:
         user = self.user_dao.get_user_by_username(username)
         if not self.authenticate(username, password):
             return False
@@ -49,7 +49,7 @@ class UserService:
             return False
         return True
 
-    def modify_username(self, username: str, new_username: str) -> bool:
+    def change_username(self, username: str, new_username: str) -> bool:
         user = self.user_dao.get_user_by_username(username)
         new_username_user = self.user_dao.get_user_by_username(new_username)
         if user is None:  #mauvais username
