@@ -8,19 +8,13 @@ class UserService:
     def __init__(self, user_dao: UserDAO):
         self.user_dao = user_dao
 
-    def get_user_info(self, id_user: int) -> Optional[dict]:
-        """Permet d'avoir les informations de l'utilisateur"""
-        user = self.user_dao.get_user(id_user)
-        if user is None:
-            return None
-        return {"id_user": user.id_user, "username": user.username}
+    def get_user(self, id_user: int) -> Optional[User]:
+        """Permet d'avoir l'utilisateur par son id"""
+        return self.user_dao.get_user(id_user)
 
-    def get_user_info_by_username(self, username: str) -> Optional[dict]:
+    def get_user_by_username(self, username: str) -> Optional[User]:
         """Permet d'avoir les informations de l'utilisateur par son username"""
-        user = self.user_dao.get_user_by_username(username)
-        if user is None:
-            return None
-        return {"id_user": user.id_user, "username": user.username}
+        return self.user_dao.get_user_by_username(username)
 
     def create_user(self, username: str, password: str) -> bool:
         if self.user_dao.username_exists(username):
