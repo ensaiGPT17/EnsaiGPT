@@ -8,21 +8,21 @@ def user_service():
     return UserService(UserDAOMock())
 
 
-def test_get_user_info_not_found(user_service):
+def test_get_user_not_found(user_service):
     # GIVEN : rien
 
     # WHEN
-    result = user_service.get_user_info(1)
+    result = user_service.get_user(1)
 
     # THEN
     assert result is None
 
 
-def test_get_user_info_by_username_not_found(user_service):
+def test_get_user_by_username_not_found(user_service):
     # GIVEN : rien
 
     # WHEN
-    result = user_service.get_user_info_by_username("Inconnu")
+    result = user_service.get_user_by_username("Inconnu")
 
     # THEN
     assert result is None
@@ -38,7 +38,7 @@ def test_create_user_success(user_service):
 
     # THEN
     assert result is True
-    assert user_service.get_user_info_by_username("Louis")["username"] == "Louis"
+    assert user_service.get_user_by_username("Louis") is not None
 
 
 def test_create_user_duplicate(user_service):
@@ -50,8 +50,8 @@ def test_create_user_duplicate(user_service):
 
     # THEN
     assert result is False
-    user_info = user_service.get_user_info_by_username("Louis")
-    assert user_info is not None
+    user = user_service.get_user_by_username("Louis")
+    assert user is not None
     assert user_service.count_users() == 1
 
 
@@ -64,10 +64,10 @@ def test_create_two_user_success(user_service):
 
     # THEN
     assert result is True
-    first_user_info = user_service.get_user_info_by_username("Louis")
-    second_user_info = user_service.get_user_info_by_username("louis")
-    assert first_user_info["username"] == "Louis"
-    assert second_user_info["username"] == "louis"
+    first_user = user_service.get_user_by_username("Louis")
+    second_user = user_service.get_user_by_username("louis")
+    assert first_user.username == "Louis"
+    assert second_user.username == "louis"
 
 
 def test_authenticate_success(user_service):
