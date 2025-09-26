@@ -4,6 +4,7 @@ from src.dao.user_dao import UserDAO
 from src.view.abstract_view import AbstractView
 from tests.dao.mocks import UserDAOMock
 from src.view.home_view import HomeView
+from getpass import getpass
 
 
 class Run(AbstractView):
@@ -37,7 +38,7 @@ class Run(AbstractView):
 
     def handle_login(self):
         username = input("Nom d'utilisateur: ")
-        password = input("Mot de passe: ")
+        password = getpass("Mot de passe: ")
         if self.user_controller.login(username, password):
             self.display(f"Connexion réussie, bienvenue {username} !")
             home = HomeView(username)
@@ -46,9 +47,11 @@ class Run(AbstractView):
             self.display("Nom d'utilisateur ou mot de passe incorrect.")
 
     def handle_register(self):
-        username = input("Nom d'utilisateur: ")
-        password = input("Mot de passe: ")
-        if self.user_controller.register(username, password):
+        username = input("Nom d'utilisateur : ")
+        password = getpass("Mot de passe : ")
+        result = self.user_controller.register(username, password)
+
+        if result.get("success"):
             self.display(f"Utilisateur {username} créé avec succès !")
         else:
-            print("Erreur")
+            self.display(f"Erreur : {result.get('error')}")
