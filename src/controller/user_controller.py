@@ -14,19 +14,35 @@ class UserController:
         return self.user_service.authenticate(username, password)
 
     def register(self, username: str, password: str) -> dict:
-        if not password_is_secure(password):
+        try:
+            success = self.user_service.create_user(username, password)
+            if success:
+                return {"success": True, "message": "Utilisateur créé."}
+            return {"success": False, "error": "L'utilisateur n'a pas été créé."}
+        except ValueError as e:
+            return {"success": False, "error": str(e)}
+
+    def change_password(self, username: str, old_password: str, old_password_confirm,
+                        new_password: str) -> dict:
+        if old_password != old_password_confirm:
             return {"success": False,
-                    "error": "Le mot de passe doit [être sécurisé]."}
+                    "error": "Les mots de passe actuels ne correspondent pas."}
 
-        success = self.user_service.create_user(username, password)
-        if success:
-            return {"success": True, "message": "Utilisateur créé."}
-        else:
-            return {"success": False, "error": "Ce nom d'utilisateur est déjà pris."}
+        try:
+            success = self.user_service.change_password(username, old_password,
+                                                        new_password)
+            if success:
+                return {"success": True, "message": "Mot de passe mis à jour."}
+            return {"success": False, "error": "Impossible de changer le mot de passe."}
+        except ValueError as e:
+            return {"success": False, "error": str(e)}
 
-    def change_password(self, username: str, old_password: str, new_password: str) -> \
-            bool:
-        return self.user_service.change_password(username, old_password, new_password)
-
-    def change_username(self, username: str, new_username: str) -> bool:
-        return self.user_service.change_username(username, new_username)
+    def change_username(self, username: str, new_username: str) -> dict:
+        try:
+            success = self.user_service.change_username(username, new_username)
+            if success:
+                return {"success": True, "message": "Nom d'utilisateur mis à jour."}
+            return {"success": False, "error": "Impossible de changer le nom "
+                                               "d'utilisateur."}
+        except ValueError as e:
+            return {"success": False, "error": str(e)}

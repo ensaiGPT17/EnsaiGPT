@@ -45,14 +45,26 @@ def test_create_user_duplicate(user_service):
     # GIVEN
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
 
-    # WHEN
-    result = user_service.create_user("Louis", "UnAutreMotDePasseSecure*159")
+    # WHEN / THEN
+    with pytest.raises(ValueError, match="Ce nom d'utilisateur est déjà pris"):
+        user_service.create_user("Louis", "UnAutreMotDePasseSecure*159")
 
     # THEN
-    assert result is False
     user = user_service.get_user_by_username("Louis")
     assert user is not None
     assert user_service.count_users() == 1
+
+
+def test_create_user_not_secure_password(user_service):
+    # GIVEN : nothing
+
+    #WHEN/THEN
+    with pytest.raises(ValueError, match="Le mot de passe n'est pas assez sécurisé."):
+        user_service.create_user("Louis", "mdp")
+    # THEN
+    user = user_service.get_user_by_username("Louis")
+    assert user is None
+    assert user_service.count_users() == 0
 
 
 def test_create_two_user_success(user_service):
@@ -114,19 +126,24 @@ def test_change_password_failure(user_service):
     #GIVEN
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
 
+    #WHEN/THEN
+    with pytest.raises(ValueError, match="Mot de passe incorrect."):
+        user_service.change_password("Louis", "mauvais_mdp",
+                                     "159*AutreMotDePasseSecure")
+    #WHEN/THEN
+    with pytest.raises(ValueError, match="Le mot de passe n'est pas assez sécurisé."):
+        user_service.change_password("Louis", "UnMotDePasseSecure*159", "mdp")
+
     #WHEN
-    result = user_service.change_password("Louis", "mauvais_mdp",
+    result = user_service.change_password("Alice", "UnMotDePasseSecure*159",
                                           "159*AutreMotDePasseSecure")
-    result2 = user_service.change_password("Alice", "UnMotDePasseSecure*159",
-                                           "159*AutreMotDePasseSecure")
-    result_auth = user_service.authenticate("Louis",  "UnMotDePasseSecure*159")
+    result_auth = user_service.authenticate("Louis", "UnMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Louis", "159*AutreMotDePasseSecure")
 
     #THEN
     assert result is False
     assert result_auth is True
     assert result_wrong_auth is False
-    assert result2 is False
 
 
 def test_change_username_success(user_service):
@@ -144,19 +161,20 @@ def test_change_username_success(user_service):
     assert result_wrong_auth is False
 
 
-def test_modify_username_failure(user_service):
+def test_change_username_failure(user_service):
     #GIVEN
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
     user_service.create_user("Alice", "A159*MotDePasseSecure")
 
     #WHEN
-    result = user_service.change_username("Louis", "Alice")
+
+    with pytest.raises(ValueError, match="Le nom d'utilisateur Alice est déjà pris."):
+        user_service.change_username("Louis", "Alice")
     result2 = user_service.change_username("Bob", "Bob2")
     result_auth = user_service.authenticate("Louis",  "UnMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Bob2", "159*AutreMotDePasseSecure")
 
     #THEN
-    assert result is False
     assert result_auth is True
     assert result_wrong_auth is False
     assert result2 is False
