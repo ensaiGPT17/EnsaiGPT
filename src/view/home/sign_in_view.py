@@ -2,7 +2,7 @@ from abstract_view import VueAbstraite
 # from InquirerPy import inquirer
 
 
-class VueConnexion(VueAbstraite):
+class SignInView(VueAbstraite):
     def __init__(self, message):
         super().__init__(message)
 

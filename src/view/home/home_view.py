@@ -1,8 +1,8 @@
-from abstract_view import VueAbstraite
+from abstract_view import AbstractView
 from InquirerPy import inquirer
 
 
-class VueAcceuil(VueAbstraite):
+class HomeView(AbstractView):
     def __init__(self, message):
         super().__init__(message)
 
@@ -24,10 +24,10 @@ class VueAcceuil(VueAbstraite):
 
         match choix:
             case "Se connecter":
-                from view.accueil.connexion_view import VueConnexion
-                return VueConnexion("Connexion à l'application")
+                from view.home.sign_in_view import SignInView
+                return SignInView("Connexion à l'application")
             case "Creer un compte":
-                from view.accueil.inscription_view import VueInscription
-                return VueInscription("Création de compte joueur")
+                from view.home.sign_up_view import SignUpView
+                return SignUpView("Création de compte joueur")
             case "Quitter":
                 print("Vous avez cliqué sur: [Quitter]")

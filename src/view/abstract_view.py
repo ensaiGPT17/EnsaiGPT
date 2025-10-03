@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class VueAbstraite(ABC):
+class AbstractView(ABC):
     """Modèle de Vue"""
 
     def __init__(self, message=""):
