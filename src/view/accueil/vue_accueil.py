@@ -24,10 +24,10 @@ class VueAcceuil(VueAbstraite):
 
         match choix:
             case "Se connecter":
-                from view_inq.accueil.connexion_view import VueConnexion
+                from view.accueil.connexion_view import VueConnexion
                 return VueConnexion("Connexion à l'application")
             case "Creer un compte":
-                from view_inq.accueil.inscription_view import VueInscription
+                from view.accueil.inscription_view import VueInscription
                 return VueInscription("Création de compte joueur")
             case "Quitter":
                 print("Vous avez cliqué sur: [Quitter]")
