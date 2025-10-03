@@ -51,7 +51,8 @@ class UserService:
 
         return ResponseService(*self.AUTH_SUCCESS)
 
-    def change_password(self, username: str, password: str, new_password: str) -> ResponseService:
+    def change_password(self, username: str, password: str, new_password: str) -> \
+            ResponseService:
         if not password_is_secure(new_password):
             return ResponseService(*self.PASSWORD_WEAK)
 
