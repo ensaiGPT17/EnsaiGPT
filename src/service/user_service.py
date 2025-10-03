@@ -6,7 +6,6 @@ from src.service.response_service import ResponseService
 
 
 class UserService:
-    # --- Constantes avec code et message ---
     USER_CREATED = (201, "Utilisateur créé avec succès")
     PASSWORD_WEAK = (400, "Mot de passe trop faible")
     USERNAME_EXISTS = (409, "Nom d'utilisateur déjà utilisé")
@@ -28,7 +27,6 @@ class UserService:
     def get_user_by_username(self, username: str) -> Optional[User]:
         return self.user_dao.get_user_by_username(username)
 
-    # ------------------- Création -------------------
     def create_user(self, username: str, password: str) -> ResponseService:
         if self.user_dao.username_exists(username):
             return ResponseService(*self.USERNAME_EXISTS)
@@ -42,7 +40,6 @@ class UserService:
 
         return ResponseService(*self.USER_CREATED)
 
-    # ------------------- Authentification -------------------
     def authenticate(self, username: str, password: str) -> ResponseService:
         user = self.user_dao.get_user_by_username(username)
         if user is None:
@@ -54,7 +51,6 @@ class UserService:
 
         return ResponseService(*self.AUTH_SUCCESS)
 
-    # ------------------- Changement de mot de passe -------------------
     def change_password(self, username: str, password: str, new_password: str) -> ResponseService:
         if not password_is_secure(new_password):
             return ResponseService(*self.PASSWORD_WEAK)
@@ -74,7 +70,6 @@ class UserService:
 
         return ResponseService(*self.PASSWORD_CHANGE_SUCCESS)
 
-    # ------------------- Changement de nom d'utilisateur -------------------
     def change_username(self, username: str, new_username: str) -> ResponseService:
         user = self.user_dao.get_user_by_username(username)
         if user is None:
@@ -91,6 +86,5 @@ class UserService:
 
         return ResponseService(*self.USERNAME_CHANGE_SUCCESS)
 
-    # ------------------- Compteur -------------------
     def count_users(self) -> int:
         return self.user_dao.count_users()
