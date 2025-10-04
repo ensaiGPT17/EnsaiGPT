@@ -1,8 +1,8 @@
-from abstract_view import AbstractView
+from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from view.session import Session
 from service.user_service import UserService
-from model.user import USer
+from model.user import User
 
 
 class SignInView(AbstractView):
@@ -13,7 +13,7 @@ class SignInView(AbstractView):
     def choisir_menu(self):
         """Vue de Connexion (saisie de pseudo et mdp)"""
 
-        print("\n" + "-" * 50 + f"\n{self.message}\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 50 + f"\nConnectez vous\n" + "-" * 50 + "\n")
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         password = inquirer.secret(message="Mot de passe :").execute()
 

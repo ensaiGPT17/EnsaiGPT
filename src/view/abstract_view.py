@@ -16,7 +16,7 @@ class AbstractView(ABC):
         """Echappe un grand espace dans le terminal pour simuler
         le changement de page de l'application"""
         self.nettoyer_console()
-        print(self.message)
+        print(self.message + "BLA BLA")
         self.choisir_menu()
         print()
 

@@ -10,7 +10,7 @@ class SignUpView(AbstractView):
     def choisir_menu(self):
         """Vue d'inscription (saisie de pseudo et mdp)"""
 
-        print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 50 + "\nInscrivez vous\n" + "-" * 50 + "\n")
         username = inquirer.text(message="Nom d'utilisateur :").execute()
 
         res_username_valide = UserService().is_username_available(username)
