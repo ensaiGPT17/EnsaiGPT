@@ -3,7 +3,7 @@ import logging
 import dotenv
 
 #from utils.log_init import initialiser_logs
-from view.home.HomeView import HomeView
+from view.home.home_view import HomeView
 
 if __name__ == "__main__":
     # On charge les variables d'envionnement
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     current_view = HomeView("Bienvenue")
     nb_erreurs = 0
 
-    while vue_courante:
+    while current_view:
         if nb_erreurs > 100:
             print("Le programme recense trop d'erreurs et va s'arrêter")
             break
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         except Exception as e:
             #logging.error(f"{type(e).__name__} : {e}", exc_info=True)
             nb_erreurs += 1
-            vue_courante = AccueilVue(
+            current_view = HomeView(
                 "Une erreur est survenue, retour au menu principal.\n"
                 "Consultez les logs pour plus d'informations."
             )

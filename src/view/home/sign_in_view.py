@@ -17,6 +17,7 @@ class SignInView(AbstractView):
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         password = inquirer.secret(message="Mot de passe :").execute()
 
+
         res_user_auth = UserService().authenticate(username, password)
 
         # Si le joueur a été trouvé à partir des ses identifiants de connexion
