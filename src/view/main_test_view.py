@@ -1,4 +1,4 @@
-from home.home_view import HomeView
+from src.view.home.home_view import HomeView
 # from vue_connexxion import VueConnexion
 
 vue_accueil = HomeView("Bienvenu!")

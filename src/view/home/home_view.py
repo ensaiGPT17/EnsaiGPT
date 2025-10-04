@@ -1,4 +1,4 @@
-from abstract_view import AbstractView
+from src.view.abstract_view import AbstractView
 from InquirerPy import inquirer
 
 
@@ -24,10 +24,10 @@ class HomeView(AbstractView):
 
         match choix:
             case "Se connecter":
-                from sign_in_view import SignInView
+                from src.view.home.sign_in_view import SignInView
                 return SignInView("Connexion à l'application")
             case "Creer un compte":
-                from sign_up_view import SignUpView
+                from src.view.home.sign_up_view import SignUpView
                 return SignUpView("Création de compte joueur")
             case "Quitter":
                 print("Vous avez cliqué sur: [Quitter]")
