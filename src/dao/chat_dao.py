@@ -1,7 +1,5 @@
 from typing import Optional
 from model.chat import Chat
-from datetime import datetime
-
 
 class ChatDAO:
     def __init__(self):
@@ -29,10 +27,4 @@ class ChatDAO:
         pass
 
     def count_chats(self) -> int:
-        pass
-
-    def search_by_title(self, id_user: int ,search_title: str):
-        pass
-
-    def search_by_date(self, id_user: int, date: datetime):
         pass

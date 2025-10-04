@@ -1,4 +1,5 @@
 from model.chat import Chat
+from dao.chat_dao import ChatDAO
 
 
 class ChatService:
