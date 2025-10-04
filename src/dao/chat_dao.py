@@ -1,6 +1,7 @@
 from typing import Optional
 from model.chat import Chat
 
+
 class ChatDAO:
     def __init__(self):
         pass
