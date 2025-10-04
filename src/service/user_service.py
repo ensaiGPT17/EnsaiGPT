@@ -29,7 +29,7 @@ class UserService:
     def is_username_available(self, username: str) -> ResponseService:
         """
         Vérifie si le nom d'utilisateur est disponible.
-        Retourne ResponseService avec status 200 si disponible, sinon 409.
+        Retourne ResponseService avec code 200 si disponible, sinon 409.
         """
         if self.user_dao.username_exists(username):
             return ResponseService(*self.USERNAME_EXISTS)
@@ -38,7 +38,7 @@ class UserService:
     def is_password_secure(self, password: str) -> ResponseService:
         """
         Vérifie si le mot de passe est sécurisé.
-        Retourne ResponseService avec status 200 si sécurisé, sinon 400.
+        Retourne ResponseService avec code 200 si sécurisé, sinon 400.
         """
         if not password_is_secure(password):
             return ResponseService(*self.PASSWORD_WEAK)
