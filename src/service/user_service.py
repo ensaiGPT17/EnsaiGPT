@@ -1,8 +1,8 @@
 from typing import Optional
-from src.model.user import User
-from src.dao.user_dao import UserDAO
-from src.service.password_service import hash_password, password_is_secure
-from src.service.response_service import ResponseService
+from model.user import User
+from dao.user_dao import UserDAO
+from service.password_service import hash_password, password_is_secure
+from service.response_service import ResponseService
 
 
 class UserService:

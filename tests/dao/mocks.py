@@ -1,6 +1,6 @@
 from typing import Optional
-from src.model.user import User
-from src.dao.user_dao import UserDAO
+from model.user import User
+from dao.user_dao import UserDAO
 
 
 class UserDAOMock(UserDAO):

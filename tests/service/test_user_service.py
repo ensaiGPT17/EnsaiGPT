@@ -1,5 +1,5 @@
 import pytest
-from src.service.user_service import UserService
+from service.user_service import UserService
 from tests.dao.mocks import UserDAOMock
 
 

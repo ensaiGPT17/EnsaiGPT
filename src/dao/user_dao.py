@@ -1,5 +1,5 @@
 from typing import Optional
-from src.model.user import User
+from model.user import User
 
 
 class UserDAO:
