@@ -6,7 +6,6 @@ from service.response_service import ResponseService
 
 
 class UserService:
-    USER_CREATED = (201, "Utilisateur créé avec succès")
     PASSWORD_WEAK = (400, "Mot de passe trop faible")
     USERNAME_EXISTS = (409, "Nom d'utilisateur déjà utilisé")
     CREATION_ERROR = (500, "Erreur interne lors de la création de l'utilisateur")
@@ -27,6 +26,24 @@ class UserService:
     def get_user_by_username(self, username: str) -> Optional[User]:
         return self.user_dao.get_user_by_username(username)
 
+    def is_username_available(self, username: str) -> ResponseService:
+        """
+        Vérifie si le nom d'utilisateur est disponible.
+        Retourne ResponseService avec status 200 si disponible, sinon 409.
+        """
+        if self.user_dao.username_exists(username):
+            return ResponseService(*self.USERNAME_EXISTS)
+        return ResponseService(200, "Nom d'utilisateur disponible")
+
+    def is_password_secure(self, password: str) -> ResponseService:
+        """
+        Vérifie si le mot de passe est sécurisé.
+        Retourne ResponseService avec status 200 si sécurisé, sinon 400.
+        """
+        if not password_is_secure(password):
+            return ResponseService(*self.PASSWORD_WEAK)
+        return ResponseService(200, "Mot de passe sécurisé")
+
     def create_user(self, username: str, password: str) -> ResponseService:
         if self.user_dao.username_exists(username):
             return ResponseService(*self.USERNAME_EXISTS)
@@ -38,7 +55,7 @@ class UserService:
         if user is None:
             return ResponseService(*self.CREATION_ERROR)
 
-        return ResponseService(*self.USER_CREATED)
+        return ResponseService(201, "Utilisateur créé avec succès")
 
     def authenticate(self, username: str, password: str) -> ResponseService:
         user = self.user_dao.get_user_by_username(username)
