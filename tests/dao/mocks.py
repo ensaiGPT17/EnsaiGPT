@@ -21,7 +21,7 @@ class UserDAOMock(UserDAO):
                 return user
         return None
 
-    def insert_user(self, user: User) -> Optional[User]:
+    def insert(self, user: User) -> Optional[User]:
         new_id = self.get_max_id() + 1
         user.id_user = new_id
         self.users.append(user)

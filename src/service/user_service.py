@@ -34,7 +34,7 @@ class UserService:
             return ResponseService(*self.PASSWORD_WEAK)
 
         hashed = hash_password(password)
-        user = self.user_dao.insert_user(User(0, username, hashed))
+        user = self.user_dao.insert(User(0, username, hashed))
         if user is None:
             return ResponseService(*self.CREATION_ERROR)
 

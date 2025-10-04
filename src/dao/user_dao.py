@@ -13,7 +13,7 @@ class UserDAO:
         """Permet d'avoir l'utilisateur grâce à son nom d'utilisateur"""
         pass
 
-    def insert_user(self, user: User) -> Optional[User]:
+    def insert(self, user: User) -> Optional[User]:
         """
         Ajoute un utilisateur à la base de données.
         """
