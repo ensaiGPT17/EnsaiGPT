@@ -24,7 +24,7 @@ class ChatDAO:
     def get_max_id(self) -> int:
         pass
 
-    def list_chats_user(self, id_user):
+    def list_chats_id_user(self, id_user):
         pass
 
     def count_chats(self) -> int:
