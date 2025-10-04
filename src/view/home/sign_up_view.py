@@ -1,14 +1,16 @@
-from abstract_view import AbstractView
+from view.abstract_view import AbstractView
+from service.user_service import UserService
 from InquirerPy import inquirer
-from user_service import UserService
-
+from model.user import User
 
 class SignUpView(AbstractView):
     def __init__(self, message):
         super().__init__(message)
 
     def choisir_menu(self):
-    """Vue d'inscription (saisie de pseudo et mdp)"""
+        """Vue d'inscription (saisie de pseudo et mdp)"""
+
+        print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
         username = inquirer.text(message="Nom d'utilisateur :").execute()
 
         res_username_valide = UserService().is_username_available(username)
@@ -16,7 +18,7 @@ class SignUpView(AbstractView):
             from home.home_view import HomeView
             return HomeView(f"Le pseudo {pseudo} est déjà utilisé.")
 
-        mdp = inquirer.secret(
+        password = inquirer.secret(
             message="Mot de passe :",
             validate=PasswordValidator(
                 length=12,
@@ -26,18 +28,15 @@ class SignUpView(AbstractView):
             ),
         ).execute()
 
-        res_user_creation = UserService().create_user(username, )
+        res_user_creation = UserService().create_user(username, password)
 
-        # Si le joueur a été trouvé à partir des ses identifiants de connexion
         if res_user_creation.code == 200 :
-            message = f"Vous êtes connecté sous le pseudo {user.username}"
-            Session().connexion(joueur)
+            message = (
+                f"Votre compte {user.username} a été créé. Vous pouvez maintenant vous connecter."
+            )
+        else:
+            message = "Erreur inconnue"
 
-            from userview.principal_menu_view import PrincipalMenuView
-
-            return PrincipalMenuView(message)
-
-        message = "Erreur inconnue"
-        from view.home.home_view import HomeView
+        from view.home import HomeView
 
         return HomeView(message)

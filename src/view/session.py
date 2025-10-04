@@ -12,17 +12,17 @@ class Session(metaclass=Singleton):
 
     def __init__(self):
         """Création de la session"""
-        self.user = None
+        self.id_user = None
         self.connexion_date = None
 
     def connexion(self, joueur):
         """Enregistement des données en session"""
-        self.user = user
+        self.id_user = user
         self.connexion_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     def deconnexion(self):
         """Suppression des données de la session"""
-        self.user = None
+        self.id_user = None
         self.connexion_date = None
 
     def afficher(self) -> str:
