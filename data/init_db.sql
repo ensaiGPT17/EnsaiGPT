@@ -16,14 +16,14 @@ CREATE TABLE ensaiGPT.user (
 -- Conversation
 --------------------------------------------------------------
 
-DROP TABLE IF EXISTS ensaiGPT.conversation CASCADE ;
-CREATE TABLE ensaiGPT.conversation (
-    id_conversation serial PRIMARY KEY,
+DROP TABLE IF EXISTS ensaiGPT.chat CASCADE ;
+CREATE TABLE ensaiGPT.chat (
+    id_chat serial PRIMARY KEY,
     id_user integer REFERENCES ensaiGPT.user(id_user),
     title text,
-    date_first_message date,
-    date_last_message date,
-    max_token integer,
+    date_start date,
+    last_date date,
+    max_tokens integer,
     top_p numeric,
     temperature numeric
 );
@@ -35,7 +35,7 @@ CREATE TABLE ensaiGPT.conversation (
 DROP TABLE IF EXISTS ensaiGPT.message CASCADE ;
 CREATE TABLE ensaiGPT.message (
     id_message serial PRIMARY KEY,
-    id_conversation integer REFERENCES ensaiGPT.conversation(id_conversation),
+    id_chat integer REFERENCES ensaiGPT.chat(id_chat),
     date_sending date,
     role_author text, 
     content text
