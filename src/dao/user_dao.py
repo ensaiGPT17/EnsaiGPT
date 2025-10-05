@@ -1,8 +1,9 @@
 from typing import Optional
 from model.user import User
+from dao.db_connection import DBConnection
+from utils.singleton import Singleton
 
-
-class UserDAO:
+class UserDAO (metaclass = Singleton):
     def __init__(self):
         pass
 

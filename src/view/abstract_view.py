@@ -13,14 +13,13 @@ class AbstractView(ABC):
             print("")
 
     def afficher(self) -> None:
-        """Echappe un grand espace dans le terminal pour simuler
-        le changement de page de l'application"""
+        """Affiche le message / en-tête. NE PAS appeler choisir_menu ici."""
         self.nettoyer_console()
-        print(self.message)
-        self.choisir_menu()
+        if self.message:
+            print(self.message)
         print()
 
     @abstractmethod
     def choisir_menu(self):
         """Choix du menu suivant de l'utilisateur"""
-        pass
+        raise NotImplementedError

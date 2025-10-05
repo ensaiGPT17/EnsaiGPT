@@ -1,39 +1,45 @@
-from abstract_view import AbstractView
+# view/userviews/principal_menu_view.py
+from view.abstract_view import AbstractView
+from InquirerPy import inquirer
 from view.session import Session
 
 class PrincipalMenuView(AbstractView):
-    def __init__(self, message):
-            super().__init__(message)
+    def __init__(self, message: str = ""):
+        super().__init__(message)
 
     def choisir_menu(self):
-
-        """Menu de l'utilisateur
-
-        Return
-        ------
-        view
-            Retourne la vue choisie par l'utilisateur dans le terminal
-        """
-
+        user = Session().user
+        username = getattr(user, "username", "utilisateur")
         print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
         choix = inquirer.select(
-            message=f"Que voulez-vous faire {Session().user.username}\n",
+            message=f"Que voulez-vous faire {username} ?",
             choices=[
-                "Démarrer une conversation", 
-                "Historique de conversation", 
-                "Se déconnecter", 
-                "Supprimer mon compte"
-                ],
+                "Démarrer une conversation",
+                "Historique de conversation",
+                "Se déconnecter",
+                "Supprimer mon compte",
+            ],
         ).execute()
 
-        match choix:
-            case "Démarrer une conversation":
-                # from view.home.sign_in_view import SignInView
-                # return SignInView("Connexion à l'application")
-                pass
-            case "Historique de conversation":
-                pass
-            case "Se déconnecter":
-                pass
-            case "Supprimer mon compte"
-                pass
+        if choix == "Démarrer une conversation":
+            print("Fonctionnalité non implémentée")
+            return self
+        elif choix == "Historique de conversation":
+            print("Fonctionnalité non implémentée")
+            return self
+        elif choix == "Se déconnecter":
+            Session().user = None
+            from view.home.home_view import HomeView
+            return HomeView("Vous avez été déconnecté.")
+        elif choix == "Supprimer mon compte":
+            # exemple : déléguer au service utilisateur
+            from service.user_service import UserService
+            res = UserService().delete_account(user)
+            status = res.code
+            if status == 200:
+                Session().user = None
+                from view.home.home_view import HomeView
+                return HomeView("Votre compte a été supprimé.")
+            else:
+                print("Impossible de supprimer le compte.")
+                return self

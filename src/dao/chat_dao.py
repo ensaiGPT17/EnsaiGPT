@@ -1,8 +1,9 @@
 from typing import Optional
 from model.chat import Chat
+from dao.db_connection import DBConnection
+from utils.singleton import Singleton
 
-
-class ChatDAO:
+class ChatDAO(metaclass = Singleton):
     def __init__(self):
         pass
 

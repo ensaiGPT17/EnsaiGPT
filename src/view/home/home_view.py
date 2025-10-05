@@ -30,4 +30,4 @@ class HomeView(AbstractView):
                 from view.home.sign_up_view import SignUpView
                 return SignUpView("Création de compte")
             case "Quitter":
-                print("Vous avez cliqué sur: [Quitter]")
+                pass
