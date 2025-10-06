@@ -35,8 +35,18 @@ class UserDAO (metaclass = Singleton):
         pass
 
     def username_exists(self, username: str) -> bool:
-        """Permet de savoir si un nom d'utilisateur est deja pris."""
-        pass
+        # Juste pour tester si les requettes fonctionne
+        """Permet de savoir si un nom d'utilisateur est déjà pris."""
+        query = """
+            SELECT 1 FROM ensaiGPT.user
+            WHERE username = %s
+            LIMIT 1;
+        """
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (username,))
+                result = cursor.fetchone()
+                return result is not None
 
     def get_max_id(self) -> int:
         """
