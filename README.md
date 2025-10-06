@@ -2,9 +2,7 @@ Projet 2A ENSAI
 
 # 💬 Projet ENSAI GPT
 
-Ce projet est une application en ligne de commande qui permet d’interagir avec une base de données PostgreSQL à l’aide d’une interface utilisateur simple basée sur **InquirerPy**.  
-Il permet de gérer des utilisateurs, leurs conversations et les messages associés, le tout dans une structure claire et testable.
-
+....
 ---
 
 ## ⚙️ Préparation avant exécution
