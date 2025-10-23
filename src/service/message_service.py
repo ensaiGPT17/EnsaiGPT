@@ -9,8 +9,8 @@ class MessageService:
     def __init__(self, message_dao: MessageDAO):
         self.message_dao = message_dao
 
-    def créer_message(self, id_chat: int, role: str, content: str) -> Optional[Message]:
+    def create_message(self, id_chat: int, role: str, content: str) -> Optional[Message]:
         pass
 
-    def supprimer_message(self, id_message: int) -> bool:
+    def delete_message(self, id_message: int) -> bool:
         pass
