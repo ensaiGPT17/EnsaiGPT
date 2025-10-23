@@ -3,24 +3,62 @@ from model.user import User
 from dao.db_connection import DBConnection
 from utils.singleton import Singleton
 
-class UserDAO (metaclass = Singleton):
+
+class UserDAO (metaclass=Singleton):
     def __init__(self):
         pass
 
     def get_user(self, id_user) -> Optional[User]:
-        pass
+        query = """
+            SELECT *
+            FROM ensaiGPT.user
+            WHERE id_user = %s
+        """
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (id_user,))
+                result = cursor.fetchone()
+
+        if result is None:
+            return None
+
+        return User(id_user=result[0], username=result[1], hashed_password=result[2])
 
     def get_user_by_username(self, username) -> Optional[User]:
         """Permet d'avoir l'utilisateur grâce à son nom d'utilisateur"""
-        pass
+        query = """
+            SELECT *
+            FROM ensaiGPT.user
+            WHERE username = %s
+        """
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (username,))
+                result = cursor.fetchone()
+
+        if result is None:
+            return None
+
+        return User(id_user=result[0], username=result[1], hashed_password=result[2])
 
     def insert(self, user: User) -> Optional[User]:
         """
-        Ajoute un utilisateur à la base de données.
+        Ajoute un utilisateur à la base de données et met à jour son id_user.
         """
-        #new_id = self.get_max_id() + 1
-        #user.id_user = new_id
-        pass
+        query = """
+            INSERT INTO ensaiGPT.user (username, hashed_password)
+            VALUES (%s, %s)
+            RETURNING id_user
+        """
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (user.username, user.hashed_password))
+                result = cursor.fetchone()
+        if result is None or result[0] is None:
+            return None  # utilisateur n'a pas été créé
+
+        user.id_user = result[0]
+        return user
 
     def delete(self, id_user: int) -> bool:
         """Supprime un utilisateur de la bdd."""
@@ -47,15 +85,6 @@ class UserDAO (metaclass = Singleton):
                 cursor.execute(query, (username,))
                 result = cursor.fetchone()
                 return result is not None
-
-    def get_max_id(self) -> int:
-        """
-        Donne le plus grand id associé à un utilisateur.
-        Retourne 0 si aucun utilisateur n'existe.
-        """
-        """ ici un SELECT id_user, ORDER BY id_user DESC, LIMIT 1  
-              # ==> par Bruno, haha :) : ensuite, renvoyer l'id de l'utilisateur """
-        pass
 
     def count_users(self) -> int:
         """Renvoie le nombre d'utilisateurs dans la base de données."""
