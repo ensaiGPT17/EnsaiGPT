@@ -12,10 +12,5 @@ def message_service():
     message_dao = MessageDAO()
     return MessageService(message_dao)
 
-
-def  test_créer_message(self, id_chat: int, role: str, content: str):
-        pass
-
-
 if __name__ == "__main__":
     pytest.main([__file__])

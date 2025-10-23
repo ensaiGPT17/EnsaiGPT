@@ -13,9 +13,6 @@ def chat_service():
     chat_dao = ChatDAO()
     return ChatService(chat_dao)
 
-def get_chat(self, id_chat) -> Optional[Chat]:
-    pass
-
 
 if __name__ == "__main__":
     pytest.main([__file__])
