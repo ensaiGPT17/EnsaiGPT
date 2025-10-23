@@ -2,6 +2,28 @@ import os
 import requests
 from typing import List, Dict, Optional
 
+"""
+Une bonne partie des methodes developpée ici vont disparaitre une fois le
+SERVICE de la CONVERSATION plus complete.
+
+Nous verrons par la suite comment nous allons les reorganiser dans CONV SERVICE.
+
+C'est le cas de : 
+
+    - add_assisatnt_message: ajouter un message de l'assistant,
+    - add_user_message: ajouter un message du user, 
+
+    - add_system_message: donne la phrase de base servant de guide à l'assistant
+                            dans les reponses generées.
+
+    - reset_history: vide la lsite des message echangé à envoyer à l'API
+                    en plus du dernier message
+
+    - Les parametres de l'assis. seront envoyés par CONV SERV, ce serait mieux.
+    et ce sera CONV SER qui fera appel à l'API, notamment la classe
+    EnsaiGPTClient de #chat_client.py
+"""
+
 
 class EnsaiGPTClient:
     """
@@ -34,7 +56,7 @@ class EnsaiGPTClient:
         self.default_top_p = default_top_p
         self.default_max_tokens = default_max_tokens
 
-        # Historique de la conversation
+        # Historique de la conversation, qui sera dans CONV SERV
         self.history: List[Dict[str, str]] = []
 
     def add_system_message(self, content: str):
@@ -88,7 +110,8 @@ class EnsaiGPTClient:
             response = requests.post(f"{self.base_url}/generate", json=payload, timeout=15)
             response.raise_for_status()
             answer = response.json()
-            self.add_assistant_message(answer)
+            assistant_answer_message = answer["choices"][0]["message"]["content"]
+            self.add_assistant_message(assistant_answer_message)
             return answer
         except requests.RequestException as e:
             raise RuntimeError(f"Erreur lors de l'appel à l'API ensaiGPT: {e}")

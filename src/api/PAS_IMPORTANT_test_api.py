@@ -2,6 +2,7 @@ import requests
 import json
 from pprint import pprint
 
+
 # === Configuration ===
 BASE_URL = "https://ensai-gpt-109912438483.europe-west4.run.app"
 ENDPOINTS = ["/openapi.json", "/generate"]

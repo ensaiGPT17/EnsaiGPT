@@ -6,8 +6,13 @@ from pprint import pprint
 # Charge les variables d'environnement depuis le fichier .env
 load_dotenv()  
 
-# Maintenant ENSAI_GPT_HOST est disponible
-client = EnsaiGPTClient()
+
+client = EnsaiGPTClient(default_max_tokens = 500)
 client.add_system_message("Tu es un assistant utile.")
 response = client.generate("Bonjour, peux-tu me donner une citation inspirante ?")
 pprint(response)
+
+# La reponse reellement envoyée
+print("---- ------ La reponse reellement envoyée ---- --------")
+rep = response['choices'][0]['message']['content']
+print(rep)
