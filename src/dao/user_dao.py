@@ -8,38 +8,40 @@ class UserDAO (metaclass=Singleton):
     def __init__(self):
         pass
 
-    def get_user(self, id_user) -> Optional[User]:
+    def get_user(self, id_user: int) -> Optional[User]:
         query = """
-            SELECT *
+            SELECT id_user, username, hashed_password
             FROM ensaiGPT.user
             WHERE id_user = %s
         """
         with DBConnection().connection as connection:
-            with connection.cursor() as cursor:
+            with connection.cursor(dictionary=True) as cursor:
                 cursor.execute(query, (id_user,))
                 result = cursor.fetchone()
 
         if result is None:
             return None
 
-        return User(id_user=result[0], username=result[1], hashed_password=result[2])
+        return User(id_user=result['id_user'], username=result['username'],
+                    hashed_password=result['hashed_password'])
 
-    def get_user_by_username(self, username) -> Optional[User]:
+    def get_user_by_username(self, username: str) -> Optional[User]:
         """Permet d'avoir l'utilisateur grâce à son nom d'utilisateur"""
         query = """
-            SELECT *
+            SELECT id_user, username, hashed_password
             FROM ensaiGPT.user
             WHERE username = %s
         """
         with DBConnection().connection as connection:
-            with connection.cursor() as cursor:
+            with connection.cursor(dictionary=True) as cursor:
                 cursor.execute(query, (username,))
                 result = cursor.fetchone()
 
         if result is None:
             return None
 
-        return User(id_user=result[0], username=result[1], hashed_password=result[2])
+        return User(id_user=result['id_user'], username=result['username'],
+                    hashed_password=result['hashed_password'])
 
     def insert(self, user: User) -> Optional[User]:
         """
