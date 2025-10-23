@@ -17,6 +17,7 @@ class SignInView(AbstractView):
         res = UserService().authenticate(username, password)
         status = res.code
         status == 200
+
         if status == 200:
             # récupérer l'objet user renvoyé si présent
             user = getattr(res, "user", None)
