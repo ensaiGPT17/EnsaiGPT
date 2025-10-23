@@ -5,13 +5,10 @@ from tests.dao.mocks import UserDAOMock
 
 @pytest.fixture
 def user_service():
-    return UserService(UserDAOMock())
+    dao = UserDAOMock()
+    dao.clear_all()  # important
+    return UserService(dao)
 
-@pytest.fixture(scope="module")
-def user_dao():
-    """Initialise la base et fournit une instance de UserDAO pour tous les tests"""
-    ResetDatabase().lancer()
-    return UserDAO()
 
 def test_get_user_not_found(user_service):
     # GIVEN : aucun utilisateur créé
@@ -188,7 +185,3 @@ def test_change_username_failure(user_service):
     assert result_user_not_found.code == 404
     assert result_auth.code == 200
     assert result_wrong_auth.code == 401
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

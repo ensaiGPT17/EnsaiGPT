@@ -1,6 +1,6 @@
 from model.chat import Chat
 from dao.chat_dao import ChatDAO
-from response_service import ResponseService
+from service.response_service import ResponseService
 from datetime import datetime
 from typing import Optional
 

@@ -3,6 +3,8 @@ from utils.reset_database import ResetDatabase
 from dao.chat_dao import ChatDAO
 from service.chat_service import ChatService
 from service.response_service import ResponseService
+from typing import Optional
+from model.chat import Chat
 
 @pytest.fixture(scope="module")
 def chat_service():

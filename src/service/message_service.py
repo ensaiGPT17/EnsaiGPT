@@ -1,6 +1,6 @@
 from model.message import Message
 from dao.message_dao import MessageDAO
-from response_service import ResponseService
+from service.response_service import ResponseService
 from datetime import datetime
 from typing import Optional
 

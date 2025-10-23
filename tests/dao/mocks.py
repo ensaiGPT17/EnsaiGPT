@@ -8,6 +8,9 @@ class UserDAOMock(UserDAO):
         super().__init__()
         self.users: list[User] = []  #simule la base SQL des utilisateurs
 
+    def clear_all(self):
+        self.users.clear()
+
     def get_user(self, id_user) -> Optional[User]:
         for user in self.users:
             if user.id_user == id_user:
