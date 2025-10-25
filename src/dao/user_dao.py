@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from model.user import User
 from dao.db_connection import DBConnection
 from utils.singleton import Singleton
@@ -64,18 +64,57 @@ class UserDAO (metaclass=Singleton):
 
     def delete(self, id_user: int) -> bool:
         """Supprime un utilisateur de la bdd."""
-        pass
+        query = "DELETE FROM ensaiGPT.user WHERE id_user = %s"
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (id_user,))
+            connection.commit()
+            changes = cursor.rowcount
+        return changes > 0
 
     def update(self, id_user: int, user_updated: User) -> Optional[User]:
         """Modifie un utilisateur de la bdd."""
-        pass
+        query = """
+            UPDATE ensaiGPT.user
+            SET username = %s, hashed_password = %s
+            WHERE id_user = %s
+        """
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (
+                    user_updated.username,
+                    user_updated.hashed_password,
+                    id_user
+                ))
+            changes = cursor.rowcount
+            connection.commit()
+        if changes == 0:
+            return None
+        return user_updated
 
-    def get_all(self):
+    def get_all(self) -> Optional[List[User]]:
         """Renvoie la liste des utilisateurs."""
-        pass
+        users = []
+        query = """
+            SELECT id_user, username, hashed_password
+            FROM ensaiGPT.user
+        """
+        with DBConnection().connection as connection:
+            with connection.cursor(dictionary=True) as cursor:
+                cursor.execute(query)
+                result = cursor.fetchall()
+
+        if result is None:
+            return None
+
+        for row in result:
+            user = User(id_user=row['id_user'], username=row['username'],
+                        hashed_password=row['hashed_password'])
+            users.append(user)
+
+        return users
 
     def username_exists(self, username: str) -> bool:
-        # Juste pour tester si les requettes fonctionne
         """Permet de savoir si un nom d'utilisateur est déjà pris."""
         query = """
             SELECT 1 FROM ensaiGPT.user
@@ -86,8 +125,17 @@ class UserDAO (metaclass=Singleton):
             with connection.cursor() as cursor:
                 cursor.execute(query, (username,))
                 result = cursor.fetchone()
-                return result is not None
+        return result is not None
 
-    def count_users(self) -> int:
+    def count_users(self) -> Optional[int]:
         """Renvoie le nombre d'utilisateurs dans la base de données."""
-        pass
+        query = """
+            SELECT COUNT(*) FROM ensaiGPT.user ;
+        """
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchone()
+        if result is None:
+            return None
+        return result[0]
