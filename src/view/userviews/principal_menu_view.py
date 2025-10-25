@@ -18,6 +18,7 @@ class PrincipalMenuView(AbstractView):
                 "Historique de conversation",
                 "Se déconnecter",
                 "Supprimer mon compte",
+                "Afficher les statistiques"
             ],
         ).execute()
 
