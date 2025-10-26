@@ -62,8 +62,11 @@ class UserService:
         if user is None:
             return ResponseService(*self.AUTH_FAILED)
 
-        hashed = hash_password(password)
-        if hashed != user.hashed_password:
+        #hashed = hash_password(password)
+        #if hashed != user.hashed_password:
+        #    return ResponseService(*self.AUTH_FAILED)
+
+        if not check_password(password, user.hashed_password):
             return ResponseService(*self.AUTH_FAILED)
 
         return ResponseService(*self.AUTH_SUCCESS)

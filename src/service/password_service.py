@@ -46,9 +46,15 @@ def password_is_secure(password: str) -> bool:
 
 
 if __name__ == "__main__":
-    pwd = "1234"
+    pwd = "mot_de_passe_Br#@1"
     if password_is_secure(pwd):
         hashed = hash_password(pwd)
         print("Mot de passe sécurisé et hashé :", hashed)
     else:
         print("Mot de passe trop faible")
+
+    # checker si le mot de passe est dejà la, je vais l'utiliser
+    # lors de la connexion
+
+    if check_password(pwd, hashed):
+        print("Connexion réussie !")

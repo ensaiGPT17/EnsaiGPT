@@ -15,21 +15,21 @@ class SignInView(AbstractView):
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         password = inquirer.secret(message="Mot de passe :").execute()
 
+        user_dao = UserDAO()
+        user_service = UserService(user_dao)
 
-        res = UserService().authenticate(username, password)
+        res = user_service.authenticate(username, password)
         status = res.code
         print(status)
 
         if status == 200:
             # récupérer l'objet user renvoyé si présent
-            harsh_password = 
-            user = UserService(UserDAO()).authenticate(username=username, password=har)
-            if user is None:
-                user = User(username=username)
+            user = user_service.get_user_by_username(username)
             Session().user = user
             message = f"Vous êtes connecté sous le pseudo {user.username}"
             # import local pour éviter cycles
             from view.userviews.principal_menu_view import PrincipalMenuView
             return PrincipalMenuView(message)
 
-        return HomeView("Erreur de connexion (pseudo ou mot de passe invalide)")
+        # sinon, nom d'user ou mdp incorrect
+        return HomeView(f"Erreur de connexion {res.content}")

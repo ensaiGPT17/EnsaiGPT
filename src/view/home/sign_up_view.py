@@ -1,5 +1,6 @@
 from view.abstract_view import AbstractView
 from service.user_service import UserService
+from dao.user_dao import UserDAO
 from InquirerPy import inquirer
 from model.user import User
 
@@ -25,34 +26,21 @@ class SignUpView(AbstractView):
     def choisir_menu(self):
         print("\n" + "-" * 50 + "\nInscrivez vous\n" + "-" * 50 + "\n")
         username = inquirer.text(message="Nom d'utilisateur :").execute()
+        password = inquirer.secret(message="Mot de passe :").execute()
 
-        res = UserService().is_username_available(username)
+        user_dao = UserDAO()
+        user_service = UserService(user_dao)
+
+        res = user_service.create_user(username, password)
         status = res.code
-        status = 1
-        if status != 200:
-            return HomeView(f"Le pseudo {username} est déjà utilisé.")
 
-        # Saisie du mot de passe avec validation manuelle
-        while True:
-            password = inquirer.secret(
-                message="Mot de passe :",
-                validate=PasswordValidator(
-                    length=6,
-                    cap=True,
-                    number=True,
-                    message="Au moins 12 caractères, incluant une majuscule et un chiffre",
-                ),
-            ).execute()
-            if is_valid_password(password):
-                break
-            print("Mot de passe invalide — au moins 12 caractères, une majuscule et un chiffre.")
-
-        res_user_creation = UserService().create_user(username, password)
-        status = res_user_creation.code
-        status = 200
-        if status == 200:
-            message = f"Votre compte {username} a été créé. Vous pouvez maintenant vous connecter."
+        if status == 201:
+            # utilisateur crée avec succes
+            return HomeView(f"{res.content}\nVous pouvez vous connecter à présent!")
+        elif status == 409:
+            return HomeView(f"Erreur: {res.content}\nLe pseudo {username} est déjà utilisé.")
+        elif status == 400:
+            return HomeView(f"Erreur: {res.content}") 
         else:
-            message = "Erreur inconnue lors de la création du compte."
-
-        return HomeView(message)
+            # erreur interne, status = 500
+            return HomeView(f"{res.content}")
