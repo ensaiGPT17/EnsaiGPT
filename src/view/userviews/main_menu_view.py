@@ -24,9 +24,9 @@ class MainMenuView(AbstractView):
 
         if choix == "Démarrer une conversation":
             print("Fonctionnalité non implémentée")
-            from view.home.home_view import HomeView
-            return HomeView(message)
-            
+            from view.userviews.start_conversation_view import StartConversationView
+            return StartConversationView("Démarrer une conversation")
+
             return self
         elif choix == "Historique de conversation":
             print("Fonctionnalité non implémentée")
@@ -60,7 +60,7 @@ class MainMenuView(AbstractView):
                 user_service = UserService(user_dao)
 
                 # recuperer les infos sur le user connecté
-                user = Session().user
+                #user = Session().user
                 res = user_service.delete_user(user.username)
                 status = res.code
 
