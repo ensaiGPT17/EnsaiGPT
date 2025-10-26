@@ -41,6 +41,8 @@ POSTGRES_DATABASE=
 POSTGRES_USER= 
 POSTGRES_PASSWORD=
 POSTGRES_PORT=
+
+ENSAI_GPT_HOST=
 ```
 
 ### 4. 🧱 Initialiser le schéma de la base de données
