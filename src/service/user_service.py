@@ -1,7 +1,7 @@
 from typing import Optional
 from model.user import User
 from dao.user_dao import UserDAO
-from service.password_service import hash_password, password_is_secure
+from service.password_service import hash_password, password_is_secure, check_password
 from service.response_service import ResponseService
 
 
@@ -61,14 +61,11 @@ class UserService:
         user = self.user_dao.get_user_by_username(username)
         if user is None:
             return ResponseService(*self.AUTH_FAILED)
-
         #hashed = hash_password(password)
         #if hashed != user.hashed_password:
         #    return ResponseService(*self.AUTH_FAILED)
-
         if not check_password(password, user.hashed_password):
             return ResponseService(*self.AUTH_FAILED)
-
         return ResponseService(*self.AUTH_SUCCESS)
 
     def change_password(self, username: str, password: str, new_password: str) -> \
@@ -107,5 +104,44 @@ class UserService:
 
         return ResponseService(*self.USERNAME_CHANGE_SUCCESS)
 
+    def delete_user(self, username: str) -> ResponseService:
+        """
+        Supprime un utilisateur à partir de son nom d'utilisateur.
+        Retourne :
+          - 200 si suppression réussie,
+          - 404 si l'utilisateur n'existe pas,
+          - 500 en cas d'erreur interne.
+        """
+        try:
+            # Vérifier si l'utilisateur existe
+            user = self.user_dao.get_user_by_username(username)
+            #if user is None:
+            #    return ResponseService(*self.USER_NOT_FOUND)
+
+            # Supprimer l'utilisateur
+            deleted = self.user_dao.delete(user.id_user)
+            if not deleted:
+                return ResponseService(500, "Erreur lors de la suppression de l'utilisateur")
+            return ResponseService(200, "Votre compte a été supprimé avec succès")
+
+        except Exception as e:
+            # En cas d’erreur inattendue
+            return ResponseService(500, f"Erreur interne : {e}")
+
+
+
     def count_users(self) -> int:
         return self.user_dao.count_users()
+
+
+if __name__ == "__main__":
+    from model.user import User
+    user = User(0, 'user1', 'user1USER1#@')
+
+    user_dao = UserDAO()
+    user_ser = UserService(user_dao)
+
+    res = user_ser.authenticate("user1", "user1USER1#@")
+
+    print(f"Code : {res.code}")
+    print(f"Message : {res.content}")

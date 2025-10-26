@@ -20,16 +20,19 @@ class SignInView(AbstractView):
 
         res = user_service.authenticate(username, password)
         status = res.code
-        print(status)
 
         if status == 200:
-            # récupérer l'objet user renvoyé si présent
-            user = user_service.get_user_by_username(username)
-            Session().user = user
-            message = f"Vous êtes connecté sous le pseudo {user.username}"
-            # import local pour éviter cycles
-            from view.userviews.principal_menu_view import PrincipalMenuView
-            return PrincipalMenuView(message)
+            # récupérer le user
+            connected_user = user_service.get_user_by_username(username)
 
-        # sinon, nom d'user ou mdp incorrect
-        return HomeView(f"Erreur de connexion {res.content}")
+            # ouvir la session
+            Session().connexion(user=connected_user)
+
+            message = f"{res.content}\nVous êtes connecté sous le pseudo {connected_user.username}"
+
+            from view.userviews.main_menu_view import MainMenuView
+            return MainMenuView(message)
+        else:
+            # status = 401
+            # sinon, nom d'user ou mdp incorrect
+            return HomeView(f"Erreur de connexion!\n{res.content}")

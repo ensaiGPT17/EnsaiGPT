@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from utils.singleton import Singleton
+from model.user import User
 
 
 class Session(metaclass=Singleton):
@@ -12,12 +13,12 @@ class Session(metaclass=Singleton):
 
     def __init__(self):
         """Création de la session"""
-        self.id_user = None
+        self.user = None
         self.connexion_date = None
 
-    def connexion(self, joueur):
+    def connexion(self, user: User):
         """Enregistement des données en session"""
-        self.id_user = user
+        self.user = user
         self.connexion_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     def deconnexion(self):
