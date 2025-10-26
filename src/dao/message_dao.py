@@ -29,16 +29,17 @@ class MessageDAO(metaclass=Singleton):
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
                 query = """
-                    INSERT INTO message (id_chat, date_sending, role_author, content)
+                    INSERT INTO ensaiGPT.messages (id_chat, date_sending, role_author, content)
                     VALUES (%s, %s, %s, %s)
                     RETURNING id_message;
                 """
                 cursor.execute(query, (id_chat, date_sending, role_author, content))
                 res = cursor.fetchone()
 
+        print(res)
         # Construction de l’objet Message si insertion réussie
         if res:
-            new_id = res[0]
+            new_id = res['id_message']
             return Message(
                 id_message=new_id,
                 id_chat=id_chat,
@@ -66,7 +67,7 @@ class MessageDAO(metaclass=Singleton):
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
                 query = """
-                    DELETE FROM message
+                    DELETE FROM ensaiGPT.messages
                     WHERE id_message = %s
                 """
                 cursor.execute(query, (id_message,))
@@ -91,19 +92,20 @@ class MessageDAO(metaclass=Singleton):
             with connection.cursor() as cursor:
                 query = """
                     SELECT id_message, id_chat, date_sending, role_author, content
-                    FROM message
+                    FROM ensaiGPT.messages
                     WHERE id_message = %s
                 """
                 cursor.execute(query, (id_message,))
                 res = cursor.fetchone()
 
+        print(res)
         if res:
             return Message(
-                id_message=res[0],
-                id_chat=res[1],
-                date_sending=res[2],
-                role_author=res[3],
-                content=res[4]
+                id_message=res['id_message'],
+                id_chat=res['id_chat'],
+                date_sending=res['date_sending'],
+                role_author=res['role_author'],
+                content=res['content']
             )
         return None
 
@@ -125,7 +127,7 @@ class MessageDAO(metaclass=Singleton):
             with connection.cursor() as cursor:
                 query = """
                     SELECT id_message, id_chat, date_sending, role_author, content
-                    FROM message
+                    FROM ensaiGPT.messages
                     WHERE id_chat = %s
                     ORDER BY date_sending ASC;
                 """
@@ -134,13 +136,71 @@ class MessageDAO(metaclass=Singleton):
 
         messages = [
             Message(
-                id_message=row[0],
-                id_chat=row[1],
-                date_sending=row[2],
-                role_author=row[3],
-                content=row[4]
+                
+                id_message=row['id_message'],
+                id_chat=row['id_chat'],
+                date_sending=row['date_sending'],
+                role_author=row['role_author'],
+                content=row['content']
+
             )
             for row in res
         ]
 
         return messages
+
+
+"""
+if __name__ == "__main__":
+
+    print("=== TEST DE LA CLASSE MessageDAO ===")
+    message_dao = MessageDAO()
+
+    # Variables de test
+    id_chat_test = 2
+    role_author_test = "assistant"
+    content_test = "Bonjour, ceci est un message de test."
+    content_update = "Message mis à jour."
+
+    #  - Création d’un message
+    print("\n--- Création d’un message ---")
+    new_message = message_dao.create_message(
+        id_chat=id_chat_test,
+        date_sending=datetime.now(),
+        role_author=role_author_test,
+        content=content_test
+    )
+    if new_message:
+        print(f"Message inséré avec succès : id={new_message.id_message}, contenu='{new_message.content}'")
+    else:
+        print("Échec de création du message")
+
+    #  - Récupération par ID
+    print("\n--- Récupération par ID ---")
+    if new_message:
+        fetched = message_dao.get_message_by_id(new_message.id_message)
+        print(f"Message récupéré : {fetched.content if fetched else 'Aucun message trouvé'}")
+
+    # 3 - Récupération par chat
+    print("\n--- Liste des messages du chat ---")
+    messages = message_dao.get_messages_by_chat(id_chat_test)
+    if messages:
+        for m in messages:
+            print(f"[{m.date_sending}] {m.role_author} : {m.content}")
+    else:
+        print("Aucun message trouvé pour ce chat")
+
+
+    # 4️⃣ - Suppression du message
+    print("\n--- Suppression du message ---")
+    if new_message:
+        deleted = message_dao.delete_message(new_message.id_message-1)
+        print("Message supprimé avec succès" if deleted else "Échec de suppression")
+
+
+    #  - Vérification après suppression
+    print("\n--- Vérification après suppression ---")
+    if new_message:
+        message_check = message_dao.get_message_by_id(new_message.id_message-1)
+        print("Message encore présent" if message_check else "Message bien supprimé")
+"""
