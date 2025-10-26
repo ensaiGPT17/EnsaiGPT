@@ -5,8 +5,8 @@ CREATE SCHEMA ensaiGPT;
 -- Utilisateur
 --------------------------------------------------------------
 
-DROP TABLE IF EXISTS ensaiGPT.user CASCADE ;
-CREATE TABLE ensaiGPT.user (
+DROP TABLE IF EXISTS ensaiGPT.users CASCADE ;
+CREATE TABLE ensaiGPT.users (
     id_user serial PRIMARY KEY,
     username text UNIQUE NOT NULL,
     hashed_password text 
@@ -16,10 +16,10 @@ CREATE TABLE ensaiGPT.user (
 -- Conversation
 --------------------------------------------------------------
 
-DROP TABLE IF EXISTS ensaiGPT.chat CASCADE ;
-CREATE TABLE ensaiGPT.chat (
+DROP TABLE IF EXISTS ensaiGPT.chats CASCADE ;
+CREATE TABLE ensaiGPT.chats (
     id_chat serial PRIMARY KEY,
-    id_user integer REFERENCES ensaiGPT.user(id_user),
+    id_user integer REFERENCES ensaiGPT.users(id_user),
     title text,
     date_start date,
     last_date date,
@@ -32,10 +32,10 @@ CREATE TABLE ensaiGPT.chat (
 -- Message 
 --------------------------------------------------------------
 
-DROP TABLE IF EXISTS ensaiGPT.message CASCADE ;
-CREATE TABLE ensaiGPT.message (
+DROP TABLE IF EXISTS ensaiGPT.messages CASCADE ;
+CREATE TABLE ensaiGPT.messages (
     id_message serial PRIMARY KEY,
-    id_chat integer REFERENCES ensaiGPT.chat(id_chat),
+    id_chat integer REFERENCES ensaiGPT.chats(id_chat),
     date_sending date,
     role_author text, 
     content text

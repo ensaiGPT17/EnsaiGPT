@@ -1,6 +1,7 @@
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from service.user_service import UserService
+from dao.user_dao import UserDAO
 from view.session import Session
 from view.home.home_view import HomeView
 from model.user import User
@@ -14,13 +15,15 @@ class SignInView(AbstractView):
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         password = inquirer.secret(message="Mot de passe :").execute()
 
+
         res = UserService().authenticate(username, password)
         status = res.code
-        status == 200
+        print(status)
 
         if status == 200:
             # récupérer l'objet user renvoyé si présent
-            user = getattr(res, "user", None)
+            harsh_password = 
+            user = UserService(UserDAO()).authenticate(username=username, password=har)
             if user is None:
                 user = User(username=username)
             Session().user = user
