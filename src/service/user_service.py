@@ -16,6 +16,8 @@ class UserService:
     USER_NOT_FOUND = (404, "Utilisateur non trouvé")
     USERNAME_CHANGE_SUCCESS = (200, "Nom d'utilisateur modifié avec succès")
     USERNAME_CHANGE_ERROR = (500, "Impossible de modifier le nom d'utilisateur")
+    USER_DELETE_SUCCESS = (200, "Utilisateur supprimé avec succès")
+    USER_DELETE_ERROR = (500, "Impossible de supprimer l'utilisateur")
 
     def __init__(self, user_dao: UserDAO):
         self.user_dao = user_dao
@@ -104,44 +106,21 @@ class UserService:
 
         return ResponseService(*self.USERNAME_CHANGE_SUCCESS)
 
-    def delete_user(self, username: str) -> ResponseService:
+    def delete_user(self, id_user: int) -> ResponseService:
         """
         Supprime un utilisateur à partir de son nom d'utilisateur.
-        Retourne :
-          - 200 si suppression réussie,
-          - 404 si l'utilisateur n'existe pas,
-          - 500 en cas d'erreur interne.
+        Retourne ResponseService avec code 200 si succès, 404 si utilisateur non trouvé,
+        500 si erreur.
         """
-        try:
-            # Vérifier si l'utilisateur existe
-            user = self.user_dao.get_user_by_username(username)
-            #if user is None:
-            #    return ResponseService(*self.USER_NOT_FOUND)
+        user = self.user_dao.get_user(id_user)
+        if user is None:
+            return ResponseService(*self.USER_NOT_FOUND)
 
-            # Supprimer l'utilisateur
-            deleted = self.user_dao.delete(user.id_user)
-            if not deleted:
-                return ResponseService(500, "Erreur lors de la suppression de l'utilisateur")
-            return ResponseService(200, "Votre compte a été supprimé avec succès")
+        deleted = self.user_dao.delete(id_user)
+        if not deleted:
+            return ResponseService(*self.USER_DELETE_ERROR)
 
-        except Exception as e:
-            # En cas d’erreur inattendue
-            return ResponseService(500, f"Erreur interne : {e}")
-
-
+        return ResponseService(*self.USER_DELETE_SUCCESS)
 
     def count_users(self) -> int:
         return self.user_dao.count_users()
-
-
-if __name__ == "__main__":
-    from model.user import User
-    user = User(0, 'user1', 'user1USER1#@')
-
-    user_dao = UserDAO()
-    user_ser = UserService(user_dao)
-
-    res = user_ser.authenticate("user1", "user1USER1#@")
-
-    print(f"Code : {res.code}")
-    print(f"Message : {res.content}")

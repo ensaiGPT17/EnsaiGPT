@@ -1,6 +1,7 @@
 import bcrypt
 import re
 
+
 def hash_password(password: str, salt: bytes = None) -> str:
     """
     Hash un mot de passe en utilisant bcrypt.
@@ -14,7 +15,6 @@ def hash_password(password: str, salt: bytes = None) -> str:
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed.decode('utf-8')  # convertir en str pour stocker
 
-import bcrypt
 
 def check_password(entered_password: str, stored_hash: str) -> bool:
     """
@@ -55,6 +55,7 @@ if __name__ == "__main__":
 
     # checker si le mot de passe est dejà la, je vais l'utiliser
     # lors de la connexion
+    # pour éviter de polluer avec ce genre de code -> faire des logs ?
 
     if check_password(pwd, hashed):
         print("Connexion réussie !")
