@@ -1,8 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 from model.user import User
 from dao.user_dao import UserDAO
 from model.message import Message
 from dao.message_dao import MessageDAO
+from datetime import datetime
+
 
 class UserDAOMock(UserDAO):
     def __init__(self):
