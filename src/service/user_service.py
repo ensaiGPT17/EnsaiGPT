@@ -63,35 +63,32 @@ class UserService:
         user = self.user_dao.get_user_by_username(username)
         if user is None:
             return ResponseService(*self.AUTH_FAILED)
-        #hashed = hash_password(password)
-        #if hashed != user.hashed_password:
-        #    return ResponseService(*self.AUTH_FAILED)
         if not check_password(password, user.hashed_password):
             return ResponseService(*self.AUTH_FAILED)
         return ResponseService(*self.AUTH_SUCCESS)
 
-    def change_password(self, username: str, password: str, new_password: str) -> \
+    def change_password(self, id_user: int, password: str, new_password: str) -> \
             ResponseService:
         if not password_is_secure(new_password):
             return ResponseService(*self.PASSWORD_WEAK)
 
-        user = self.user_dao.get_user_by_username(username)
+        user = self.user_dao.get_user(id_user)
         if user is None:
             return ResponseService(*self.USER_NOT_FOUND)
 
-        auth_response = self.authenticate(username, password)
+        auth_response = self.authenticate(user.username, password)
         if auth_response.code != 200:
             return ResponseService(*self.AUTH_FAILED)
 
         user.hashed_password = hash_password(new_password)
-        updated_user = self.user_dao.update(user.id_user, user)
+        updated_user = self.user_dao.update(id_user, user)
         if updated_user is None:
             return ResponseService(*self.PASSWORD_CHANGE_ERROR)
 
         return ResponseService(*self.PASSWORD_CHANGE_SUCCESS)
 
-    def change_username(self, username: str, new_username: str) -> ResponseService:
-        user = self.user_dao.get_user_by_username(username)
+    def change_username(self, id_user: int, new_username: str) -> ResponseService:
+        user = self.user_dao.get_user(id_user)
         if user is None:
             return ResponseService(*self.USER_NOT_FOUND)
 
@@ -100,13 +97,13 @@ class UserService:
             return ResponseService(*self.USERNAME_EXISTS)
 
         user.username = new_username
-        updated_user = self.user_dao.update(user.id_user, user)
+        updated_user = self.user_dao.update(id_user, user)
         if updated_user is None:
             return ResponseService(*self.USERNAME_CHANGE_ERROR)
 
         return ResponseService(*self.USERNAME_CHANGE_SUCCESS)
 
-    def delete_user(self, id_user: int) -> ResponseService:
+    def delete_user(self, id_user: int, password: str) -> ResponseService:
         """
         Supprime un utilisateur à partir de son nom d'utilisateur.
         Retourne ResponseService avec code 200 si succès, 404 si utilisateur non trouvé,
@@ -115,6 +112,10 @@ class UserService:
         user = self.user_dao.get_user(id_user)
         if user is None:
             return ResponseService(*self.USER_NOT_FOUND)
+
+        auth_response = self.authenticate(user.username, password)
+        if auth_response.code != 200:
+            return auth_response
 
         deleted = self.user_dao.delete(id_user)
         if not deleted:

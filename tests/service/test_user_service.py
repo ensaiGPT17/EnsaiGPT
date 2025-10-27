@@ -116,9 +116,10 @@ def test_authenticate_failure(user_service):
 def test_change_password_success(user_service):
     # GIVEN
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
+    created = user_service.get_user_by_username("Louis")
 
     # WHEN
-    result = user_service.change_password("Louis", "UnMotDePasseSecure*159",
+    result = user_service.change_password(created.id_user, "UnMotDePasseSecure*159",
                                           "AutreMotDePasseSecure*159")
     result_auth = user_service.authenticate("Louis", "AutreMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Louis", "UnMotDePasseSecure*159")
@@ -132,16 +133,16 @@ def test_change_password_success(user_service):
 
 def test_change_password_failure(user_service):
     # GIVEN
+    result_user_not_found = user_service.change_password(1, "UnMotDePasseSecure*159",
+                                                         "159*AutreMotDePasseSecure")
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
+    created = user_service.get_user_by_username("Louis")
 
     # WHEN
-    result_wrong_password = user_service.change_password("Louis", "mauvais_mdp",
+    result_wrong_password = user_service.change_password(created.id_user, "mauvais_mdp",
                                                          "159*AutreMotDePasseSecure")
-    result_weak_password = user_service.change_password("Louis",
+    result_weak_password = user_service.change_password(created.id_user,
                                                         "UnMotDePasseSecure*159", "mdp")
-    result_user_not_found = user_service.change_password("Alice",
-                                                         "UnMotDePasseSecure*159",
-                                                         "159*AutreMotDePasseSecure")
     result_auth = user_service.authenticate("Louis", "UnMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Louis", "159*AutreMotDePasseSecure")
 
@@ -156,9 +157,10 @@ def test_change_password_failure(user_service):
 def test_change_username_success(user_service):
     # GIVEN
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
+    created = user_service.get_user_by_username("Louis")
 
     # WHEN
-    result = user_service.change_username("Louis", "Bob")
+    result = user_service.change_username(created.id_user, "Bob")
     result_auth = user_service.authenticate("Bob", "UnMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Louis", "UnMotDePasseSecure*159")
 
@@ -171,12 +173,13 @@ def test_change_username_success(user_service):
 
 def test_change_username_failure(user_service):
     # GIVEN
+    result_user_not_found = user_service.change_username(1, "Bob2")
     user_service.create_user("Louis", "UnMotDePasseSecure*159")
     user_service.create_user("Alice", "A159*MotDePasseSecure")
+    created = user_service.get_user_by_username("Louis")
 
     # WHEN
-    result_duplicate = user_service.change_username("Louis", "Alice")
-    result_user_not_found = user_service.change_username("Bob", "Bob2")
+    result_duplicate = user_service.change_username(created.id_user, "Alice")
     result_auth = user_service.authenticate("Louis", "UnMotDePasseSecure*159")
     result_wrong_auth = user_service.authenticate("Bob2", "159*AutreMotDePasseSecure")
 
@@ -185,3 +188,31 @@ def test_change_username_failure(user_service):
     assert result_user_not_found.code == 404
     assert result_auth.code == 200
     assert result_wrong_auth.code == 401
+
+
+def test_delete_user_success(user_service):
+    # GIVEN
+    user_service.create_user("Louis", "UnMotDePasseSecure*159")
+    user_service.create_user("Alice", "A159*MotDePasseSecure")
+    created_f = user_service.get_user_by_username("Louis")
+
+    # WHEN
+    delete = user_service.delete_user(created_f.id_user, "UnMotDePasseSecure*159")
+
+    #THEN
+    assert user_service.get_user_by_username("Louis") is None
+    assert user_service.get_user_by_username("Alice") is not None
+    assert delete.code == 200
+
+
+def test_delete_user_failure(user_service):
+    # GIVEN
+    user_service.create_user("Louis", "UnMotDePasseSecure*159")
+    created = user_service.get_user_by_username("Louis")
+
+    # WHEN
+    wrong_password = user_service.delete_user(created.id_user,
+                                              "unMotDePasseSecure*159")
+
+    # THEN
+    assert wrong_password.code == 401
