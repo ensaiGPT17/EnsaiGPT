@@ -1,0 +1,35 @@
+# Version du format de configuration logging
+version: 1
+
+# Formatters : définissent le format des messages de log
+formatters:
+  simple:
+    format: '%(asctime)s - %(levelname)-8s - %(message)s'
+    datefmt: "%d/%m/%Y %H:%M:%S"
+
+# Handlers : définissent où les logs sont envoyés (fichier, console, etc.)
+handlers:
+  file:
+    class: logging.handlers.TimedRotatingFileHandler
+    formatter: simple
+    filename: logs/my_application.log  # chemin du fichier log
+    when: midnight                     # rotation à minuit
+    backupCount: 7                     # conserver les 7 derniers fichiers
+    encoding: utf8
+
+  console:
+    class: logging.StreamHandler
+    formatter: simple
+    stream: ext://sys.stdout           # affiche les logs dans le terminal
+
+# Loggers : pour configurer des loggers spécifiques si nécessaire
+loggers:
+  simpleLogger:
+    handlers: [file, console]         # utilise à la fois fichier et console
+    level: INFO
+    propagate: no
+
+# Logger racine : utilisé par défaut si on fait logging.getLogger(__name__)
+root:
+  level: INFO
+  handlers: [file, console]

@@ -1,14 +1,14 @@
 import logging
 import dotenv
 
-#from utils.log_init import initialiser_logs
+from utils.log_init import initialiser_logs
 from view.home.home_view import HomeView
 
 if __name__ == "__main__":
     # On charge les variables d'envionnement
     dotenv.load_dotenv(override=True)
 
-    #initialiser_logs("Application")
+    initialiser_logs("Application")
 
     current_view = HomeView("Bienvenue")
     nb_erreurs = 0
@@ -24,7 +24,7 @@ if __name__ == "__main__":
             # Affichage des choix possibles
             current_view = current_view.choisir_menu()
         except Exception as e:
-            #logging.error(f"{type(e).__name__} : {e}", exc_info=True)
+            logging.error(f"{type(e).__name__} : {e}", exc_info=True)
             print(f"ERREUR : {type(e).__name__} - {e}")
             nb_erreurs += 1
             current_view = HomeView(
@@ -36,4 +36,4 @@ if __name__ == "__main__":
     print("----------------------------------")
     print("Au revoir")
 
-    #logging.info("Fin de l'application")
+    logging.info("Fin de l'application")

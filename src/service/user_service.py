@@ -3,6 +3,7 @@ from model.user import User
 from dao.user_dao import UserDAO
 from service.password_service import hash_password, password_is_secure, check_password
 from service.response_service import ResponseService
+from utils.log_decorator import log
 
 
 class UserService:
@@ -22,12 +23,15 @@ class UserService:
     def __init__(self, user_dao: UserDAO):
         self.user_dao = user_dao
 
+    @log
     def get_user(self, id_user: int) -> Optional[User]:
         return self.user_dao.get_user(id_user)
 
+    @log
     def get_user_by_username(self, username: str) -> Optional[User]:
         return self.user_dao.get_user_by_username(username)
 
+    @log
     def is_username_available(self, username: str) -> ResponseService:
         """
         Vérifie si le nom d'utilisateur est disponible.
@@ -37,6 +41,7 @@ class UserService:
             return ResponseService(*self.USERNAME_EXISTS)
         return ResponseService(200, "Nom d'utilisateur disponible")
 
+    @log
     def is_password_secure(self, password: str) -> ResponseService:
         """
         Vérifie si le mot de passe est sécurisé.
@@ -46,6 +51,7 @@ class UserService:
             return ResponseService(*self.PASSWORD_WEAK)
         return ResponseService(200, "Mot de passe sécurisé")
 
+    @log
     def create_user(self, username: str, password: str) -> ResponseService:
         if self.user_dao.username_exists(username):
             return ResponseService(*self.USERNAME_EXISTS)
@@ -59,6 +65,7 @@ class UserService:
 
         return ResponseService(201, "Utilisateur créé avec succès")
 
+    @log
     def authenticate(self, username: str, password: str) -> ResponseService:
         user = self.user_dao.get_user_by_username(username)
         if user is None:
@@ -67,6 +74,7 @@ class UserService:
             return ResponseService(*self.AUTH_FAILED)
         return ResponseService(*self.AUTH_SUCCESS)
 
+    @log
     def change_password(self, id_user: int, password: str, new_password: str) -> \
             ResponseService:
         if not password_is_secure(new_password):
@@ -87,6 +95,7 @@ class UserService:
 
         return ResponseService(*self.PASSWORD_CHANGE_SUCCESS)
 
+    @log
     def change_username(self, id_user: int, new_username: str) -> ResponseService:
         user = self.user_dao.get_user(id_user)
         if user is None:
@@ -103,6 +112,7 @@ class UserService:
 
         return ResponseService(*self.USERNAME_CHANGE_SUCCESS)
 
+    @log
     def delete_user(self, id_user: int, password: str) -> ResponseService:
         """
         Supprime un utilisateur à partir de son nom d'utilisateur.
@@ -123,5 +133,6 @@ class UserService:
 
         return ResponseService(*self.USER_DELETE_SUCCESS)
 
+    @log
     def count_users(self) -> int:
         return self.user_dao.count_users()

@@ -17,6 +17,7 @@ class MainMenuView(AbstractView):
                 "Démarrer une conversation",
                 "Historique de conversation",
                 "Afficher les statistiques",
+                "Modifier ses identifiants",
                 "Se déconnecter",
                 "Supprimer mon compte"                
             ],
@@ -73,4 +74,7 @@ class MainMenuView(AbstractView):
 
                     from view.home.home_view import HomeView
                     return HomeView(message)
+        elif choix == "Modifier ses identifiants":
+            print("Fonctionnalité non implémentée")
+            return self
 
