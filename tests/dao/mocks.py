@@ -1,6 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 from model.user import User
 from dao.user_dao import UserDAO
+from model.message import Message
+from dao.message_dao import MessageDAO
+from datetime import datetime
 
 
 class UserDAOMock(UserDAO):
@@ -70,3 +73,39 @@ class UserDAOMock(UserDAO):
     def count_users(self) -> int:
         """Renvoie le nombre d'utilisateurs dans la base de données."""
         return len(self.users)
+
+
+class MessageDAOMock(MessageDAO):
+    def __init__(self):
+        super().__init__()
+        self.messages: List[Message] = []  # simule la table messages
+
+    def clear_all(self):
+        self.messages.clear()
+
+    def get_message_by_id(self, id_message: int) -> Optional[Message]:
+        for msg in self.messages:
+            if msg.id_message == id_message:
+                return msg
+        return None
+
+    def get_messages_by_chat(self, id_chat: int) -> List[Message]:
+        return [msg for msg in self.messages if msg.id_chat == id_chat]
+
+    def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str) -> Optional[Message]:
+        new_id = self.get_max_id() + 1
+        msg = Message(new_id, id_chat, date_sending, role_author, content)
+        self.messages.append(msg)
+        return msg
+
+    def delete_message(self, id_message: int) -> bool:
+        for i, msg in enumerate(self.messages):
+            if msg.id_message == id_message:
+                del self.messages[i]
+                return True
+        return False
+
+    def get_max_id(self) -> int:
+        if not self.messages:
+            return 0
+        return max(msg.id_message for msg in self.messages)
