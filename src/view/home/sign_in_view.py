@@ -4,7 +4,7 @@ from service.user_service import UserService
 from dao.user_dao import UserDAO
 from view.session import Session
 from view.home.home_view import HomeView
-from model.user import User
+
 
 class SignInView(AbstractView):
     def __init__(self, message: str = ""):

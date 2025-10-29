@@ -8,7 +8,7 @@ class StartConversationView(AbstractView):
 
     def choisir_menu(self):
         user = Session().user
-        username = getattr(user, "username", "utilisateur")
+        username = user.username
         print("\n" + "-" * 50 + "\nDémarrer une conversation\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
@@ -26,5 +26,5 @@ class StartConversationView(AbstractView):
             from view.userviews.change_params_view import ChangeConvParamsView
             return ChangeConvParamsView("Configurer les paramètres")
         elif choix == "Retour":
-            print("Fonctionnalité non implémentée")
-            return self
+            from view.userviews.main_menu_view import MainMenuView
+            return MainMenuView("Menu Principal")

@@ -24,7 +24,7 @@ class DiscussionView(AbstractView):
 
     def choisir_menu(self):
         user = Session().user
-        username = getattr(user, "username", "utilisateur")
+        username = user.username
 
         while True:
             self.afficher_conversation()

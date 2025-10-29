@@ -9,7 +9,7 @@ class MainMenuView(AbstractView):
 
     def choisir_menu(self):
         user = Session().user
-        username = getattr(user, "username", "utilisateur")
+        username = user.username
         print("\n" + "-" * 50 + "\nMenu Principal\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
@@ -17,9 +17,9 @@ class MainMenuView(AbstractView):
                 "Démarrer une conversation",
                 "Historique de conversation",
                 "Afficher les statistiques",
-                "Modifier ses identifiants",
+                "Modifier mes identifiants",
                 "Se déconnecter",
-                "Supprimer mon compte"                
+                "Supprimer mon compte"              
             ],
         ).execute()
 
@@ -59,10 +59,8 @@ class MainMenuView(AbstractView):
             if confirm:
                 user_dao = UserDAO()
                 user_service = UserService(user_dao)
-
-                # recuperer les infos sur le user connecté
-                #user = Session().user
-                res = user_service.delete_user(user.username)
+                user = Session().user
+                res = user_service.delete_user(user.id_user, user.hashed_password)
                 status = res.code
 
                 if status == 500:
@@ -70,11 +68,18 @@ class MainMenuView(AbstractView):
                 else:
                     # status == 200, succes
                     Session().deconnexion()
-                    message = f"{res.content}\nDéconnexion"
+                    message = f"{res.content}\nSuppression de compte réussi"
 
                     from view.home.home_view import HomeView
                     return HomeView(message)
-        elif choix == "Modifier ses identifiants":
-            print("Fonctionnalité non implémentée")
+            else:
+                from view.userviews.main_menu_view import MainMenuView
+                return MainMenuView("Retour au Menu Princiapl")
+
+        elif choix == "Modifier mes identifiants":
+            from view.userviews.change_credentials_view import ChangeCredentialsView
+            return ChangeCredentialsView("Modifier mes identifiants")
+        elif choix == "Afficher les statistiques":
+            print("Fonctionnalitée non implémentée")
             return self
 
