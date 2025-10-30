@@ -44,8 +44,12 @@ class UserService:
     @log
     def is_password_secure(self, password: str) -> ResponseService:
         """
-        Vérifie si le mot de passe est sécurisé.
-        Retourne ResponseService avec code 200 si sécurisé, sinon 400.
+        Crée un nouvel utilisateur avec un mot de passe sécurisé.
+        Codes de sortie :
+        - 201 : "Utilisateur créé avec succès"
+        - 400 : "Mot de passe trop faible"
+        - 409 : "Nom d'utilisateur déjà utilisé"
+        - 500 : "Erreur interne lors de la création de l'utilisateur"
         """
         if not password_is_secure(password):
             return ResponseService(*self.PASSWORD_WEAK)
@@ -53,6 +57,15 @@ class UserService:
 
     @log
     def create_user(self, username: str, password: str) -> ResponseService:
+
+        """
+        Crée un nouvel utilisateur avec un mot de passe sécurisé.
+        Codes de sortie :
+        - 201 : "Utilisateur créé avec succès"
+        - 400 : "Mot de passe trop faible"
+        - 409 : "Nom d'utilisateur déjà utilisé"
+        - 500 : "Erreur interne lors de la création de l'utilisateur"
+        """
         if self.user_dao.username_exists(username):
             return ResponseService(*self.USERNAME_EXISTS)
         if not password_is_secure(password):
@@ -67,6 +80,13 @@ class UserService:
 
     @log
     def authenticate(self, username: str, password: str) -> ResponseService:
+        """
+        Authentifie un utilisateur via son nom d'utilisateur et mot de passe.
+        
+        Codes de sortie :
+        - 200 : "Authentification réussie"
+        - 401 : "Nom d'utilisateur ou mot de passe incorrect"
+        """
         user = self.user_dao.get_user_by_username(username)
         if user is None:
             return ResponseService(*self.AUTH_FAILED)
@@ -75,8 +95,18 @@ class UserService:
         return ResponseService(*self.AUTH_SUCCESS)
 
     @log
-    def change_password(self, id_user: int, password: str, new_password: str) -> \
+    def change_password(self, id_user: int, old_password: str, new_password: str) -> \
             ResponseService:
+
+        """
+        Change le mot de passe d'un utilisateur après vérification de l'ancien mot de passe.    
+        Codes de sortie :
+        - 200 : "Mot de passe modifié avec succès"
+        - 400 : "Mot de passe trop faible"
+        - 401 : "Nom d'utilisateur ou mot de passe incorrect"
+        - 404 : "Utilisateur non trouvé"
+        - 500 : "Impossible de modifier le mot de passe"
+        """
         if not password_is_secure(new_password):
             return ResponseService(*self.PASSWORD_WEAK)
 
@@ -84,30 +114,36 @@ class UserService:
         if user is None:
             return ResponseService(*self.USER_NOT_FOUND)
 
-        auth_response = self.authenticate(user.username, password)
-        if auth_response.code != 200:
+        if not check_password(old_password, user.hashed_password):
             return ResponseService(*self.AUTH_FAILED)
 
         user.hashed_password = hash_password(new_password)
-        updated_user = self.user_dao.update(id_user, user)
-        if updated_user is None:
+        if self.user_dao.update(id_user, user) is None:
             return ResponseService(*self.PASSWORD_CHANGE_ERROR)
 
         return ResponseService(*self.PASSWORD_CHANGE_SUCCESS)
 
     @log
     def change_username(self, id_user: int, new_username: str) -> ResponseService:
+
+        """
+            Change le nom d'utilisateur après vérification de la disponibilité.
+            
+            Codes de sortie :
+            - 200 : "Nom d'utilisateur modifié avec succès"
+            - 404 : "Utilisateur non trouvé"
+            - 409 : "Nom d'utilisateur déjà utilisé"
+            - 500 : "Impossible de modifier le nom d'utilisateur"
+        """
         user = self.user_dao.get_user(id_user)
         if user is None:
             return ResponseService(*self.USER_NOT_FOUND)
 
-        new_username_user = self.user_dao.get_user_by_username(new_username)
-        if new_username_user is not None:
+        if self.user_dao.username_exists(new_username):
             return ResponseService(*self.USERNAME_EXISTS)
 
         user.username = new_username
-        updated_user = self.user_dao.update(id_user, user)
-        if updated_user is None:
+        if self.user_dao.update(id_user, user) is None:
             return ResponseService(*self.USERNAME_CHANGE_ERROR)
 
         return ResponseService(*self.USERNAME_CHANGE_SUCCESS)
@@ -118,17 +154,23 @@ class UserService:
         Supprime un utilisateur à partir de son nom d'utilisateur.
         Retourne ResponseService avec code 200 si succès, 404 si utilisateur non trouvé,
         500 si erreur.
+
+        Codes de sortie :
+            - 200 : "Utilisateur supprimé avec succès"
+            - 401 : "Nom d'utilisateur ou mot de passe incorrect"
+            - 404 : "Utilisateur non trouvé"
+            - 500 : "Impossible de supprimer l'utilisateur"
         """
+
         user = self.user_dao.get_user(id_user)
         if user is None:
             return ResponseService(*self.USER_NOT_FOUND)
 
-        auth_response = self.authenticate(user.username, password)
-        if auth_response.code != 200:
-            return auth_response
+        # Authentification
+        if not check_password(password, user.hashed_password):
+            return ResponseService(*self.AUTH_FAILED)
 
-        deleted = self.user_dao.delete(id_user)
-        if not deleted:
+        if not self.user_dao.delete(id_user):
             return ResponseService(*self.USER_DELETE_ERROR)
 
         return ResponseService(*self.USER_DELETE_SUCCESS)

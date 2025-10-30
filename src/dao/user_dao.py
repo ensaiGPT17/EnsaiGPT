@@ -144,7 +144,6 @@ class UserDAO (metaclass=Singleton):
         return result['count']
 
 
-
 """
 if __name__ == "__main__":
     # Initialisation du DAO
@@ -194,8 +193,8 @@ if __name__ == "__main__":
 
     #  - Mise à jour
     print("\n--- Mise à jour d'un utilisateur ---")
-    updated_user = User(id_user=2, username="updated_user", hashed_password="new_hashed_pwd")
-    result = user_dao.update(2, updated_user)
+    updated_user = User(id_user=inserted_user.id_user, username="updated_user", hashed_password="new_hashed_pwd")
+    result = user_dao.update(inserted_user.id_user, updated_user)
     print(f"Mise à jour réussie : {result.username if result else 'Échec'}")
 
     #  - Compter le nombre d'utilisateurs
@@ -209,7 +208,7 @@ if __name__ == "__main__":
     print("Utilisateur supprimé avec succès" if deleted else "Échec de suppression")
 
 
-        # 5 Récupération de tous les utilisateurs
+    # 5 Récupération de tous les utilisateurs
     print("\n--- Liste de tous les utilisateurs ---")
     users = user_dao.get_all()
     if users:
