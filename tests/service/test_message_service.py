@@ -2,7 +2,7 @@ import pytest
 from datetime import datetime
 from service.message_service import MessageService
 from service.response_service import ResponseService
-from tests.dao.mocks import MessageDAOMock  
+from tests.test_dao.mocks import MessageDAOMock  
 
 
 @pytest.fixture

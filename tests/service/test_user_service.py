@@ -1,6 +1,6 @@
 import pytest
 from service.user_service import UserService
-from tests.dao.mocks import UserDAOMock
+from tests.test_dao.mocks import UserDAOMock
 
 
 @pytest.fixture
