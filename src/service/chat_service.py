@@ -3,20 +3,24 @@ from dao.chat_dao import ChatDAO
 from service.response_service import ResponseService
 from datetime import datetime
 from typing import Optional, List
-
+from utils.log_decorator import log
 
 class ChatService:
 
     # CHAT_NOT_FOUND = (404, "Conversation non trouvée!")
     CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
     CHAT_GET_SUCCESS = (200, "Récupération de conversation réussie")
-
     CHATS_GET_BY_ID_SUCCES = (200, "Récupération réussie")
     CHATS_GET_BY_ID_ERROR = (500, "Erreur interne lors de la recupération des conversations")
+    CHAT_CREATE_SUCCESS = (200, "creation de la conversation reussie")
+    CHAT_CREATE_ERROR = (500, "echec de la creation de la conversation")
+    CHAT_DELETE_ERROR = (500, "echec suppression conversation")
+    CHAT_DELETE_SUCCESS = (200, "supression conversation reussie")
 
     def __init__(self, chat_dao: ChatDAO = ChatDAO()):
         self.chat_dao = chat_dao
 
+    @log
     def get_chat(self, id_chat: int) -> Optional[Chat]:
         """Récupère une conversation spécifique.
         Code de  sortie:
@@ -28,6 +32,7 @@ class ChatService:
             return ResponseService(*self.CHAT_GET_SUCCESS)
         return ResponseService(*self.CHAT_GET_ERROR)
 
+    @log
     def get_chats_by_id_user(self, id_user: int) -> ResponseService:
         """Retourne toutes les conversations d’un utilisateur.
         code de sortie:
@@ -39,38 +44,39 @@ class ChatService:
             return ResponseService(*self.CHATS_GET_BY_ID_SUCCES)
         return ResponseService(*self.CHATS_GET_BY_ID_ERROR)
 
+    @log
     def request_title(self, id_chat: int) -> ResponseService:
-        # je n'ai aucune idée :)
         pass
 
-
-
-    def create_chat(self, id_user: int, max_tokens: int, top_p: float,
+    @log
+    def create_chat(self, id_user: int, title, date_start, last_date, max_tokens: int, top_p: float,
                     temperature: float) -> ResponseService:
         """
         Crée une nouvelle conversation.
-        Les paramètres (max_tokens, top_p, temperature) peuvent être stockés plus tard dans un champ JSON ou une autre table.
         """
         chat = Chat(
             id_chat=None,
             id_user=id_user,
             title="Nouvelle conversation",
-            created_at=datetime.now(),
-            updated_at=datetime.now()
+            date_start=datetime.now(),
+            last_date=datetime.now(),
+            max_tokens=max_tokens,
+            top_p = top_p,
+            temperature = temperature
         )
 
         inserted_chat = self.chat_dao.insert(chat)
         if inserted_chat:
-            return ResponseService(success=True, data=inserted_chat,
-                                   message="Conversation créée avec succès.")
-        return ResponseService(success=False, message="Erreur lors de la création du chat.")
+            return ResponseService(*self.CHAT_CREATE_SUCCESS)
+        return ResponseService(*self.CHAT_CREATE_ERROR)
 
+    @log
     def delete_chat(self, id_chat: int) -> ResponseService:
         """Supprime une conversation."""
         deleted = self.chat_dao.delete(id_chat)
         if deleted:
-            return ResponseService(success=True, message="Chat supprimé avec succès.")
-        return ResponseService(success=False, message="Chat introuvable ou non supprimé.")
+            return ResponseService(*self.CHAT_DELETE_SUCCESS)
+        return ResponseService(*self.CHAT_DELETE_ERROR)
 
     def search_chat_by_tile(self, search: str) -> ResponseService:
         """Recherche les conversations contenant un mot-clé dans le titre."""
