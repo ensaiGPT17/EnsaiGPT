@@ -13,13 +13,13 @@ def user_dao():
 def test_username_exists_true(user_dao):
     """Doit retourner True si l'utilisateur existe"""
     result = user_dao.username_exists("bruno")
-    assert result is True, "L'utilisateur 'bruno' devrait exister dans la base."
+    assert result is True
 
 
 def test_username_exists_false(user_dao):
     """Doit retourner False si l'utilisateur n'existe pas"""
     result = user_dao.username_exists("user_inconnu")
-    assert result is False, "L'utilisateur 'unknown_user' ne devrait pas exister dans la base."
+    assert result is False
 
 
 if __name__ == "__main__":
