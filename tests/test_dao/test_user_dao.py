@@ -86,5 +86,6 @@ def test_count_users(user_dao):
     count = user_dao.count_users()
     assert isinstance(count, int)
 
+
 if __name__ == "__main__":
     pytest.main([__file__])
