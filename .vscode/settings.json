@@ -16,9 +16,6 @@
     "python.analysis.extraPaths": [
         "./*"
     ],
-    "terminal.integrated.env.windows": {
-        "PYTHONPATH": "${workspaceFolder}/src"
-    },
     "terminal.integrated.env.linux": {
         "PYTHONPATH": "${workspaceFolder}/src"
     },
