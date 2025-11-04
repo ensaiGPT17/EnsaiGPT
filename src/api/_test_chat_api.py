@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from chat_client import EnsaiGPTClient  # ton fichier client
+from api.chat_client import EnsaiGPTClient  # ton fichier client
 from pprint import pprint
 
 # Charge les variables d'environnement depuis le fichier .env

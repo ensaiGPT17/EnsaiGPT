@@ -32,6 +32,7 @@ class MessageService:
         message = self.message_dao.create_message(id_chat, date_sending, role_author, content)
         # si echec creation du message 
         if message is None:
+            
             return ResponseService(*self.CREATION_ERROR)
         # si reussite 
         return ResponseService(self.CREATION_SUCCESS[0], f"{self.CREATION_SUCCESS[1]} (id={message.id_message})")
