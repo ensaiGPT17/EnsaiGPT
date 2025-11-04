@@ -7,6 +7,9 @@ from utils.reset_database import ResetDatabase
 
 @pytest.fixture
 def user_service_mock():
+    """
+    Pour les tests unitaires.
+    """
     dao = UserDAOMock()
     dao.clear_all()  # important
     return UserService(dao)
@@ -14,6 +17,9 @@ def user_service_mock():
 
 @pytest.fixture
 def user_service_real():
+    """
+    Pour les tests d integration.
+    """
     ResetDatabase().lancer()
     dao = UserDAO()
     return UserService(dao)
