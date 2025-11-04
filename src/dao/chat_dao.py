@@ -11,7 +11,7 @@ class ChatDAO(metaclass=Singleton):
     def get_chat(self, id_chat: int) -> Optional[Chat]:
         """Récupère une conversation par son id."""
         query = """
-            SELECT id_chat, id_user, title, created_at, updated_at
+            SELECT id_chat, id_user, title, date_start, last_date
             FROM ensaiGPT.chats
             WHERE id_chat = %s
         """
@@ -27,16 +27,19 @@ class ChatDAO(metaclass=Singleton):
             id_chat=result["id_chat"],
             id_user=result["id_user"],
             title=result["title"],
-            created_at=result["created_at"],
-            updated_at=result["updated_at"]
+            date_start=result["date_start"],
+            last_date=result["last_date"],
+            max_tokens=result["max_tokens"],
+            temperature=result['temperature'],
+            top_p=result["top_p"]
         )
 
     def insert(self, chat: Chat) -> Optional[Chat]:
         """Insère une nouvelle conversation et renvoie l'objet avec son id."""
         query = """
-            INSERT INTO ensaiGPT.chats (id_user, title, created_at, updated_at)
+            INSERT INTO ensaiGPT.chats (id_user, title, date_start, last_date)
             VALUES (%s, %s, NOW(), NOW())
-            RETURNING id_chat, created_at, updated_at
+            RETURNING id_chat, date_start, last_date
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
@@ -47,8 +50,8 @@ class ChatDAO(metaclass=Singleton):
             return None
 
         chat.id_chat = result["id_chat"]
-        chat.created_at = result["created_at"]
-        chat.updated_at = result["updated_at"]
+        chat.date_start = result["date_start"]
+        chat.last_date = result["last_date"]
         return chat
 
     def delete(self, id_chat: int) -> bool:
@@ -64,7 +67,7 @@ class ChatDAO(metaclass=Singleton):
         """Met à jour le titre d’une conversation."""
         query = """
             UPDATE ensaiGPT.chats
-            SET title = %s, updated_at = NOW()
+            SET title = %s, last_date = NOW()
             WHERE id_chat = %s
         """
         with DBConnection().connection as connection:
@@ -79,9 +82,9 @@ class ChatDAO(metaclass=Singleton):
     def get_all(self) -> Optional[List[Chat]]:
         """Retourne toutes les conversations."""
         query = """
-            SELECT id_chat, id_user, title, created_at, updated_at
+            SELECT id_chat, id_user, title, date_start, last_date
             FROM ensaiGPT.chats
-            ORDER BY updated_at DESC
+            ORDER BY last_date DESC
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
@@ -97,18 +100,21 @@ class ChatDAO(metaclass=Singleton):
                 id_chat=row["id_chat"],
                 id_user=row["id_user"],
                 title=row["title"],
-                created_at=row["created_at"],
-                updated_at=row["updated_at"]
+                date_start=row["date_start"],
+                last_date=row["last_date"],
+                max_tokens=row["max_tokens"],
+                temperature=row['temperature'],
+                top_p=row["top_p"]
             ))
         return chats
 
     def list_chats_id_user(self, id_user: int) -> Optional[List[Chat]]:
         """Liste toutes les conversations d’un utilisateur."""
         query = """
-            SELECT id_chat, id_user, title, created_at, updated_at
+            SELECT id_chat, id_user, title, date_start, last_date
             FROM ensaiGPT.chats
             WHERE id_user = %s
-            ORDER BY updated_at DESC
+            ORDER BY last_date DESC
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
@@ -124,8 +130,11 @@ class ChatDAO(metaclass=Singleton):
                 id_chat=row["id_chat"],
                 id_user=row["id_user"],
                 title=row["title"],
-                created_at=row["created_at"],
-                updated_at=row["updated_at"]
+                date_start=row["date_start"],
+                last_date=row["last_date"],
+                max_tokens=row["max_tokens"],
+                temperature=row['temperature'],
+                top_p=row["top_p"]
             ))
         return chats
 
