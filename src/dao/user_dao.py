@@ -56,8 +56,7 @@ class UserDAO (metaclass=Singleton):
             with connection.cursor() as cursor:
                 cursor.execute(query, (user.username, user.hashed_password))
                 result = cursor.fetchone()
-        #print(result)
-        if result is None :
+        if result is None:
             return None  # utilisateur n'a pas été créé
 
         user.id_user = result['id_user']
@@ -137,8 +136,7 @@ class UserDAO (metaclass=Singleton):
             with connection.cursor() as cursor:
                 cursor.execute(query)
                 result = cursor.fetchone()
-        
-        #print(result)
+
         if result is None:
             return None
         return result['count']
