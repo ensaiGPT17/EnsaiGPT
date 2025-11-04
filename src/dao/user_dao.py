@@ -136,8 +136,7 @@ class UserDAO (metaclass=Singleton):
             with connection.cursor() as cursor:
                 cursor.execute(query)
                 result = cursor.fetchone()
-        
-        #print(result)
+
         if result is None:
             return None
         return result['count']

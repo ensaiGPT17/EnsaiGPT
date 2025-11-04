@@ -11,7 +11,7 @@ def user_service_mock():
     Pour les tests unitaires.
     """
     dao = UserDAOMock()
-    dao.clear_all()  # important
+    dao.clear_all()
     return UserService(dao)
 
 
