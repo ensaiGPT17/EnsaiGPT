@@ -73,7 +73,7 @@ class MainMenuView(AbstractView):
 
                     from view.home.home_view import HomeView
                     return HomeView(message)
-                elif status == 400 or status == 404:
+                elif status == 401 or status == 404:
                     from view.userviews.main_menu_view import MainMenuView
                     return MainMenuView("Mot de passe erroné!\n Retour au Menu Princiapl")
             else:
