@@ -16,3 +16,5 @@ pprint(response)
 print("---- ------ La reponse reellement envoyée ---- --------")
 rep = response['choices'][0]['message']['content']
 print(rep)
+
+# ENSAI_GPT_HOST = "https://ensai-gpt-109912438483.europe-west4.run.app"
