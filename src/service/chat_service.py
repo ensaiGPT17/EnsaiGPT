@@ -6,22 +6,44 @@ from typing import Optional, List
 
 
 class ChatService:
+
+    # CHAT_NOT_FOUND = (404, "Conversation non trouvée!")
+    CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
+    CHAT_GET_SUCCESS = (200, "Récupération de conversation réussie")
+
+    CHATS_GET_BY_ID_SUCCES = (200, "Récupération réussie")
+    CHATS_GET_BY_ID_ERROR = (500, "Erreur interne lors de la recupération des conversations")
+
     def __init__(self, chat_dao: ChatDAO = ChatDAO()):
         self.chat_dao = chat_dao
 
     def get_chat(self, id_chat: int) -> Optional[Chat]:
-        """Récupère une conversation spécifique."""
+        """Récupère une conversation spécifique.
+        Code de  sortie:
+        - 500 : Erreur inconnue
+        - 200 : succes
+        """
         chat = self.chat_dao.get_chat(id_chat)
         if chat:
-            return ResponseService(success=True, data=chat)
-        return ResponseService(success=False, message="Chat introuvable.")
+            return ResponseService(*self.CHAT_GET_SUCCESS)
+        return ResponseService(*self.CHAT_GET_ERROR)
 
     def get_chats_by_id_user(self, id_user: int) -> ResponseService:
-        """Retourne toutes les conversations d’un utilisateur."""
+        """Retourne toutes les conversations d’un utilisateur.
+        code de sortie:
+        - 200: succes
+        - 500: Echec
+        """
         chats = self.chat_dao.list_chats_id_user(id_user)
-        if not chats:
-            return ResponseService(success=False, message="Aucune conversation trouvée.")
-        return ResponseService(success=True, data=chats)
+        if chats:
+            return ResponseService(*self.CHATS_GET_BY_ID_SUCCES)
+        return ResponseService(*self.CHATS_GET_BY_ID_ERROR)
+
+    def request_title(self, id_chat: int) -> ResponseService:
+        # je n'ai aucune idée :)
+        pass
+
+
 
     def create_chat(self, id_user: int, max_tokens: int, top_p: float,
                     temperature: float) -> ResponseService:
@@ -42,30 +64,6 @@ class ChatService:
             return ResponseService(success=True, data=inserted_chat,
                                    message="Conversation créée avec succès.")
         return ResponseService(success=False, message="Erreur lors de la création du chat.")
-
-    def request_title(self, id_chat: int) -> ResponseService:
-        # je n'ai aucune idée :)
-        pass
-
-    def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
-                               top_p: float, temperature: float) -> ResponseService:
-        """
-        Met à jour les paramètres d’un chat (si ces champs existent dans la BDD).
-        Pour le moment, on suppose qu’ils seront stockés ailleurs.
-        """
-        chat = self.chat_dao.get_chat(id_chat)
-        if not chat:
-            return ResponseService(success=False, message="Chat introuvable.")
-
-        # TODO: si tu ajoutes ces colonnes (context, max_tokens, etc.), tu les modifies ici.
-        return ResponseService(success=True, message="Paramètres mis à jour (simulation).")
-
-    def update_chat(self, id_chat: int, updated_chat: Chat) -> ResponseService:
-        """Met à jour le titre ou d’autres infos d’un chat."""
-        updated = self.chat_dao.update(id_chat, updated_chat)
-        if updated:
-            return ResponseService(success=True, message="Chat mis à jour.", data=updated)
-        return ResponseService(success=False, message="Échec de la mise à jour du chat.")
 
     def delete_chat(self, id_chat: int) -> ResponseService:
         """Supprime une conversation."""
@@ -95,3 +93,16 @@ class ChatService:
         if not results:
             return ResponseService(success=False, message="Aucun chat à cette date.")
         return ResponseService(success=True, data=results)
+
+
+    def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
+                               top_p: float, temperature: float) -> ResponseService:
+        """
+        Met à jour les paramètres d’un chat (si ces champs existent dans la BDD).
+        Pour le moment, on suppose qu’ils seront stockés ailleurs.
+        """
+        pass
+
+    def update_chat(self, id_chat: int, updated_chat: Chat) -> ResponseService:
+        """Met à jour le titre ou d’autres infos d’un chat."""
+        pass

@@ -26,6 +26,7 @@ class UserService:
     @log
     def get_user(self, id_user: int) -> Optional[User]:
         return self.user_dao.get_user(id_user)
+        
 
     @log
     def get_user_by_username(self, username: str) -> Optional[User]:
