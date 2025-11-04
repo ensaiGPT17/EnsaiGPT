@@ -24,8 +24,30 @@ C'est le cas de :
     EnsaiGPTClient de #chat_client.py
 """
 
-
 class EnsaiGPTClient:
+
+    def __init__(self, payload):
+        self.payload = payload
+    
+    def generate(self) -> str:
+        """
+        Envoie un message utilisateur au modèle et retourne la réponse générée
+        """
+        self.add_user_message(user_message)
+
+        try:
+            response = requests.post(f"{self.base_url}/generate", json=self.payload, timeout=15)
+            response.raise_for_status()
+            answer = response.json()
+            assistant_answer_message = answer["choices"][0]["message"]["content"]
+            assistant_answer_message = {"role": "assistant", "content": assistant_answer_message}
+            return assistant_answer_message
+        except requests.RequestException as e:
+            raise RuntimeError(f"Erreur lors de l'appel à l'API ensaiGPT: {e}")
+
+
+
+class EnsaiGPTClient_:
     """
     Client pour interagir avec l'API ensaiGPT.
     
