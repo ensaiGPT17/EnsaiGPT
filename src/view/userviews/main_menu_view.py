@@ -24,14 +24,11 @@ class MainMenuView(AbstractView):
         ).execute()
 
         if choix == "Démarrer une conversation":
-            print("Fonctionnalité non implémentée")
             from view.userviews.start_conversation_view import StartConversationView
             return StartConversationView("Démarrer une conversation")
-
-            return self
         elif choix == "Historique de conversation":
-            print("Fonctionnalité non implémentée")
-            return self
+            from view.userviews.historic_conversation_view import HistoricConversationView
+            return HistoricConversationView("Historique de conversation")
         elif choix == "Se déconnecter":
             # Confirmation avant la déconnexion
             confirm = inquirer.confirm(

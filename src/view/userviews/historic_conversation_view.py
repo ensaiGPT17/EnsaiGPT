@@ -9,22 +9,22 @@ class HistoricConversationView(AbstractView):
     def choisir_menu(self):
         user = Session().user
         username = user.username
-        print("\n" + "-" * 50 + "\nDémarrer une conversation\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 50 + "\nHistorique de conversation\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
             choices=[
-                "Continuer",
-                "Configurer les paramètres",
+                "Voir l'historique",
+                "Rechercher une conversation",
                 "Retour"               
             ],
         ).execute()
 
-        if choix == "Continuer":
-            from view.userviews.discussion_view import DiscussionView
-            return DiscussionView("Discussion")
-        elif choix == "Configurer les paramètres":
-            from view.userviews.change_params_view import ChangeConvParamsView
-            return ChangeConvParamsView("Configurer les paramètres")
+        if choix == "Voir l'historique":
+            from view.userviews.see_historic_view import SeeHistoricView
+            return SeeHistoricView("Voir l'historique")
+        elif choix == "Rechercher une conversation":
+            from view.userviews.search_conversation_view import SearchConversationView
+            return SearchConversationView("Rechercher une conversation")
         elif choix == "Retour":
             from view.userviews.main_menu_view import MainMenuView
             return MainMenuView("Menu Principal")
