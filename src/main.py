@@ -14,7 +14,7 @@ if __name__ == "__main__":
     nb_erreurs = 0
 
     while current_view:
-        if nb_erreurs > 6:
+        if nb_erreurs > 5:
             print("Le programme recense trop d'erreurs et va s'arrêter")
             break
         try:

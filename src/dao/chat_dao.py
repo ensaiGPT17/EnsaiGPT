@@ -2,7 +2,7 @@ from typing import Optional, List
 from model.chat import Chat
 from dao.db_connection import DBConnection
 from utils.singleton import Singleton
-
+from datetime import datetime
 
 class ChatDAO(metaclass=Singleton):
     def __init__(self):
@@ -161,12 +161,87 @@ class ChatDAO(metaclass=Singleton):
             return None
         return result["count"]
 
+    def search_by_title(self, id_user:int, mot_cle:str) -> Optional[List[Chat]]:
+        """Liste toutes les conversations d'un utilisateur dont le titre contient le mot-clé"""
+        query = """
+            SELECT id_chat, id_user, title, date_start, last_date, max_tokens, 
+            temperature, top_p
+            FROM ensaiGPT.chats
+            WHERE id_user = %s
+            AND LOWER(title) LIKE %s
+            ORDER BY last_date DESC
+        """
+        mot_cle = f"%{mot_cle.lower()}%"
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (id_user, mot_cle.lower()))
+                results = cursor.fetchall()
+
+        if not results:
+            return None
+
+        chats = []
+        for row in results:
+            chats.append(Chat(
+                id_chat=row["id_chat"],
+                id_user=row["id_user"],
+                title=row["title"],
+                date_start=row["date_start"],
+                last_date=row["last_date"],
+                max_tokens=row["max_tokens"],
+                temperature=row['temperature'],
+                top_p=row["top_p"]
+            ))
+        return chats
+
+    def search_by_date(self, id_user:int, date:datetime) -> Optional[List[Chat]]:
+        """Liste toutes les conversations d'un utilisateur à la date date"""
+        query = """
+            SELECT id_chat, id_user, title, date_start, last_date, max_tokens, 
+            temperature, top_p
+            FROM ensaiGPT.chats
+            WHERE id_user = %s
+            AND DATE(last_date) = %s
+            ORDER BY last_date DESC
+        """
+        with DBConnection().connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (id_user, date))
+                results = cursor.fetchall()
+
+        if not results:
+            return None
+
+        chats = []
+        for row in results:
+            chats.append(Chat(
+                id_chat=row["id_chat"],
+                id_user=row["id_user"],
+                title=row["title"],
+                date_start=row["date_start"],
+                last_date=row["last_date"],
+                max_tokens=row["max_tokens"],
+                temperature=row['temperature'],
+                top_p=row["top_p"]
+            ))
+        return chats
+
+
 """
 if __name__ == "__main__":
     from datetime import datetime
 
-    print("=== TEST DE LA CLASSE ChatDAO ===")
 
+    date ="2025-09-30"
+    date = datetime.strptime(date, "%Y-%m-%d")
+    print(date)
+    conv = ChatDAO().search_by_date(1,date)
+    print(conv)
+    for i in conv: 
+        print(f"CONV: {i.title} -- et derniere fois: {i.last_date}")
+
+    print("=== TEST DE LA CLASSE ChatDAO ===")
+    
     chat_dao = ChatDAO()
     #  Recup conversation
 
