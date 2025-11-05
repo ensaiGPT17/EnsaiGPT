@@ -49,7 +49,7 @@ class SearchConversationView(AbstractView):
             # on bascule dans la vue voir historique 
 
             from view.userviews.list_conversation_view import ListConversationView
-            return ListConversationView(message="Voir l'historique de conversation", conv_list=res, last_view=0)
+            return ListConversationView(message="Voir l'historique de conversation", conv_list=res, last_view=1)
             
             # si erreur : a faire 
 
