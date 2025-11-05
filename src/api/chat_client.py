@@ -31,7 +31,7 @@ class EnsaiGPTClient:
     def __init__(self):
         pass
 
-    def generate(self, chat: Chat, history: List[Message]) -> Message:
+    def generate(self, chat: Chat, history: List[Message]) -> str:
         # on renvoie un message avec un id=-1, le vrai id sera mis à jour dans
         # service au momement du stockage dans la DAO
         """

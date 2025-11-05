@@ -8,6 +8,8 @@ from api.chat_client import EnsaiGPTClient
 from service.message_service import MessageService
 from dao.message_dao import MessageDAO
 from utils.log_decorator import log
+import Levenshtein
+
 
 class ChatService:
     CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
@@ -47,19 +49,19 @@ class ChatService:
         return chats
 
     @log
-    def request_title(self, id_chat: int) -> Message:
+    def request_title(self, id_chat: int) -> str:
         history = self.message_service.get_messages_by_chat(id_chat)
         history.append(self.message_service.title_request()) # methode a implementer
+        # cette methode devra renvoyer un objet Message avec le contenu de la demande
+        # de titre
         chat = self.get_chat(id_chat)
         return self.client.generate(chat, history)
 
 
-
-
     @log
-    def create_chat(self, user_first_message_content, id_user: int, max_tokens=150,
-                    top_p=1.0,
-                    temperature=0.7) -> ResponseService:
+    def create_chat(self, user_first_message_content: str, id_user: int,
+                    max_tokens=150, top_p=1.0, temperature=0.7,
+                    system_message="Tu es un assistant utile.") -> ResponseService:
         """
         Crée une nouvelle conversation.
         """
@@ -76,16 +78,15 @@ class ChatService:
 
         chat_inserted = self.chat_dao.insert(new_chat)
 
-        # Message 0: Pour le SYSTEME
+        # Message systeme
         self.message_service.create_message(
             id_chat=chat_inserted.id_chat, 
             date_sending=datetime.now(), 
             role_author="system", 
-            content="Tu es un assistant utile."
+            content=system_message
         )
 
-        
-        # Message 1: Pour le USER
+        # message user
         self.message_service.create_message(
             id_chat=chat_inserted.id_chat, 
             date_sending=datetime.now(), 
@@ -97,18 +98,25 @@ class ChatService:
 
         assistant_response = self.client.generate(chat_inserted, messages)
 
-        # Emplier la reponse de l'assistant puis le stocker
-        self.history.append(assistant_response)
-        message_service = MessageService(MessageDAO())
-        message_service.create_message(
+        # reponse assistant
+        self.message_service.create_message(
             id_chat=chat_inserted.id_chat, 
             date_sending=datetime.now(), 
             role_author="assistant", 
             content=assistant_response
         )
-        
 
+        # titre
+        chat_inserted.title = self.request_title(chat_inserted.id_chat)
+        chat_updated = self.chat_dao.update(chat_inserted.id_chat, chat_inserted)
 
+        if chat_updated is None:
+            return ResponseService(*self.CHAT_CREATE_ERROR)
+
+        return ResponseService(*self.CHAT_CREATE_SUCCESS)
+
+    def send_message(self, id_chat, content) -> ResponseService:
+        pass
 
     @log
     def delete_chat(self, id_chat: int) -> ResponseService:
@@ -119,35 +127,46 @@ class ChatService:
         return ResponseService(*self.CHAT_DELETE_ERROR)
 
     @log
-    def search_chat_by_title(self, search: str) -> ResponseService:
-        """Recherche les conversations contenant un mot-clé dans le titre."""
-        # faire plutot methode search by title dans chat dao ? 
-        all_chats = self.chat_dao.get_all()
+    def search_chat_by_title(self,id_user: int, search: str) -> List[Chat]:
+        """
+        Recherche des conversations par titre, triées grâce à la distance de
+        Levenshtein.
+        """
+        all_chats = self.chat_dao.list_chats_id_user(id_user)
         if not all_chats:
-            return ResponseService(success=False, message="Aucun chat disponible.")
+            return []
 
-        results = [chat for chat in all_chats if search.lower() in chat.title.lower()]
-        if not results:
-            return ResponseService(*self.CHAT_TITLE_ERROR)
-        return ResponseService(*self.CHAT_TITLE_FOUND)
+        search_words = search.lower().split()
+        similarity_threshold = 0.6  # seuil (vérifier s'il n'est pas trop haut)
 
+        scored_results = []
 
+        for chat in all_chats:
+            title_words = chat.title.lower().split()
 
+            total_score = 0
+            for sw in search_words:  # on compare mot à mot
+                best_ratio = max(Levenshtein.ratio(sw, tw) for tw in title_words)
+                total_score += best_ratio
 
+            avg_score = total_score/len(search)
 
-    
+            if avg_score >= similarity_threshold:
+                scored_results.append((avg_score, chat))
 
-    def search_chat_by_date(self, search: datetime) -> ResponseService:
+        # Trier par similarité décroissante
+        scored_results.sort(key=lambda x: x[0], reverse=True)
+
+        return [chat for _, chat in scored_results]
+
+    def search_chat_by_date(self, id_user: int, search_date: str) -> List[Chat]:
         """Recherche les conversations créées à une certaine date."""
-        all_chats = self.chat_dao.get_all()
-        if not all_chats:
-            return ResponseService(success=False, message="Aucun chat disponible.")
-
-        results = [chat for chat in all_chats if chat.created_at.date() == search.date()]
-        if not results:
-            return ResponseService(*self.CHAT_DATE_ERROR)
-        return ResponseService(*self.CHAT_DATE_FOUND)
-
+        date = datetime.strptime(search_date, "%y-%m-%d")
+        all_chats = self.chat_dao.get_chat_by_date(id_user, date)
+        if all_chats is None:
+            return []
+        all_chats.sort(key=lambda chat: chat.date_start, reverse=True)
+        return all_chats
 
     def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
                                top_p: float, temperature: float) -> ResponseService:
