@@ -34,7 +34,7 @@ class MessageService:
     def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str) -> ResponseService:
         """creer un nouveau message"""
         # appel messageDAO
-        message = self.message_dao.create_message(id_chat, date_sending, role_author, content)
+        message = self.message_dao.insert(Message(-1, id_chat, date_sending, role_author, content))
         # si echec creation du message 
         if message is None:
             
@@ -46,7 +46,7 @@ class MessageService:
     def delete_message(self, id_message: int) -> ResponseService:
         """Supprime un message à partir de son ID."""
         # Appel messageDAO 
-        deleted = self.message_dao.delete_message(id_message)
+        deleted = self.message_dao.delete(id_message)
         # si erreur 
         if not deleted:
             return ResponseService(*self.DELETE_NOT_FOUND)
