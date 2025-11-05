@@ -29,28 +29,20 @@ class ChatService:
         ]
 
     @log
-    def get_chat(self, id_chat: int) -> ResponseService:
-        """Récupère une conversation spécifique.
-        Code de  sortie:
-        - 500 : Erreur inconnue
-        - 200 : succes
+    def get_chat(self, id_chat: int) -> Chat:
         """
-        chat = self.chat_dao.get_chat(id_chat)
-        if chat:
-            return ResponseService(*self.CHAT_GET_SUCCESS)
-        return ResponseService(*self.CHAT_GET_ERROR)
+        Récupère une conversation spécifique.
+        """
+        return self.chat_dao.get_chat(id_chat)
 
     @log
-    def get_chats_by_id_user(self, id_user: int) -> ResponseService:
-        """Retourne toutes les conversations d’un utilisateur.
-        code de sortie:
-        - 200: succes
-        - 500: Echec
+    def get_chats_by_id_user(self, id_user: int) -> List[Chat]:
         """
-        chats = self.chat_dao.list_chats_id_user(id_user)
-        if chats:
-            return ResponseService(*self.CHATS_GET_BY_ID_SUCCES)
-        return ResponseService(*self.CHATS_GET_BY_ID_ERROR)
+        Retourne toutes les conversations d’un utilisateur.
+        """
+        chats_list = self.chat_dao.list_chats_id_user(id_user)
+
+        return chats_list
 
     @log
     def request_title(self, id_chat: int) -> ResponseService:
