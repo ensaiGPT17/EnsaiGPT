@@ -21,9 +21,14 @@ class MessageService:
         return self.message_dao.get_message_by_id(id_message)
 
     @log
-    def get_messages_by_chat(self, id_chat: int) -> List[Message]:
-        """recuperer les messages d'une conversation"""
-        return self.message_dao.get_messages_by_chat(id_chat)
+    def get_messages_by_chat(self, id_chat: int) -> Optional[List[Message]]:
+        """Retourne la liste triée des messages."""
+        messages = self.message_dao.get_messages_by_chat(id_chat)
+        if messages is None:
+            return None
+        messages.sort(key=lambda m: m.date_sending)
+        return messages
+
 
     @log
     def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str) -> ResponseService:
