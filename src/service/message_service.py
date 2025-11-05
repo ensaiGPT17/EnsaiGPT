@@ -33,7 +33,6 @@ class MessageService:
     @log
     def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str) -> ResponseService:
         """creer un nouveau message"""
-        # DOIT RENVOYER L'OBJET MESSAGE CREE
         # appel messageDAO
         message = self.message_dao.create_message(id_chat, date_sending, role_author, content)
         # si echec creation du message 
