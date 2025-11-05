@@ -39,7 +39,7 @@ class MessageDAO(metaclass=Singleton):
         message.id_message = result['id_message']
         return message
 
-    def delete_message(self, id_message: int) -> bool:
+    def delete(self, id_message: int) -> bool:
         """Supprimer un message de la base de données
 
         Parameters
