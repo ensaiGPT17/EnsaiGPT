@@ -1,0 +1,151 @@
+04/11/2025 08:55:42 - INFO     - --------------------------------------------------
+04/11/2025 08:55:42 - INFO     - Lancement Application
+04/11/2025 08:55:42 - INFO     - --------------------------------------------------
+04/11/2025 08:57:25 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 08:57:25 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 08:57:25 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7ffa79b4d010>
+04/11/2025 08:57:25 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 08:57:25 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 08:57:25 - INFO     -        └─> Sortie : <model.user.User object at 0x7ffa79715f90>
+04/11/2025 08:58:18 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 08:58:18 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 08:58:18 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7ffa78feec10>
+04/11/2025 08:58:18 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 08:58:18 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 08:58:18 - INFO     -        └─> Sortie : <model.user.User object at 0x7ffa78b34510>
+04/11/2025 08:58:36 - INFO     -     UserService.delete_user(4, '*****') - DEBUT
+04/11/2025 08:58:36 - INFO     -     UserService.delete_user(4, '*****') - FIN
+04/11/2025 08:58:36 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7ffa78fede50>
+04/11/2025 08:58:36 - INFO     - Fin de l'application
+04/11/2025 09:04:34 - INFO     - --------------------------------------------------
+04/11/2025 09:04:34 - INFO     - Lancement Application
+04/11/2025 09:04:34 - INFO     - --------------------------------------------------
+04/11/2025 09:04:42 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:04:42 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:04:42 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f2b5d75cc20>
+04/11/2025 09:04:42 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 09:04:42 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 09:04:42 - INFO     -        └─> Sortie : <model.user.User object at 0x7f2b5d322210>
+04/11/2025 09:04:51 - INFO     -     UserService.delete_user(4, '*****') - DEBUT
+04/11/2025 09:04:52 - INFO     -     UserService.delete_user(4, '*****') - FIN
+04/11/2025 09:04:52 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f2b5d307610>
+04/11/2025 09:06:02 - INFO     -     UserService.create_user('elsa', '*****') - DEBUT
+04/11/2025 09:06:02 - INFO     -     UserService.create_user('elsa', '*****') - FIN
+04/11/2025 09:06:02 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f2b5cbf8b90>
+04/11/2025 09:06:11 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:06:11 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:06:11 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f2b5cfbe2c0>
+04/11/2025 09:06:11 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 09:06:11 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 09:06:11 - INFO     -        └─> Sortie : <model.user.User object at 0x7f2b5cf744d0>
+04/11/2025 09:06:42 - INFO     -     UserService.delete_user(5, '*****') - DEBUT
+04/11/2025 09:06:43 - INFO     -     UserService.delete_user(5, '*****') - FIN
+04/11/2025 09:06:43 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f2b5cfbda70>
+04/11/2025 09:06:43 - INFO     - Fin de l'application
+04/11/2025 09:08:25 - INFO     - --------------------------------------------------
+04/11/2025 09:08:25 - INFO     - Lancement Application
+04/11/2025 09:08:25 - INFO     - --------------------------------------------------
+04/11/2025 09:08:32 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:08:32 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:08:32 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7ff0014b4c20>
+04/11/2025 09:08:32 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 09:08:32 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 09:08:32 - INFO     -        └─> Sortie : <model.user.User object at 0x7ff000d16210>
+04/11/2025 09:08:40 - INFO     -     UserService.delete_user(5, '*****') - DEBUT
+04/11/2025 09:08:40 - INFO     -     UserService.delete_user(5, '*****') - FIN
+04/11/2025 09:08:40 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7ff00155f4d0>
+04/11/2025 09:08:54 - INFO     - Fin de l'application
+04/11/2025 09:15:49 - INFO     - --------------------------------------------------
+04/11/2025 09:15:49 - INFO     - Lancement Application
+04/11/2025 09:15:49 - INFO     - --------------------------------------------------
+04/11/2025 09:15:57 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:15:57 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:15:57 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7fbaf235cc20>
+04/11/2025 09:15:57 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 09:15:57 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 09:15:57 - INFO     -        └─> Sortie : <model.user.User object at 0x7fbaf1f22210>
+04/11/2025 09:16:21 - ERROR    - NameError : name 'uples' is not defined
+Traceback (most recent call last):
+  File "/home/onyxia/work/EnsaiGPT/src/main.py", line 25, in <module>
+    current_view = current_view.choisir_menu()
+  File "/home/onyxia/work/EnsaiGPT/src/view/userviews/start_conversation_view.py", line 24, in choisir_menu
+    return DiscussionView("Discussion")
+  File "/home/onyxia/work/EnsaiGPT/src/view/userviews/discussion_view.py", line 10, in __init__
+    uples (role, message)
+    ^^^^^
+NameError: name 'uples' is not defined. Did you mean: 'tuple'?
+04/11/2025 09:16:32 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:16:32 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:16:32 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7fbaf17d3890>
+04/11/2025 09:16:32 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 09:16:32 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 09:16:32 - INFO     -        └─> Sortie : <model.user.User object at 0x7fbaf1baab10>
+04/11/2025 09:17:27 - ERROR    - ModuleNotFoundError : No module named 'view.userviews.principal_menu_view'
+Traceback (most recent call last):
+  File "/home/onyxia/work/EnsaiGPT/src/main.py", line 25, in <module>
+    current_view = current_view.choisir_menu()
+  File "/home/onyxia/work/EnsaiGPT/src/view/userviews/change_params_view.py", line 50, in choisir_menu
+    from view.userviews.principal_menu_view import MainMenuView
+ModuleNotFoundError: No module named 'view.userviews.principal_menu_view'
+04/11/2025 09:18:10 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:18:10 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:18:10 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7fbaf08256d0>
+04/11/2025 09:18:10 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 09:18:10 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 09:18:10 - INFO     -        └─> Sortie : <model.user.User object at 0x7fbaf0818ef0>
+04/11/2025 09:18:43 - ERROR    - ModuleNotFoundError : No module named 'view.userviews.principal_menu_view'
+Traceback (most recent call last):
+  File "/home/onyxia/work/EnsaiGPT/src/main.py", line 25, in <module>
+    current_view = current_view.choisir_menu()
+  File "/home/onyxia/work/EnsaiGPT/src/view/userviews/change_params_view.py", line 50, in choisir_menu
+    from view.userviews.principal_menu_view import MainMenuView
+ModuleNotFoundError: No module named 'view.userviews.principal_menu_view'
+04/11/2025 09:18:43 - INFO     - Fin de l'application
+04/11/2025 09:22:40 - INFO     - --------------------------------------------------
+04/11/2025 09:22:40 - INFO     - Lancement Application
+04/11/2025 09:22:40 - INFO     - --------------------------------------------------
+04/11/2025 09:22:49 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:22:50 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:22:50 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f4c30550c20>
+04/11/2025 09:22:50 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 09:22:50 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 09:22:50 - INFO     -        └─> Sortie : <model.user.User object at 0x7f4c30116210>
+04/11/2025 09:23:04 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:23:05 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:23:05 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f4c3053b890>
+04/11/2025 09:24:07 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:24:07 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:24:07 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f4c2f9c3610>
+04/11/2025 09:24:43 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:24:44 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:24:44 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f4c2fda8d60>
+04/11/2025 09:24:59 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:24:59 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:24:59 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f4c3052d350>
+04/11/2025 09:25:11 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 09:25:11 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 09:25:11 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f4c3019b2f0>
+04/11/2025 09:38:11 - INFO     - Fin de l'application
+04/11/2025 13:42:33 - INFO     - --------------------------------------------------
+04/11/2025 13:42:33 - INFO     - Lancement Application
+04/11/2025 13:42:33 - INFO     - --------------------------------------------------
+04/11/2025 13:42:46 - INFO     -     UserService.create_user('elsa', '*****') - DEBUT
+04/11/2025 13:42:46 - INFO     -     UserService.create_user('elsa', '*****') - FIN
+04/11/2025 13:42:46 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7facc08dcad0>
+04/11/2025 13:43:37 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 13:43:38 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 13:43:38 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7facc011cf50>
+04/11/2025 13:43:38 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 13:43:38 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 13:43:38 - INFO     -        └─> Sortie : <model.user.User object at 0x7facc011c7d0>
+04/11/2025 13:43:45 - INFO     - Fin de l'application
+04/11/2025 14:19:44 - INFO     - --------------------------------------------------
+04/11/2025 14:19:44 - INFO     - Lancement Application
+04/11/2025 14:19:44 - INFO     - --------------------------------------------------
+04/11/2025 14:19:56 - INFO     -     UserService.authenticate('elsa', '*****') - DEBUT
+04/11/2025 14:19:56 - INFO     -     UserService.authenticate('elsa', '*****') - FIN
+04/11/2025 14:19:56 - INFO     -        └─> Sortie : <service.response_service.ResponseService object at 0x7f7f0b54cc20>
+04/11/2025 14:19:56 - INFO     -     UserService.get_user_by_username('elsa',) - DEBUT
+04/11/2025 14:19:56 - INFO     -     UserService.get_user_by_username('elsa',) - FIN
+04/11/2025 14:19:56 - INFO     -        └─> Sortie : <model.user.User object at 0x7f7f0b096210>
+04/11/2025 14:24:20 - INFO     - Fin de l'application

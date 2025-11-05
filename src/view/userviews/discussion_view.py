@@ -6,8 +6,7 @@ from view.session import Session
 class DiscussionView(AbstractView):
     def __init__(self, message: str = ""):
         super().__init__(message)
-        self.conversation = []  # liste de t
-        uples (role, message)
+        self.conversation = []  # liste de tuples (role, message)
 
     def afficher_conversation(self):
         print("\n" + "-"*50)
