@@ -3,7 +3,7 @@ from InquirerPy import inquirer
 from view.session import Session
 from dao.user_dao import UserDAO
 from service.user_service import UserService
-from view.userviews.main_menu_view import MainMenuView
+
 
 class ChangeCredentialsView(AbstractView):
     def __init__(self, message: str = ""):
@@ -34,18 +34,23 @@ class ChangeCredentialsView(AbstractView):
                 # user confirmé, il peut changer le USERNAME
                 new_username = inquirer.text(message="Rentrez votre nouveau nom d'utilisateur:").execute()
                 res_chgt_username = user_service.change_username(user.id_user, new_username)
-                # si reussite changement username 
+                # si reussite changement username : test OK
                 if res_chgt_username.code == 200:
+                    from view.home.home_view import HomeView
                     message = f"{res_chgt_username.content}\n" 
-                    return MainMenuView(message)                   
+                    return HomeView(message)                 
                 # si echec changement username
                 elif res_chgt_username == 409:
+                    # cas username deja utilise : test marche pas 
+                    from view.userviews.main_menu_view import MainMenuView
                     message = f"{res_chgt_username.content}"
                     return MainMenuView(message)
                 elif res_chgt_username == 500 : 
+                    from view.userviews.main_menu_view import MainMenuView
                     message=f"Erreur inconnue:{res_chgt_username.content}"
                     return MainMenuView(message)
             else:
+                from view.userviews.main_menu_view import MainMenuView
                 return MainMenuView("Mot de passe erronné! Retour au Menu Principal")
 
         elif choix == "Changer mon mot de passe":
@@ -57,13 +62,20 @@ class ChangeCredentialsView(AbstractView):
                 new_password = inquirer.secret(message="Rentrez votre nouveau mot de passe: ")
                 res_chgt_password = user_service.change_password(user.id_user, password, new_password)
                 if res_chgt_password.code==200:
+                    from view.userviews.main_menu_view import MainMenuView
                     message = f"{res_chgt_password.content}\n"
+                    return MainMenuView(message)
                 elif res_chgt_password.code==400:
+                    from view.userviews.main_menu_view import MainMenuView
                     message = f"Echec:{res_chgt_password.content}\n"
+                    return MainMenuView(message)
                 elif res_chgt_password.code==500:
+                    from view.userviews.main_menu_view import MainMenuView
                     message = f"Echec, erreur inconnue:{res_chgt_password.content}\n"
-                return MainMenuView(message)
+                    return MainMenuView(message)
             else:
+                from view.userviews.main_menu_view import MainMenuView
                 return MainMenuView("Mot de passe erronné! Retour au Menu Principal")
         elif choix == "Retour":
+            from view.userviews.main_menu_view import MainMenuView
             return MainMenuView("Menu Principal")
