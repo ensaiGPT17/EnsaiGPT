@@ -1,6 +1,7 @@
 import os
 import requests
 from typing import List, Dict, Optional
+from model.message import Message
 
 """
 Une bonne partie des methodes developpée ici vont disparaitre une fois le
@@ -29,10 +30,13 @@ class EnsaiGPTClient:
     def __init__(self, payload):
         self.payload = payload
     
-    def generate(self) -> str:
+    def generate(self, history: List[Message]) -> Message:
+        # on renvoie un message avec un id=-1, le vrai id sera mis à jour dans
+        # service au momement du stockage dans la DAO
         """
         Envoie un message utilisateur au modèle et retourne la réponse générée
         """
+        pass
 
 
         try:
