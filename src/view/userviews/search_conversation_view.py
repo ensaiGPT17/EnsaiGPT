@@ -48,8 +48,8 @@ class SearchConversationView(AbstractView):
             # si pas d'erreur : la fonction doit renvoyer liste des conversations correspondantes
             # on bascule dans la vue voir historique 
 
-            from view.userviews.see_historic_view import SeeHistoricView
-            return SeeHistoricView(message="Voir l'historique de conversation", conv_list=res)
+            from view.userviews.list_conversation_view import ListConversationView
+            return SeeHistoricView(message="Voir l'historique de conversation", conv_list=res, last_view=0)
             
             # si erreur : a faire 
 
