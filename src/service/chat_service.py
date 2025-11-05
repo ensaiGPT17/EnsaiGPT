@@ -73,8 +73,6 @@ class ChatService:
             temperature = temperature
         )
 
-
-
         chat_inserted = self.chat_dao.insert(new_chat)
 
         # Message 0: Pour le SYSTEME
