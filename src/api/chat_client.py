@@ -33,7 +33,7 @@ class EnsaiGPTClient:
         """
         Envoie un message utilisateur au modèle et retourne la réponse générée
         """
-        self.add_user_message(user_message)
+
 
         try:
             response = requests.post(f"{self.base_url}/generate", json=self.payload, timeout=15)

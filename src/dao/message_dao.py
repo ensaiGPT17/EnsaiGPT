@@ -6,52 +6,40 @@ from utils.singleton import Singleton
 
 
 class MessageDAO(metaclass=Singleton):
+    def __init__(self):
+        pass
 
-    def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str) -> Optional[Message]:
+    def insert(self, message: Message) -> Optional[Message]:
         """Ajouter un nouveau message à la base de données
 
         Parameters
         ----------
-        id_chat : int
-            L'id de la conversation à laquelle le message appartient
-        date_sending : datetime
-            La date d'envoi du message
-        role_author : str
-            L'auteur du message
-        content : str
-            Le contenu du message
+        message : Message
 
         Returns
         -------
         Optional[Message]
             L'objet Message créé ou None en cas d'erreur
         """
+        query = """
+                INSERT INTO ensaiGPT.messages (id_chat, date_sending, role_author, 
+                content)
+                VALUES (%s, %s, %s, %s)
+                RETURNING id_message;
+                """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
-                query = """
-                    INSERT INTO ensaiGPT.messages (id_chat, date_sending, role_author, content)
-                    VALUES (%s, %s, %s, %s)
-                    RETURNING id_message;
-                """
-                cursor.execute(query, (id_chat, date_sending, role_author, content))
-                res = cursor.fetchone()
+                cursor.execute(query, (message.id_chat, message.date_sending,
+                                       message.role_author,
+                                       message.content))
+                result = cursor.fetchone()
+        if result is None:
+            return None
 
-        print(res)
-        # Construction de l’objet Message si insertion réussie
-        if res:
-            new_id = res['id_message']
-            return Message(
-                id_message=new_id,
-                id_chat=id_chat,
-                date_sending=date_sending,
-                role_author=role_author,
-                content=content
-            )
+        message.id_message = result['id_message']
+        return message
 
-        # En cas d’échec
-        return None
-
-    def delete_message(self, id_message: int) -> bool:
+    def delete(self, id_message: int) -> bool:
         """Supprimer un message de la base de données
 
         Parameters
