@@ -29,7 +29,6 @@ class MessageService:
         messages.sort(key=lambda m: m.date_sending)
         return messages
 
-
     @log
     def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str) -> ResponseService:
         """creer un nouveau message"""
@@ -52,3 +51,9 @@ class MessageService:
             return ResponseService(*self.DELETE_NOT_FOUND)
         # si suppression reussie 
         return ResponseService(*self.DELETE_SUCCESS)
+
+    @log
+    def title_request(self):
+        prompt = "Donne un titre en moins de 10 mots à cette conversation."
+        return Message(id_message=-1, id_chat=-1, date_sending=datetime.now(),
+                       role_author="tool", content=prompt)
