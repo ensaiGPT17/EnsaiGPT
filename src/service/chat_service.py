@@ -112,21 +112,19 @@ class ChatService:
     @log
     def send_message(self, chat: Chat, history: List[Message], content: str) -> \
             List[Message]:
-        liste = history.copy()
-        print(liste)
+
         user_message_sent = self.message_service.create_message(id_chat=chat.id_chat,
                                             date_sending=datetime.now(),
                                             role_author="user", content=content)[1]
-        liste.append(user_message_sent)
-        print(liste)
+        history.append(user_message_sent)
         assistant_response = self.client.generate(chat, history)
         assistant_response_saved = self.message_service.create_message(id_chat=chat.id_chat,
                                             date_sending=datetime.now(),
                                             role_author="assistant",
                                             content=assistant_response)[1]
         # messages_updated = self.message_service.get_messages_by_chat(chat.id_chat)
-        liste.append(assistant_response_saved)
-        return liste
+        history.append(assistant_response_saved)
+        return history
 
     @log
     def delete_chat(self, id_chat: int) -> ResponseService:

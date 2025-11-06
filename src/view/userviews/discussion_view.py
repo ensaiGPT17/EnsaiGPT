@@ -58,6 +58,11 @@ class DiscussionView(AbstractView):
                 from dao.message_dao import MessageDAO
                 from view.userviews.discussion_view import DiscussionView
 
+                print("=============================")
+                for mes in self.conversation:
+                    print(f"--> {mes[0]}:{mes[1]}")
+                print("=============================")
+
                 message_user = inquirer.text(message="Votre message :").execute()
                 self.conversation.append(("user", message_user))
 
@@ -71,11 +76,9 @@ class DiscussionView(AbstractView):
                     history=self.liste_messages,
                     content=message_user
                 )
-                
-                message_list = message_list[1:]
                 return DiscussionView(chat=self.chat, liste_message=message_list, first_time=1)
 
 
             elif choix == "Quitter la discussion":
-                from view.userviews.main_menu_view import MainMenuView
-                return MainMenuView(f"Retour au menu principal, {username}.")
+                from view.userviews.start_conversation_view import StartConversationView
+                return StartConversationView(f"Retour au menu de demarrage discussion, {username}.")
