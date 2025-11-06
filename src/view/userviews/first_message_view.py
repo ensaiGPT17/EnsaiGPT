@@ -50,10 +50,10 @@ class FirstMessageView(AbstractView):
             message_service = MessageService(MessageDAO())
 
             new_chat = chat_service.create_chat(message_user, user.id_user)
-            message_list_of_new_chat = message_service.get_messages_by_chat(new_chat.id)
+            message_list_of_new_chat = message_service.get_messages_by_chat(new_chat.id_chat)
             
             message_list_of_new_chat = message_list_of_new_chat[1:]
-            return DiscussionView(chat=new_chat, liste_message=message_list_of_new_chat, firt_time=1)
+            return DiscussionView(chat=new_chat, liste_message=message_list_of_new_chat, first_time=1)
             
         elif choix == "Retour":
             from view.userviews.start_conversation_view import StartConversationView
