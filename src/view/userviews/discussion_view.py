@@ -4,13 +4,14 @@ from InquirerPy import inquirer
 from view.session import Session
 
 class DiscussionView(AbstractView):
-    def __init__(self, message: str = ""):
+    def __init__(self, message: str = "", conv_title = "" , firt_time = 0):
         super().__init__(message)
         self.conversation = []  # liste de tuples (role, message)
 
     def afficher_conversation(self):
         print("\n" + "-"*50)
         print("Discussion".center(50))
+        
         print("-"*50 + "\n")
 
         for role, msg in self.conversation:

@@ -76,3 +76,4 @@ class ChangeConvParamsView(AbstractView):
         # Retour au menu principal
         from view.userviews.discussion_view import DiscussionView
         return DiscussionView(f"Paramètres de la conversation mis à jour\n")
+
