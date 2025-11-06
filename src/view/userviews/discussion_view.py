@@ -1,19 +1,23 @@
-# view/userviews/discussion_view.py
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from view.session import Session
+from model.message import Message
+from model.chat import Chat
 
 class DiscussionView(AbstractView):
-    def __init__(self, message: str = "", conv_title = "" , firt_time = 0):
-        super().__init__(message)
-        self.conversation = []  # liste de tuples (role, message)
+    def __init__(self, chat: Chat, liste_message: list[Message]):
+        super().__init__(chat)  # Remplacer 'message' par 'chat' si nécessaire
+        self.conversation = [
+            (message.role_author, message.content) for message in liste_message
+        ]  # Liste de tuples (role, message)
+        self.title = chat.title
 
     def afficher_conversation(self):
         print("\n" + "-"*50)
         print("Discussion".center(50))
-        
         print("-"*50 + "\n")
 
+        # Affichage de la conversation
         for role, msg in self.conversation:
             if role == "assistant":
                 print("Assistant 🤖:")
@@ -42,7 +46,7 @@ class DiscussionView(AbstractView):
                 self.conversation.append(("user", message_user))
 
                 # Simulation de réponse de l’assistant (placeholder)
-                message_assistant = f"Réponse à : '{message_user}'"
+                message_assistant = f"Réponse à : '{message_user}'"  # À remplacer par un vrai modèle si besoin
                 self.conversation.append(("assistant", message_assistant))
 
             elif choix == "Quitter la discussion":
