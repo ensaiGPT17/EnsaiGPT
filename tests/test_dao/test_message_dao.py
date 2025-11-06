@@ -1,22 +1,81 @@
 import pytest
+from datetime import datetime
 from dao.message_dao import MessageDAO
+from model.message import Message
 from utils.reset_database import ResetDatabase
 
-@pytest.fixture(scope="module")
+
+@pytest.fixture
 def message_dao():
     """Réinitialise la base et fournit une instance de MessageDAO"""
     ResetDatabase().lancer()
     return MessageDAO()
 
 
-def test_créer_message(message_dao):
-    """Test la création d'un message"""
-    pass
+# -----------------------------
+# Tests d'insertion
+# -----------------------------
 
-def test_supprimer_message(message_dao):
+def test_insert_message(message_dao):
+    """Test l'insertion d'un message"""
+    msg = Message(
+        id_message=None,
+        id_chat=1,
+        date_sending=datetime.now(),
+        role_author="user",
+        content="Bonjour, ceci est un message de test"
+    )
+
+    inserted = message_dao.insert(msg)
+    assert inserted is not None
+    assert inserted.id_message is not None
+    assert inserted.content == msg.content
+    assert inserted.role_author == "user"
+
+
+def test_delete_message(message_dao):
     """Test la suppression d'un message"""
-    # Créer un message à supprimer, je pense
-    pass
+    msg = Message(None, 1, datetime.now(), "assistant", "Message à supprimer")
+    inserted = message_dao.insert(msg)
 
-if __name__ == "__main__":
-    pytest.main([__file__])
+    deleted = message_dao.delete(inserted.id_message)
+    assert deleted is True
+
+
+# -----------------------------
+# Tests de récupération
+# -----------------------------
+
+def test_get_message_by_id(message_dao):
+    """Test récupération par id"""
+    msg = Message(None, 1, datetime.now(), "user", "Message pour get_by_id")
+    inserted = message_dao.insert(msg)
+
+    fetched = message_dao.get_message_by_id(inserted.id_message)
+    assert fetched is not None
+    assert fetched.id_message == inserted.id_message
+    assert fetched.content == "Message pour get_by_id"
+
+
+def test_get_message_by_id_not_found(message_dao):
+    """Retourne None si l'id n'existe pas"""
+    fetched = message_dao.get_message_by_id(9999)
+    assert fetched is None
+
+
+def test_get_messages_by_chat(message_dao):
+    """Récupère tous les messages d'un chat par ordre croissant"""
+    chat_id = 1
+    msg1 = Message(None, chat_id, datetime(2025, 1, 1, 10, 0), "user", "Message 1")
+    msg2 = Message(None, chat_id, datetime(2025, 1, 1, 10, 5), "assistant", "Message 2")
+
+    inserted1 = message_dao.insert(msg1)
+    inserted2 = message_dao.insert(msg2)
+
+    messages = message_dao.get_messages_by_chat(chat_id)
+    assert isinstance(messages, list)
+    assert len(messages) >= 2
+    assert messages[0].content == "Message 1"
+    assert messages[1].content == "Message 2"
+    # Vérifie l'ordre chronologique
+    assert messages[0].date_sending <= messages[1].date_sending
