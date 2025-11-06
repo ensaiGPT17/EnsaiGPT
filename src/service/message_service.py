@@ -30,16 +30,16 @@ class MessageService:
         return messages
 
     @log
-    def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str) -> ResponseService:
+    def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str):
         """creer un nouveau message"""
         # appel messageDAO
         message = self.message_dao.insert(Message(-1, id_chat, date_sending, role_author, content))
         # si echec creation du message 
         if message is None:
             
-            return ResponseService(*self.CREATION_ERROR)
+            return ResponseService(*self.CREATION_ERROR), message
         # si reussite 
-        return ResponseService(self.CREATION_SUCCESS[0], f"{self.CREATION_SUCCESS[1]} (id={message.id_message})")
+        return ResponseService(self.CREATION_SUCCESS[0], f"{self.CREATION_SUCCESS[1]} (id={message.id_message})"), message
 
     @log
     def delete_message(self, id_message: int) -> ResponseService:

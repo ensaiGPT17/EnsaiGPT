@@ -67,7 +67,7 @@ class DiscussionView(AbstractView):
                 #new_chat = chat_service.create_chat(message_user, user.id_user)
 
                 message_list = chat_service.send_message(
-                   chat=self.chat,
+                    chat=self.chat,
                     history=self.liste_messages,
                     content=message_user
                 )
