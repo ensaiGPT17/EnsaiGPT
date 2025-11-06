@@ -227,7 +227,7 @@ class ChatDAO(metaclass=Singleton):
         return chats
 
 
-
+"""
 if __name__ == "__main__":
 
 
@@ -239,8 +239,7 @@ if __name__ == "__main__":
     print(f"CONV: {chat1.title} -- et derniere fois: {chat1.last_date}")
     print(type(chat1.temperature))
     print(type(chat1.max_tokens))
-
-"""    
+    
     from datetime import datetime
     date ="2025-09-30"
     date = datetime.strptime(date, "%Y-%m-%d")

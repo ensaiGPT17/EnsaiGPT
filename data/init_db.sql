@@ -19,7 +19,7 @@ CREATE TABLE ensaiGPT.users (
 DROP TABLE IF EXISTS ensaiGPT.chats CASCADE ;
 CREATE TABLE ensaiGPT.chats (
     id_chat serial PRIMARY KEY,
-    id_user integer REFERENCES ensaiGPT.users(id_user),
+    id_user integer REFERENCES ensaiGPT.users(id_user) ON DELETE CASCADE,
     title text,
     date_start date,
     last_date date,
