@@ -57,7 +57,7 @@ class ChatService:
 
     @log
     def create_chat(self, user_first_message_content: str, id_user: int,
-                    max_tokens=150, top_p=1.0, temperature=0.7,
+                    max_tokens=512, top_p=1.0, temperature=0.7,
                     system_message="Tu es un assistant utile.") -> Chat:
         """
         Crée une nouvelle conversation.
