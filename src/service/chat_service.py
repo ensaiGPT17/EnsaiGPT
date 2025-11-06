@@ -110,18 +110,17 @@ class ChatService:
         return chat_updated
 
     @log
-    def send_message(self, id_chat: int, history: List[Message], content: str) -> \
+    def send_message(self, chat: Chat, history: List[Message], content: str) -> \
             List[Message]:
-        chat = self.get_chat(id_chat)
-        self.message_service.create_message(id_chat=id_chat,
+        self.message_service.create_message(id_chat=chat.id_chat,
                                             date_sending=datetime.now(),
                                             role_author="user", content=content)
         assistant_response = self.client.generate(chat, history)
-        self.message_service.create_message(id_chat=id_chat,
+        self.message_service.create_message(id_chat=chat.id_chat,
                                             date_sending=datetime.now(),
                                             role_author="assistant",
                                             content=assistant_response)
-        messages_updated = self.message_service.get_messages_by_chat(id_chat)
+        messages_updated = self.message_service.get_messages_by_chat(chat.id_chat)
         return messages_updated
 
     @log
