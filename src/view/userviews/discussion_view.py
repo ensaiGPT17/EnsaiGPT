@@ -58,11 +58,6 @@ class DiscussionView(AbstractView):
                 from dao.message_dao import MessageDAO
                 from view.userviews.discussion_view import DiscussionView
 
-                print("=============================")
-                for mes in self.conversation:
-                    print(f"--> {mes[0]}:{mes[1]}")
-                print("=============================")
-
                 message_user = inquirer.text(message="Votre message :").execute()
                 self.conversation.append(("user", message_user))
 
