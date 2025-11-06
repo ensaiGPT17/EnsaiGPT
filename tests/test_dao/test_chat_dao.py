@@ -103,7 +103,7 @@ def test_list_chats_id_user(chat_dao):
     print("\nRésultats retournés par list_chats_id_user(1):")
     for c in chats:
         print(f"id_chat={c.id_chat}, id_user={c.id_user}, title={c.title}")
-    assert all(c.id_user == (user_id,) for c in chats) # c'est une solution pas efficace,(probleme de tuple) je vais revoir ça (yassine)
+    assert all(c.id_user == user_id for c in chats) # c'est une solution pas efficace,(probleme de tuple) je vais revoir ça (yassine)
 
 
 
