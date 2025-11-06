@@ -19,7 +19,7 @@ class ListConversationView(AbstractView):
 
         # Formatage de la liste des conversations avec un compteur i et des underscores ajustés
 
-        total_width = 80
+        total_width = 100
         formated_conv_list = []
         for i, conv in enumerate(self.conv_list, start=1):
             # Assurer que la date soit un objet datetime

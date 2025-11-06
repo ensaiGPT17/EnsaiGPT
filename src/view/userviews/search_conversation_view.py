@@ -52,8 +52,6 @@ class SearchConversationView(AbstractView):
             return ListConversationView(message="Voir l'historique de conversation", conv_list=res, last_view=1)
             
             # si erreur : a faire 
-
-
             print("fonctionnalité non implémentée")
             return self
 
@@ -61,14 +59,10 @@ class SearchConversationView(AbstractView):
             # demande de la date à l'utilisateur et convertir en datetime 
             date = inquirer.text("Rentrez une date pour la recherche (YYYY-MM-DD): ").execute()
             date_convertie = datetime.strptime(date, "%Y-%m-%d")
-            # appel a la fonction dans chat service 
+            # appel a la fonction dans chat service
             res = chat_service.search_chat_by_date(date_convertie)
 
             # si pas d'erreur : la fonction doit renvoyer liste des conv 
-    
-            
-
-
             # si erreur : 
 
             print("fonctionnalité non implémentée")
