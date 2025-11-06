@@ -2,6 +2,7 @@ import os
 import requests
 from typing import List, Dict, Optional
 from model.message import Message
+from model.chat import Chat
 
 """
 Une bonne partie des methodes developpée ici vont disparaitre une fois le
@@ -27,10 +28,10 @@ C'est le cas de :
 
 class EnsaiGPTClient:
 
-    def __init__(self, payload):
-        self.payload = payload
-    
-    def generate(self, history: List[Message]) -> Message:
+    def __init__(self):
+        pass
+
+    def generate(self, chat: Chat, history: List[Message]) -> str:
         # on renvoie un message avec un id=-1, le vrai id sera mis à jour dans
         # service au momement du stockage dans la DAO
         """
