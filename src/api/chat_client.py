@@ -18,7 +18,7 @@ class EnsaiGPTClient:
     def __init__(self, base_url: str = host):
         self.base_url = base_url.rstrip("/")  # Enlève le slash final si présent
 
-    def generate(self, chat: Chat, history: List[Message]) -> Dict:
+    def generate(self, chat: Chat, history: List[Message]) -> str:
         """
         Envoie un message utilisateur au modèle et retourne la réponse générée.
         """
@@ -49,7 +49,7 @@ class EnsaiGPTClient:
             answer = response.json()  # Récupère la réponse JSON
 
             assistant_answer_message = answer["choices"][0]["message"]["content"]
-            return {"role": "assistant", "content": assistant_answer_message}
+            return assistant_answer_message
 
         except requests.RequestException as e:
             # Affiche les détails de la réponse de l'API pour mieux comprendre l'erreur
