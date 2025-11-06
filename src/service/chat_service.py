@@ -160,7 +160,7 @@ class ChatService:
 
             avg_score = total_score/len(search)
 
-            if avg_score >= similarity_threshold:
+            if avg_score >= similarity_threshold or True:
                 scored_results.append((avg_score, chat))
 
         # Trier par similarité décroissante
