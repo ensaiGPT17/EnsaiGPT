@@ -55,11 +55,10 @@ class ChatService:
         chat = self.get_chat(id_chat)
         return self.client.generate(chat, history)
 
-
     @log
     def create_chat(self, user_first_message_content: str, id_user: int,
                     max_tokens=150, top_p=1.0, temperature=0.7,
-                    system_message="Tu es un assistant utile.") -> ResponseService:
+                    system_message="Tu es un assistant utile.") -> Chat:
         """
         Crée une nouvelle conversation.
         """
@@ -108,13 +107,22 @@ class ChatService:
         chat_inserted.title = self.request_title(chat_inserted.id_chat)
         chat_updated = self.chat_dao.update(chat_inserted.id_chat, chat_inserted)
 
-        if chat_updated is None:
-            return ResponseService(*self.CHAT_CREATE_ERROR)
+        return chat_updated
 
-        return ResponseService(*self.CHAT_CREATE_SUCCESS)
-
-    def send_message(self, id_chat, content) -> ResponseService:
-        pass
+    @log
+    def send_message(self, id_chat: int, history: List[Message], content: str) -> \
+            List[Message]:
+        chat = self.get_chat(id_chat)
+        self.message_service.create_message(id_chat=id_chat,
+                                            date_sending=datetime.now(),
+                                            role_author="user", content=content)
+        assistant_response = self.client.generate(chat, history)
+        self.message_service.create_message(id_chat=id_chat,
+                                            date_sending=datetime.now(),
+                                            role_author="assistant",
+                                            content=assistant_response)
+        messages_updated = self.message_service.get_messages_by_chat(id_chat)
+        return messages_updated
 
     @log
     def delete_chat(self, id_chat: int) -> ResponseService:
@@ -125,7 +133,7 @@ class ChatService:
         return ResponseService(*self.CHAT_DELETE_ERROR)
 
     @log
-    def search_chat_by_title(self,id_user: int, search: str) -> List[Chat]:
+    def search_chat_by_title(self, id_user: int, search: str) -> List[Chat]:
         """
         Recherche des conversations par titre, triées grâce à la distance de
         Levenshtein.
@@ -172,8 +180,4 @@ class ChatService:
         Met à jour les paramètres d’un chat (si ces champs existent dans la BDD).
         Pour le moment, on suppose qu’ils seront stockés ailleurs.
         """
-        pass
-
-    def update_chat(self, id_chat: int, updated_chat: Chat) -> ResponseService:
-        """Met à jour le titre ou d’autres infos d’un chat."""
         pass
