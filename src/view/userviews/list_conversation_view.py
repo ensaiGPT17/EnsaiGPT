@@ -59,13 +59,33 @@ class ListConversationView(AbstractView):
             # Récupérer l'index de la conversation sélectionnée
             selected_conv_index = formated_conv_list.index(choix)
             selected_conv = self.conv_list[selected_conv_index]  # Récupérer l'objet Chat complet
+            
+            choix_action = inquirer.select(
+                message=f"Que voulez-vous faire avec la conversation '{selected_conv.title}' ?",
+                choices=["Reprendre la discussion", "Supprimer la conversation"]
+            ).execute()
 
-            # Récupérer l'ID du chat
-            chat_id = selected_conv.id_chat 
-            # on recupere la liste des messages deja envoyes 
-            messages_envoyes = message_service.get_messages_by_chat(id_chat=chat_id)
-            from view.userviews.discussion_view import DiscussionView
-            return DiscussionView(selected_conv, messages_envoyes)
+            if choix_action=="Reprendre la discussion":
+                # Récupérer l'ID du chat
+                chat_id = selected_conv.id_chat 
+                # on recupere la liste des messages deja envoyes 
+                messages_envoyes = message_service.get_messages_by_chat(id_chat=chat_id)
+                from view.userviews.discussion_view import DiscussionView
+                return DiscussionView(selected_conv, messages_envoyes)
+
+            else : 
+                chat_dao = ChatDAO()
+                chat_service = ChatService(chat_dao)
+                chat_id = selected_conv.id_chat 
+                res = chat_service.delete_chat(chat_id)
+                if res.code == 200 : 
+                    from view.userviews.main_menu_view import MainMenuView
+                    message = f"{res.content}"
+                    return MainMenuView(message)
+                else:
+                    from view.userviews.historic_conversation_view import HistoricConversationView
+                    message = f"{res.content}"
+                    return HistoricConversationView(message)
 
         # Afficher la conversation sélectionnée
         print("Vous avez sélectionné:\n --->", choix)

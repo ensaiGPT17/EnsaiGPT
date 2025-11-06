@@ -56,7 +56,6 @@ class DiscussionView(AbstractView):
                 from dao.chat_dao import ChatDAO
                 from service.message_service import MessageService
                 from dao.message_dao import MessageDAO
-                from view.userviews.discussion_view import DiscussionView
 
                 message_user = inquirer.text(message="Votre message :").execute()
                 self.conversation.append(("user", message_user))
