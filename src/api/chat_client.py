@@ -36,6 +36,8 @@ class EnsaiGPTClient:
             "max_tokens": int(chat.max_tokens),      # S'assurer que c'est un int
         }
 
+        print(payload)
+
         # Vérification de la sérialisation du payload
         try:
             json_payload = json.dumps(payload)  # Essayer de sérialiser manuellement
