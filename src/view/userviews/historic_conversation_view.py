@@ -29,8 +29,8 @@ class HistoricConversationView(AbstractView):
         if choix == "Voir l'historique":
             from view.userviews.list_conversation_view import ListConversationView
             res = chat_service.get_chats_by_id_user(user.id_user)
-            
-            """max_tokens = 4000
+            """
+            max_tokens = 4000
             top_p = 0.5
             temperature = 0.5
 

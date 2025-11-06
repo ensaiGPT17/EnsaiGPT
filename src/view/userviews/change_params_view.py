@@ -74,6 +74,6 @@ class ChangeConvParamsView(AbstractView):
         print(f"max_tokens = {self.max_tokens}, top_p = {self.top_p}, temperature = {self.temperature}\n")
 
         # Retour au menu principal
-        from view.userviews.discussion_view import DiscussionView
-        return DiscussionView(f"Paramètres de la conversation mis à jour\n")
+        from view.userviews.first_message_view import FirstMessageView
+        return FirstMessageView(f"Paramètres de la conversation mis à jour\n")
 
