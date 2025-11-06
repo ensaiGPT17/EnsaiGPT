@@ -21,7 +21,7 @@ handlers:
 
 loggers:
   simpleLogger:
-    handlers: [file, console]
+    handlers: [file]
     level: INFO
     propagate: no
 
