@@ -125,7 +125,8 @@ class ChatService:
                                             role_author="assistant",
                                             content=assistant_response)[1]
         # messages_updated = self.message_service.get_messages_by_chat(chat.id_chat)
-        return liste.append(assistant_response_saved)
+        liste.append(assistant_response_saved)
+        return liste
 
     @log
     def delete_chat(self, id_chat: int) -> ResponseService:
