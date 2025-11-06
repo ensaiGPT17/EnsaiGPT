@@ -161,8 +161,8 @@ class ChatService:
 
     def search_chat_by_date(self, id_user: int, search_date: str) -> List[Chat]:
         """Recherche les conversations créées à une certaine date."""
-        date = datetime.strptime(search_date, "%y-%m-%d")
-        all_chats = self.chat_dao.get_chat_by_date(id_user, date)
+        date = datetime.strptime(search_date, "%Y-%m-%d")
+        all_chats = self.chat_dao.search_by_date(id_user, date)
         if all_chats is None:
             return []
         all_chats.sort(key=lambda chat: chat.date_start, reverse=True)
