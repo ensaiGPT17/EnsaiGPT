@@ -50,6 +50,11 @@ class ListConversationView(AbstractView):
             else:
                 from view.userviews.search_conversation_view import SearchConversationView
                 return SearchConversationView("Retour au menu de recherche")
+        """else: 
+            # si on selectionne une conversation : afficher la conv et pouvoir la reprendre
+            messages_envoyes =  
+            from view.userviews.discussion_view import DiscussionView
+            return DiscussionView(, )"""
 
         # Afficher la conversation sélectionnée
         print("Vous avez sélectionné:\n --->", choix)
