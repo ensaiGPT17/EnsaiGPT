@@ -79,5 +79,5 @@ class DiscussionView(AbstractView):
 
 
             elif choix == "Quitter la discussion":
-                from view.userviews.start_conversation_view import StartConversationView
-                return StartConversationView(f"Retour au menu de demarrage discussion, {username}.")
+                from view.userviews.main_menu_view import MainMenuView
+                return MainMenuView("Retour au menu principal")
