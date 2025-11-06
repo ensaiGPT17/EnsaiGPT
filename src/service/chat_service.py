@@ -53,7 +53,7 @@ class ChatService:
         history = self.message_service.get_messages_by_chat(id_chat)
         history.append(self.message_service.title_request())
         chat = self.get_chat(id_chat)
-        return self.client.generate(chat, history)
+        return self.client.generate(chat, history).strip('"')
 
     @log
     def create_chat(self, user_first_message_content: str, id_user: int,
