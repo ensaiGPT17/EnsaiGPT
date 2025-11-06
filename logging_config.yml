@@ -27,4 +27,4 @@ loggers:
 
 root:
   level: INFO
-  handlers: [file, console]
+  handlers: [file]
