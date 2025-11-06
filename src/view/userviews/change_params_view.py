@@ -25,6 +25,7 @@ class ChangeConvParamsView(AbstractView):
         self.max_tokens = max_tokens  # Valeur par défaut : 4096
         self.top_p = top_p  # Valeur par défaut : 1.0
         self.temperature = temperature  # Valeur par défaut : 0.7
+        self.system = "Tu es un assistant utile."
 
     def choisir_menu(self):
         """
@@ -69,11 +70,33 @@ class ChangeConvParamsView(AbstractView):
             float_allowed=True
         ).execute()
 
+
+        # Modification du paramètre temperature
+        print("\n>>> Instruction de contexte")
+        print("Donner une phrase directive qui guidera le comportement de l'assistant\nRegardez l'exemple")
+        self.system = inquirer.text(
+            message=f"[Actuel : {self.system}] :",
+            default=self.system
+        ).execute()
+
         # Confirmation des modifications
         print("\nParamètres mis à jour avec succès :")
         print(f"max_tokens = {self.max_tokens}, top_p = {self.top_p}, temperature = {self.temperature}\n")
 
+        params = {
+            'max_tokens': self.max_tokens,
+            "top_p": self.top_p,
+            "temperature": self.temperature,
+            "system":self.system
+        }
+
         # Retour au menu principal
         from view.userviews.first_message_view import FirstMessageView
-        return FirstMessageView(f"Paramètres de la conversation mis à jour\n")
+        return FirstMessageView(
+            message=f"Paramètres de la conversation mis à jour\n",
+            max_tokens=params["max_tokens"],
+            temperature=params["temperature"],
+            top_p=params["top_p"],
+            system_message=params["system"]
+            )
 

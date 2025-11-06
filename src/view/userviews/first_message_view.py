@@ -4,9 +4,19 @@ from InquirerPy import inquirer
 from view.session import Session
 
 class FirstMessageView(AbstractView):
-    def __init__(self, message: str = ""):
+    def __init__(
+        self, message: str = "", 
+        max_tokens=512, 
+        top_p=1.0, 
+        temperature=0.7, 
+        system_message ="Tu es un assistant utile."):
+
         super().__init__(message)
         self.conversation = []  # liste de tuples (role, message)
+        self.max_tokens = max_tokens
+        self.top_p = top_p
+        self.temperature = temperature
+        self.system = system_message
 
     def afficher_conversation(self):
         print("\n" + "-"*50)
@@ -49,7 +59,14 @@ class FirstMessageView(AbstractView):
             chat_service = ChatService(ChatDAO())
             message_service = MessageService(MessageDAO())
 
-            new_chat = chat_service.create_chat(message_user, user.id_user)
+            new_chat = chat_service.create_chat(
+                user_first_message_content=message_user,
+                id_user=user.id_user,
+                max_tokens=self.max_tokens,
+                top_p=self.top_p,
+                temperature=self.temperature,
+                system_message=self.system
+            )
             message_list_of_new_chat = message_service.get_messages_by_chat(new_chat.id_chat)
             
             message_list_of_new_chat = message_list_of_new_chat[1:]
