@@ -3,6 +3,7 @@ import logging
 import logging.config
 import yaml
 
+
 def initialiser_logs(nom: str):
     # Chemin absolu du fichier YAML à la racine du projet
     config_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "logging_config.yml"))
