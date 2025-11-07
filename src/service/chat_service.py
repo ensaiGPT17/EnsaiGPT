@@ -53,7 +53,10 @@ class ChatService:
         history = self.message_service.get_messages_by_chat(id_chat)
         history.append(self.message_service.title_request())
         chat = self.get_chat(id_chat)
-        return self.client.generate(chat, history).strip('"')
+        title = self.client.generate(chat, history).strip()
+        # Supprime les guillemets simples et doubles en début/fin
+        title = title.strip(' "\'')
+        return title
 
     @log
     def create_chat(self, user_first_message_content: str, id_user: int,
