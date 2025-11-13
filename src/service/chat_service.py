@@ -24,6 +24,8 @@ class ChatService:
     CHAT_TITLE_ERROR = (500, "conversation par recherche titre non trouvée")
     CHAT_DATE_FOUND = (200, "conversation par date trouvée")
     CHAT_DATE_ERROR = (500, "conversation par date non trouvée")
+    CHATS_CLEARED_ERROR = (500, "echec de la suppression de liste de conversations")
+    CHATS_CLEARED_SUCCES = (200, "Suppression de liste de conversations réussie")
 
     def __init__(self, chat_dao: ChatDAO = ChatDAO()):
         self.chat_dao = chat_dao
@@ -162,7 +164,7 @@ class ChatService:
 
             avg_score = total_score/len(search)
 
-            if avg_score >= similarity_threshold or True:
+            if avg_score >= similarity_threshold:
                 scored_results.append((avg_score, chat))
 
         # Trier par similarité décroissante
@@ -170,6 +172,7 @@ class ChatService:
 
         return [chat for _, chat in scored_results]
 
+    @log
     def search_chat_by_date(self, id_user: int, search_date: str) -> List[Chat]:
         """Recherche les conversations créées à une certaine date."""
         date = datetime.strptime(search_date, "%Y-%m-%d")
@@ -179,6 +182,31 @@ class ChatService:
         all_chats.sort(key=lambda chat: chat.date_start, reverse=True)
         return all_chats
 
+    @log
+    def delete_all_chats(self, id_user: int):
+        """
+        Supprime toutes les conversations associées à un utilisateur.
+
+        Paramètres
+        ----------
+        id_user : int
+            Identifiant unique de l'utilisateur dont toutes les conversations
+            doivent être supprimées.
+
+        Retour
+        ------
+        ResponseService
+            - Renvoie CHATS_CLEARED_SUCCES code 200.
+            - Renvoie CHATS_CLEARED_ERROR code 500.
+
+        Description
+        """
+        res = self.chat_dao.delete_all_chats(id_user)
+        if res == False:
+            return ResponseService(*self.CHATS_CLEARED_ERROR)
+        return ResponseService(*self.CHATS_CLEARED_SUCCES)
+
+    
     def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
                                top_p: float, temperature: float) -> ResponseService:
         """

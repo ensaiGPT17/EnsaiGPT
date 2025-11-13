@@ -9,7 +9,7 @@ class ChangeConvParamsView(AbstractView):
     
     Cette vue permet à l'utilisateur de personnaliser les paramètres de la conversation avec un modèle de langage.
     """
-    def __init__(self, message: str = "", max_tokens: int = 4096,
+    def __init__(self, message: str = "", max_tokens: int = 512,
                  top_p: float = 1.0, temperature: float = 0.7):
         """
         Constructeur pour initialiser les paramètres de la conversation.

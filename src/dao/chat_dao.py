@@ -226,6 +226,39 @@ class ChatDAO(metaclass=Singleton):
             ))
         return chats
 
+    def delete_all_chats(self, id_user: int):
+        """
+        Supprime toutes les conversations d'un utilisateur.
+
+        Paramètres
+        ----------
+        id_user : int
+            Identifiant de l'utilisateur dont les conversations doivent être supprimées.
+
+        Retour
+        ------
+        bool
+            True  : si la suppression s'est effectuée sans erreur.
+            False : en cas d'échec ou d'exception.
+        """
+        query = """
+            DELETE FROM ensaiGPT.chats
+            WHERE id_user = %s;
+        """
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(query, (id_user,))
+                    connection.commit()
+            return True
+
+        except Exception:
+            # Optionnel : logger l'exception
+            return False
+
+
+
 
 """
 if __name__ == "__main__":

@@ -35,17 +35,7 @@ class EnsaiGPTClient:
             "top_p": float(chat.top_p),              # S'assurer que c'est un float
             "max_tokens": int(chat.max_tokens),      # S'assurer que c'est un int
         }
-        """
-        print(payload)
-
-        # Vérification de la sérialisation du payload
-        try:
-            json_payload = json.dumps(payload)  # Essayer de sérialiser manuellement
-            print(f"Payload JSON: {json_payload}")
-        except TypeError as e:
-            print(f"Erreur de sérialisation: {e}")
-        """
-
+        
         try:
             response = requests.post(f"{self.base_url}/generate", json=payload, timeout=15)
             response.raise_for_status()  # Vérifie si la réponse est correcte

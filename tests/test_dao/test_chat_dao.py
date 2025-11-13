@@ -168,6 +168,27 @@ def test_search_by_date_not_found(chat_dao):
     results = chat_dao.search_by_date(1, datetime(2025, 1, 1))
     assert results is None
 
+def test_delete_all_chats(chat_dao):
+    """Test la suppression de toutes les conversations d'un utilisateur."""
+    user_id = 1
+
+    # Insertion de quelques chats pour l'utilisateur
+    chat_dao.insert(Chat(None, user_id, "Chat 1", datetime.now(), datetime.now(), 256, 0.9, 0.5))
+    chat_dao.insert(Chat(None, user_id, "Chat 2", datetime.now(), datetime.now(), 256, 0.8, 0.6))
+
+    # Vérifie qu'il y a bien des chats avant suppression
+    chats_before = chat_dao.list_chats_id_user(user_id)
+    assert chats_before is not None
+    assert len(chats_before) >= 2
+
+    # Appel de la méthode delete_all_chats
+    result = chat_dao.delete_all_chats(user_id)
+    assert result is True
+
+    # Vérifie qu'il ne reste plus aucun chat pour cet utilisateur
+    chats_after = chat_dao.list_chats_id_user(user_id)
+    assert chats_after is None or len(chats_after) == 0
+
 
 if __name__ == "__main__":
     pytest.main([__file__])
