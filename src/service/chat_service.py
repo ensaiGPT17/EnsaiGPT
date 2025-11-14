@@ -234,7 +234,7 @@ class ChatService:
 
     
     @log 
-    def export_chat_to_PDF(self, user: User, id_chat: int, messages, file_path: str = "exports/"):
+    def export_chat_to_PDF(self, user: User, id_chat: int, messages: List[Message], file_path: str = "exports/"):
         """
         Exporte une conversation en PDF avec :
         - Id de l' utilisateur
@@ -321,9 +321,9 @@ class ChatService:
         pdf.setFont("Helvetica", 10)
 
         for msg in messages:
-            sender = msg.sender if hasattr(msg, "sender") else msg["sender"]
-            content = msg.content if hasattr(msg, "content") else msg["content"]
-            timestamp = msg.timestamp if hasattr(msg, "timestamp") else msg["timestamp"]
+            sender = msg.role_author
+            content = msg.content
+            timestamp = msg.date_sending
 
             pdf.setFillColor(colors.HexColor("#374151"))
             pdf.setFont("Helvetica-Bold", 10)
