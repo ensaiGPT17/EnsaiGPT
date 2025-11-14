@@ -9,6 +9,11 @@ from service.message_service import MessageService
 from dao.message_dao import MessageDAO
 from utils.log_decorator import log
 import Levenshtein
+import os
+from datetime import datetime
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
 
 
 class ChatService:
@@ -224,6 +229,191 @@ class ChatService:
                 nombre_total_de_message += len(messages)
 
             return nombre_total_de_message + 1
+
+
+    
+    DEFAULT_EXPORT_PATH = "src/exports/"
+    @log 
+    def export_chat_to_PDF(self, id_user: int, id_chat: int, messages, file_path: str = None):
+        """
+        Exporte une conversation en PDF avec :
+        - Id de l' utilisateur
+        - Id du Chat
+        - Messages échangés
+        Le tout dans un style minimaliste propre.
+
+        Params :
+            chat      : objet Chat (doit contenir : id, id_user, title, date_creation, date_update, tokens, temp, top_p)
+            user      : objet User (doit contenir : id, firstname, lastname, email)
+            messages  : liste d'objets Message ou dictionnaires {sender, content, timestamp}
+            file_path : chemin de sortie optionnel (sinon = exports/conversation_{id}.pdf)
+        """
+
+        # Créer dossier par défaut si nécessaire
+        if file_path is None:
+            if not os.path.exists(DEFAULT_EXPORT_PATH):
+                os.makedirs(DEFAULT_EXPORT_PATH)
+
+            safe_title = "".join(c for c in chat.title if c.isalnum() or c in (" ", "_")).rstrip()
+            filename = f"conversation_{chat.id}_{safe_title}.pdf"
+            file_path = os.path.join(DEFAULT_EXPORT_PATH, filename)
+
+        # Création du PDF
+        pdf = canvas.Canvas(file_path, pagesize=A4)
+        width, height = A4
+
+        y = height - 50
+
+        # ---------- HEADER ----------
+        pdf.setFillColor(colors.HexColor("#1F2937"))  # gris foncé élégant
+        pdf.setFont("Helvetica-Bold", 18)
+        pdf.drawString(40, y, "Conversation Export")
+        y -= 30
+
+        pdf.setFillColor(colors.black)
+        pdf.setFont("Helvetica-Bold", 13)
+        pdf.drawString(40, y, f"Chat Title : {chat.title}")
+        y -= 25
+
+        # ---------- USER INFO ----------
+        pdf.setFont("Helvetica-Bold", 11)
+        pdf.drawString(40, y, "User Information")
+        y -= 15
+        pdf.setFont("Helvetica", 10)
+        pdf.drawString(40, y, f"Name      : {user.firstname} {user.lastname}")
+        y -= 15
+        pdf.drawString(40, y, f"User ID   : {user.id}")
+        y -= 15
+        pdf.drawString(40, y, f"Email     : {user.email}")
+        y -= 30
+
+        # ---------- CHAT INFO ----------
+        pdf.setFont("Helvetica-Bold", 11)
+        pdf.drawString(40, y, "Chat Details")
+        y -= 15
+        pdf.setFont("Helvetica", 10)
+        pdf.drawString(40, y, f"Chat ID        : {chat.id}")
+        y -= 15
+        pdf.drawString(40, y, f"Created        : {chat.date_creation}")
+        y -= 15
+        pdf.drawString(40, y, f"Last Updated   : {chat.date_update}")
+        y -= 15
+        pdf.drawString(40, y, f"Tokens         : {chat.tokens}")
+        y -= 15
+        pdf.drawString(40, y, f"Temperature    : {chat.temp}")
+        y -= 15
+        pdf.drawString(40, y, f"Top_P          : {chat.top_p}")
+        y -= 30
+
+        # Séparation visuelle
+        pdf.setStrokeColor(colors.grey)
+        pdf.line(40, y, width - 40, y)
+        y -= 40
+
+        # ---------- MESSAGES ----------
+        pdf.setFont("Helvetica-Bold", 12)
+        pdf.setFillColor(colors.HexColor("#111827"))
+        pdf.drawString(40, y, "Messages")
+        y -= 30
+
+        pdf.setFont("Helvetica", 10)
+
+        for msg in messages:
+            sender = msg.sender if hasattr(msg, "sender") else msg["sender"]
+            content = msg.content if hasattr(msg, "content") else msg["content"]
+            timestamp = msg.timestamp if hasattr(msg, "timestamp") else msg["timestamp"]
+
+            pdf.setFillColor(colors.HexColor("#374151"))
+            pdf.setFont("Helvetica-Bold", 10)
+            pdf.drawString(40, y, f"{sender}  -  {timestamp}")
+            y -= 15
+
+            pdf.setFont("Helvetica", 10)
+            pdf.setFillColor(colors.black)
+
+            # Gestion du retour à la ligne
+            for line in split_text(content, max_len=95):
+                if y < 50:  # Nouvelle page si espace insuffisant
+                    pdf.showPage()
+                    y = height - 50
+                    pdf.setFont("Helvetica", 10)
+                pdf.drawString(50, y, line)
+                y -= 13
+
+            y -= 15  # Espace entre messages
+
+        pdf.save()
+        return file_path
+
+
+    def split_text(text, max_len=95):
+        """Coupe proprement un long texte pour l'affichage dans un PDF."""
+        words = text.split()
+        lines = []
+        current = ""
+
+        for word in words:
+            if len(current) + len(word) + 1 <= max_len:
+                current += " " + word if current else word
+            else:
+                lines.append(current)
+                current = word
+
+        if current:
+            lines.append(current)
+
+        return lines
+
+    def export_chat_to_TXT(user: User, id_chat: int, messages: list[Message]) -> str:
+        """
+        Exporte proprement une conversation en fichier .txt
+        """
+        os.makedirs(DEFAULT_EXPORT_DIR, exist_ok=True)
+
+        filename = f"chat_{chat.id_chat}.txt"
+        filepath = os.path.join(DEFAULT_EXPORT_DIR, filename)
+
+        with open(filepath, "w", encoding="utf-8") as f:
+
+            # ---- HEADER ----
+            f.write("=========================================\n")
+            f.write("          CONVERSATION EXPORTÉE\n")
+            f.write("=========================================\n\n")
+
+            # ---- USER INFO ----
+            f.write("👤 UTILISATEUR\n")
+            f.write(f"ID utilisateur : {user.id_user}\n")
+            f.write(f"Nom            : {getattr(user, 'name', 'N/A')}\n")
+            f.write(f"Email          : {getattr(user, 'email', 'N/A')}\n\n")
+
+            f.write("-----------------------------------------\n")
+
+            # ---- CHAT INFO ----
+            f.write("💬 CONVERSATION\n")
+            f.write(f"ID chat        : {chat.id_chat}\n")
+            f.write(f"Titre          : {chat.title}\n")
+            f.write(f"Début          : {chat.date_start}\n")
+            f.write(f"Dernière maj   : {chat.last_date}\n")
+            f.write(f"Max Tokens     : {chat.max_tokens}\n")
+            f.write(f"Top P          : {chat.top_p}\n")
+            f.write(f"Température    : {chat.temperature}\n\n")
+
+            f.write("-----------------------------------------\n")
+            f.write("📨 MESSAGES\n\n")
+
+            # ---- MESSAGES ----
+            for msg in messages:
+                role = msg.role_author.capitalize()
+                timestamp = msg.date_sending.strftime("%Y-%m-%d %H:%M:%S")
+
+                f.write(f"[{timestamp}] {role} :\n")
+                f.write(f"{msg.content}\n\n")
+
+            f.write("=========================================\n")
+            f.write("        FIN DE LA CONVERSATION\n")
+            f.write("=========================================\n")
+
+        return filepath
 
     
     def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
