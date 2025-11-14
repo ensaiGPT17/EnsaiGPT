@@ -21,8 +21,8 @@ CREATE TABLE ensaiGPT.chats (
     id_chat serial PRIMARY KEY,
     id_user integer REFERENCES ensaiGPT.users(id_user) ON DELETE CASCADE,
     title text,
-    date_start date,
-    last_date date,
+    date_start timestamp,
+    last_date timestamp,
     max_tokens integer,
     top_p numeric,
     temperature numeric
@@ -36,7 +36,7 @@ DROP TABLE IF EXISTS ensaiGPT.messages CASCADE ;
 CREATE TABLE ensaiGPT.messages (
     id_message serial PRIMARY KEY,
     id_chat integer REFERENCES ensaiGPT.chats(id_chat) ON DELETE CASCADE,
-    date_sending date,
+    date_sending timestamp,
     role_author text, 
     content text
 
