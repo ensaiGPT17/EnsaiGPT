@@ -232,6 +232,24 @@ class ChatService:
             return nombre_total_de_message + 1
 
 
+    def split_text(text, max_len=95):
+        """Coupe proprement un long texte pour l'affichage dans un PDF."""
+        words = text.split()
+        lines = []
+        current = ""
+
+        for word in words:
+            if len(current) + len(word) + 1 <= max_len:
+                current += " " + word if current else word
+            else:
+                lines.append(current)
+                current = word
+
+        if current:
+            lines.append(current)
+
+        return lines
+
     
     @log 
     def export_chat_to_PDF(self, user: User, id_chat: int, messages: List[Message], file_path: str = "exports/"):
@@ -346,25 +364,6 @@ class ChatService:
 
         pdf.save()
         return file_path
-
-
-    def split_text(text, max_len=95):
-        """Coupe proprement un long texte pour l'affichage dans un PDF."""
-        words = text.split()
-        lines = []
-        current = ""
-
-        for word in words:
-            if len(current) + len(word) + 1 <= max_len:
-                current += " " + word if current else word
-            else:
-                lines.append(current)
-                current = word
-
-        if current:
-            lines.append(current)
-
-        return lines
 
     def export_chat_to_TXT(self, user: User, id_chat: int, messages: list[Message], file_path: str = "exports/") -> str:
         """
