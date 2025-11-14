@@ -39,7 +39,8 @@ class StatisticView(AbstractView):
                 return self 
 
         elif choix == "Afficher le nombre de messages envoyés":
-            print("Nombre de messages échangés au total:")
+            nb_messages = chat_service.counts_user_message(user.id_user)
+            print(f"Nombre de messages échangés au total:{nb_messages}")
             choix_action = inquirer.select(
                     message=f"Que voulez-vous?",
                     choices=["Retour"]
