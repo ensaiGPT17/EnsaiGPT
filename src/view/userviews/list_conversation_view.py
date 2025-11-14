@@ -83,7 +83,7 @@ class ListConversationView(AbstractView):
                     chat_id = selected_conv.id_chat
                     messages_envoyes = message_service.get_messages_by_chat(id_chat=chat_id)
                     chat_service.export_chat_to_PDF(user, chat_id, messages_envoyes)
-                    #chat_service.export_chat_to_TXT()
+                    chat_service.export_chat_to_TXT(user,chat_id, messages_envoyes)
                 else : 
                     chat_dao = ChatDAO()
                     chat_service = ChatService(chat_dao)
