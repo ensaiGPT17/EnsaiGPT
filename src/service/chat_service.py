@@ -1,5 +1,6 @@
 from model.chat import Chat
 from model.message import Message
+from model.user import User
 from dao.chat_dao import ChatDAO
 from service.response_service import ResponseService
 from datetime import datetime
@@ -14,7 +15,6 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
-
 
 class ChatService:
     CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
@@ -232,9 +232,8 @@ class ChatService:
 
 
     
-    DEFAULT_EXPORT_PATH = "src/exports/"
     @log 
-    def export_chat_to_PDF(self, user: User, id_chat: int, messages, file_path: str = None):
+    def export_chat_to_PDF(self, user: User, id_chat: int, messages, file_path: str = "exports/"):
         """
         Exporte une conversation en PDF avec :
         - Id de l' utilisateur
@@ -251,8 +250,8 @@ class ChatService:
 
         # Créer dossier par défaut si nécessaire
         if file_path is None:
-            if not os.path.exists(DEFAULT_EXPORT_PATH):
-                os.makedirs(DEFAULT_EXPORT_PATH)
+            if not os.path.exists(file_path):
+                os.makedirs(file_path)
 
             safe_title = "".join(c for c in chat.title if c.isalnum() or c in (" ", "_")).rstrip()
             filename = f"conversation_{chat.id}_{safe_title}.pdf"
@@ -363,14 +362,19 @@ class ChatService:
 
         return lines
 
-    def export_chat_to_TXT(user: User, id_chat: int, messages: list[Message]) -> str:
+    def export_chat_to_TXT(user: User, id_chat: int, messages: list[Message], file_path: str = "exports/") -> str:
         """
         Exporte proprement une conversation en fichier .txt
         """
-        os.makedirs(DEFAULT_EXPORT_DIR, exist_ok=True)
+        # Créer dossier par défaut si nécessaire
+        if file_path is None:
+            if not os.path.exists(file_path):
+                os.makedirs(file_path)
+
+        os.makedirs(file_path, exist_ok=True)
 
         filename = f"chat_{chat.id_chat}.txt"
-        filepath = os.path.join(DEFAULT_EXPORT_DIR, filename)
+        filepath = os.path.join(file_path, filename)
 
         with open(filepath, "w", encoding="utf-8") as f:
 
