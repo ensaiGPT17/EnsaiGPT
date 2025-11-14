@@ -292,7 +292,7 @@ class ChatService:
 
         pdf.setFillColor(colors.black)
         pdf.setFont("Helvetica-Bold", 13)
-        pdf.drawString(40, y, f"Chat Title : {chat.title}")
+        pdf.drawString(40, y, f"Titre : {chat.title}")
         y -= 25
 
         # ---------- USER INFO ----------
@@ -310,9 +310,9 @@ class ChatService:
         y -= 15
         pdf.setFont("Helvetica", 10)
         y -= 15
-        pdf.drawString(40, y, f"Début         : {chat.date_start}")
+        pdf.drawString(40, y, f"Début         : {chat.date_start.strftime("%Y-%m-%d %H:%M")}")
         y -= 15
-        pdf.drawString(40, y, f"Derniere mal    : {chat.last_date}")
+        pdf.drawString(40, y, f"Derniere maj    : {chat.last_date.strftime("%Y-%m-%d %H:%M")}")
         y -= 15
         pdf.drawString(40, y, f"Tokens         : {chat.max_tokens}")
         y -= 15
@@ -337,7 +337,7 @@ class ChatService:
         for msg in messages:
             sender = msg.role_author
             content = msg.content
-            timestamp = msg.date_sending
+            timestamp = msg.date_sending.strftime("%Y-%m-%d %H:%M")
 
             pdf.setFillColor(colors.HexColor("#374151"))
             pdf.setFont("Helvetica-Bold", 10)
@@ -393,8 +393,8 @@ class ChatService:
             f.write("💬 CONVERSATION\n")
             f.write(f"ID chat        : {chat.id_chat}\n")
             f.write(f"Titre          : {chat.title}\n")
-            f.write(f"Début          : {chat.date_start}\n")
-            f.write(f"Dernière maj   : {chat.last_date}\n")
+            f.write(f"Début          : {chat.date_start.strftime("%Y-%m-%d %H:%M")}\n")
+            f.write(f"Dernière maj   : {chat.last_date.strftime("%Y-%m-%d %H:%M")}\n")
             f.write(f"Max Tokens     : {chat.max_tokens}\n")
             f.write(f"Top P          : {chat.top_p}\n")
             f.write(f"Température    : {chat.temperature}\n\n")
