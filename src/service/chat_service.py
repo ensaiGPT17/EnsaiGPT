@@ -215,7 +215,7 @@ class ChatService:
         message_dao = MessageDAO()
         nombre_total_de_message = -1
 
-        if len(chats_ids) == 0:
+        if chats is None:
             return 0
         
         for id in chats_ids:
