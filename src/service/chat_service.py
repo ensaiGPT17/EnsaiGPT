@@ -250,20 +250,21 @@ class ChatService:
         """
 
         # Créer dossier par défaut si nécessaire
+        chat = self.chat_dao.get_chat(id_chat=id_chat)
+
         if file_path is None:
             if not os.path.exists(file_path):
                 os.makedirs(file_path)
 
             safe_title = "".join(c for c in chat.title if c.isalnum() or c in (" ", "_")).rstrip()
-            filename = f"conversation_{chat.id}_{safe_title}.pdf"
-            file_path = os.path.join(DEFAULT_EXPORT_PATH, filename)
+            filename = f"conversation_{chat.id_chat}_{safe_title}.pdf"
+            file_path = os.path.join(file_path, filename)
 
         # Création du PDF
         pdf = canvas.Canvas(file_path, pagesize=A4)
         width, height = A4
 
-        chat = self.chat_dao.get_chat(id_chat=id_chat)
-
+        
         y = height - 50
 
         # ---------- HEADER ----------
@@ -283,9 +284,9 @@ class ChatService:
         y -= 15
         pdf.setFont("Helvetica", 10)
         y -= 15
-        pdf.drawString(40, y, f"User ID   : {user.id}")
+        pdf.drawString(40, y, f"User ID   : {user.id_user}")
         y -= 15
-        pdf.drawString(40, y, f"Nom d'utilisateur     : {user.email}")
+        pdf.drawString(40, y, f"Nom d'utilisateur     : {user.username}")
         y -= 30
 
         # ---------- CHAT INFO ----------
@@ -293,15 +294,15 @@ class ChatService:
         pdf.drawString(40, y, "Details de la conversation")
         y -= 15
         pdf.setFont("Helvetica", 10)
-        pdf.drawString(40, y, f"ID de la conversation       : {chat.id}")
+        pdf.drawString(40, y, f"ID de la conversation       : {chat.id_chat}")
         y -= 15
-        pdf.drawString(40, y, f"Début         : {chat.date_creation}")
+        pdf.drawString(40, y, f"Début         : {chat.date_start}")
         y -= 15
-        pdf.drawString(40, y, f"Derniere mal    : {chat.date_update}")
+        pdf.drawString(40, y, f"Derniere mal    : {chat.last_date}")
         y -= 15
-        pdf.drawString(40, y, f"Tokens         : {chat.tokens}")
+        pdf.drawString(40, y, f"Tokens         : {chat.max_tokens}")
         y -= 15
-        pdf.drawString(40, y, f"Temperature    : {chat.temp}")
+        pdf.drawString(40, y, f"Temperature    : {chat.temperature}")
         y -= 15
         pdf.drawString(40, y, f"Top_P          : {chat.top_p}")
         y -= 30
