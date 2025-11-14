@@ -223,7 +223,7 @@ class ChatService:
                 messages = message_dao.get_messages_by_chat(id_chat=id)
                 nombre_total_de_message += len(messages)
 
-            return nombre_total_de_messag + 1
+            return nombre_total_de_message + 1
 
     
     def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
