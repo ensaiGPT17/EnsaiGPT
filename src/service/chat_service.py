@@ -14,7 +14,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
-
+from model.user import User
 
 class ChatService:
     CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
