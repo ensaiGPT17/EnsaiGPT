@@ -392,7 +392,7 @@ class ChatService:
             # ---- USER INFO ----
             f.write("👤 UTILISATEUR\n")
             f.write(f"ID utilisateur   : {user.id_user}\n")
-            f.write(f"Nom d'utilisateur: {getattr(user, 'name', 'N/A')}\n\n")
+            f.write(f"Nom d'utilisateur: {user.username}\n\n")
 
             f.write("-----------------------------------------\n")
 
