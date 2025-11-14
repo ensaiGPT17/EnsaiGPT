@@ -212,7 +212,17 @@ class ChatService:
         chats = self.get_chats_by_id_user(id_user=id_user)
 
         chats_ids = [c.id_chat for c in chats]
+        message_dao = MessageDAO()
+        nombre_total_de_message = -1
 
+        if len(chats_ids) == 0:
+            return 0
+        
+        for id in chats_ids:
+            messages = message_dao.get_messages_by_chat(id_chat=id)
+            nombre_total_de_message += len(messages)
+
+        return nombre_total_de_messag + 1
 
     
     def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
