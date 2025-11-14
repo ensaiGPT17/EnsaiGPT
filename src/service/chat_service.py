@@ -232,7 +232,7 @@ class ChatService:
             return nombre_total_de_message + 1
 
 
-    def split_text(text, max_len=95):
+    def split_text(self, text, max_len=95):
         """Coupe proprement un long texte pour l'affichage dans un PDF."""
         words = text.split()
         lines = []
@@ -352,7 +352,7 @@ class ChatService:
             pdf.setFillColor(colors.black)
 
             # Gestion du retour à la ligne
-            for line in split_text(content, max_len=95):
+            for line in self.split_text(content, max_len=95):
                 if y < 50:  # Nouvelle page si espace insuffisant
                     pdf.showPage()
                     y = height - 50
