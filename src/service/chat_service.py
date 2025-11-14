@@ -234,7 +234,7 @@ class ChatService:
     
     DEFAULT_EXPORT_PATH = "src/exports/"
     @log 
-    def export_chat_to_PDF(self, id_user: int, id_chat: int, messages, file_path: str = None):
+    def export_chat_to_PDF(self, user: User, id_chat: int, messages, file_path: str = None):
         """
         Exporte une conversation en PDF avec :
         - Id de l' utilisateur
@@ -267,7 +267,7 @@ class ChatService:
         # ---------- HEADER ----------
         pdf.setFillColor(colors.HexColor("#1F2937"))  # gris foncé élégant
         pdf.setFont("Helvetica-Bold", 18)
-        pdf.drawString(40, y, "Conversation Export")
+        pdf.drawString(40, y, "Conversation Exportée")
         y -= 30
 
         pdf.setFillColor(colors.black)
@@ -277,26 +277,25 @@ class ChatService:
 
         # ---------- USER INFO ----------
         pdf.setFont("Helvetica-Bold", 11)
-        pdf.drawString(40, y, "User Information")
+        pdf.drawString(40, y, "Informations de l'utilisateur")
         y -= 15
         pdf.setFont("Helvetica", 10)
-        pdf.drawString(40, y, f"Name      : {user.firstname} {user.lastname}")
         y -= 15
         pdf.drawString(40, y, f"User ID   : {user.id}")
         y -= 15
-        pdf.drawString(40, y, f"Email     : {user.email}")
+        pdf.drawString(40, y, f"Nom d'utilisateur     : {user.email}")
         y -= 30
 
         # ---------- CHAT INFO ----------
         pdf.setFont("Helvetica-Bold", 11)
-        pdf.drawString(40, y, "Chat Details")
+        pdf.drawString(40, y, "Details de la conversation")
         y -= 15
         pdf.setFont("Helvetica", 10)
-        pdf.drawString(40, y, f"Chat ID        : {chat.id}")
+        pdf.drawString(40, y, f"ID de la conversation       : {chat.id}")
         y -= 15
-        pdf.drawString(40, y, f"Created        : {chat.date_creation}")
+        pdf.drawString(40, y, f"Début         : {chat.date_creation}")
         y -= 15
-        pdf.drawString(40, y, f"Last Updated   : {chat.date_update}")
+        pdf.drawString(40, y, f"Derniere mal    : {chat.date_update}")
         y -= 15
         pdf.drawString(40, y, f"Tokens         : {chat.tokens}")
         y -= 15
@@ -382,9 +381,8 @@ class ChatService:
 
             # ---- USER INFO ----
             f.write("👤 UTILISATEUR\n")
-            f.write(f"ID utilisateur : {user.id_user}\n")
-            f.write(f"Nom            : {getattr(user, 'name', 'N/A')}\n")
-            f.write(f"Email          : {getattr(user, 'email', 'N/A')}\n\n")
+            f.write(f"ID utilisateur   : {user.id_user}\n")
+            f.write(f"Nom d'utilisateur: {getattr(user, 'name', 'N/A')}\n\n")
 
             f.write("-----------------------------------------\n")
 
