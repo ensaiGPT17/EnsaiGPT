@@ -15,7 +15,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
-
+from model.user import User
 
 class ChatService:
     CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
@@ -262,6 +262,8 @@ class ChatService:
         pdf = canvas.Canvas(file_path, pagesize=A4)
         width, height = A4
 
+        chat = self.chat_dao.get_chat(id_chat=id_chat)
+
         y = height - 50
 
         # ---------- HEADER ----------
@@ -363,7 +365,7 @@ class ChatService:
 
         return lines
 
-    def export_chat_to_TXT(user: User, id_chat: int, messages: list[Message], file_path: str = "exports/") -> str:
+    def export_chat_to_TXT(self, user: User, id_chat: int, messages: list[Message], file_path: str = "exports/") -> str:
         """
         Exporte proprement une conversation en fichier .txt
         """
@@ -373,6 +375,8 @@ class ChatService:
                 os.makedirs(file_path)
 
         os.makedirs(file_path, exist_ok=True)
+
+        chat = self.chat_dao.get_chat(id_chat=id_chat)
 
         filename = f"chat_{chat.id_chat}.txt"
         filepath = os.path.join(file_path, filename)
