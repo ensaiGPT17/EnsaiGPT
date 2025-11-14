@@ -17,6 +17,9 @@ class ListConversationView(AbstractView):
     def choisir_menu(self):
         user = Session().user
         username = user.username
+        chat_dao = ChatDAO()
+        chat_service = ChatService(chat_dao)
+
         print("\n" + "-" * 50 + "\nHistorique de conversation\n" + "-" * 50 + "\n")
 
         # Formatage de la liste des conversations avec un compteur i et des underscores ajustés
@@ -63,7 +66,7 @@ class ListConversationView(AbstractView):
                 
                 choix_action = inquirer.select(
                     message=f"Que voulez-vous faire avec la conversation '{selected_conv.title}' ?",
-                    choices=["Reprendre la discussion", "Supprimer la conversation", "Retour"]
+                    choices=["Reprendre la discussion", "Supprimer la conversation", "Exporter la conversation", "Retour"]
                 ).execute()
 
                 if choix_action=="Reprendre la discussion":
@@ -76,6 +79,9 @@ class ListConversationView(AbstractView):
                 elif choix_action == "Retour":
                     from view.userviews.historic_conversation_view import HistoricConversationView
                     return HistoricConversationView("Retour au menu historique de conversation")
+                elif choix_action == "Exporter la conversation":
+                    chat_service.export_chat_to_PDF(user.id_user, chat_id, messages_envoyes)
+                    #chat_service.export_chat_to_TXT()
                 else : 
                     chat_dao = ChatDAO()
                     chat_service = ChatService(chat_dao)

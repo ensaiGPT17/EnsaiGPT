@@ -7,4 +7,4 @@ bcrypt
 pyyaml
 python-dotenv
 levenshtein
-reportlab==3.6.13
+reportlab
