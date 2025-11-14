@@ -16,6 +16,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 
+
 class ChatService:
     CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
     CHAT_GET_SUCCESS = (200, "Récupération de conversation réussie")
