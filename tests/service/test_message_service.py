@@ -36,13 +36,15 @@ def test_create_message_success(message_service_mock):
     content = "Bonjour, ceci est un test"
 
     # WHEN
-    resp = message_service_mock.create_message(id_chat, date_sending, role_author, content)
-
+    resp, message = message_service_mock.create_message(id_chat, date_sending, role_author, content)
+    print(f"Response code: {resp.code}")
+    print(f"Response content: {resp.content}")
     # THEN
     assert resp.code == 201
     assert "Message créé avec succès" in resp.content
     # vérifier qu'on peut récupérer le message via le DAO
     messages = message_service_mock.get_messages_by_chat(id_chat)
+    print(f"Messages for chat {id_chat}: {messages}")
     assert len(messages) == 1
     assert messages[0].content == content
 

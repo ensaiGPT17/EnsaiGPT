@@ -2,6 +2,8 @@
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from view.session import Session
+from service.chat_service import ChatService
+from dao.chat_dao import ChatDAO
 
 class MainMenuView(AbstractView):
     def __init__(self, message: str = ""):
@@ -10,6 +12,9 @@ class MainMenuView(AbstractView):
     def choisir_menu(self):
         user = Session().user
         username = user.username
+        chat_dao = ChatDAO()
+        chat_service = ChatService(chat_dao)
+
         print("\n" + "-" * 50 + "\nMenu Principal\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
@@ -81,6 +86,8 @@ class MainMenuView(AbstractView):
             from view.userviews.change_credentials_view import ChangeCredentialsView
             return ChangeCredentialsView("Modifier mes identifiants")
         elif choix == "Afficher les statistiques":
-            print("Fonctionnalitée non implémentée")
-            return self
+            chats = chat_service.get_chats_by_id_user(user.id_user)
+            nb_conv = len(chats) if chats is not None else 0
+            print (f"Nombre de conversations: {nb_conv}")
+            print("Nombre de messages échangés au total:")
 
