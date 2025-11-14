@@ -42,7 +42,7 @@ class HistoricConversationView(AbstractView):
                 from view.userviews.main_menu_view import MainMenuView
                 return MainMenuView(message=message + "\n" + res.content)
             else:
-                message == "Erreur interne"
+                message = "Erreur interne"
                 from view.userviews.main_menu_view import MainMenuView
                 return MainMenuView(message=message + "\n" + res.content)
             
