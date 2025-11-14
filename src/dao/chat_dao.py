@@ -161,6 +161,7 @@ class ChatDAO(metaclass=Singleton):
             return None
         return result["count"]
 
+
     def search_by_title(self, id_user:int, mot_cle:str) -> Optional[List[Chat]]:
         """Liste toutes les conversations d'un utilisateur dont le titre contient le mot-clé"""
         query = """

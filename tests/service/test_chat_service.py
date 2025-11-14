@@ -76,7 +76,7 @@ def test_delete_all_chats(chat_service):
     # Suppression
     response: ResponseService = chat_service.delete_all_chats(user_id)
     assert response.code == 200
-    assert "réussie" in response.message.lower()
+    assert "Suppression de liste de conversations réussie" in response.code.lower()
 
     chats_after = chat_service.get_chats_by_id_user(user_id)
     assert chats_after is None or len(chats_after) == 0
@@ -85,7 +85,6 @@ def test_delete_all_chats(chat_service):
 # ----------------------
 # Tests recherche
 # ----------------------
-
 def test_search_chat_by_title_found(chat_service):
     user_id = 1
     # On force le titre généré pour qu'il soit prévisible
@@ -97,9 +96,6 @@ def test_search_chat_by_title_found(chat_service):
     assert results is not None
     assert len(results) >= 1
     assert any("GPT" in chat.title for chat in results)
-
-
-
 
 def test_search_chat_by_title_not_found(chat_service):
     """Recherche par titre inexistante"""

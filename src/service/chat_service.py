@@ -164,7 +164,7 @@ class ChatService:
 
             avg_score = total_score/len(search)
 
-            if avg_score >= similarity_threshold:
+            if avg_score >= similarity_threshold or True:
                 scored_results.append((avg_score, chat))
 
         # Trier par similarité décroissante
@@ -205,6 +205,14 @@ class ChatService:
         if res == False:
             return ResponseService(*self.CHATS_CLEARED_ERROR)
         return ResponseService(*self.CHATS_CLEARED_SUCCES)
+
+    
+    @log
+    def counts_user_message(self, id_user: int):
+        chats = self.get_chats_by_id_user(id_user=id_user)
+
+        chats_ids = [c.id_chat for c in chats]
+
 
     
     def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
