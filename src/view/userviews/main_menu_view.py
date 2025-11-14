@@ -86,8 +86,7 @@ class MainMenuView(AbstractView):
             from view.userviews.change_credentials_view import ChangeCredentialsView
             return ChangeCredentialsView("Modifier mes identifiants")
         elif choix == "Afficher les statistiques":
-            chats = chat_service.get_chats_by_id_user(user.id_user)
-            nb_conv = len(chats) if chats is not None else 0
-            print (f"Nombre de conversations: {nb_conv}")
-            print("Nombre de messages échangés au total:")
-
+            from view.userviews.statistics_view import StatisticView
+            return StatisticView("Affichage des statistiques")
+            
+            
