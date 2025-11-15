@@ -11,7 +11,6 @@ class SignInView(AbstractView):
         super().__init__(message)
 
     def choisir_menu(self):
-        print("\n" + "-" * 50 + f"\nConnectez vous\n" + "-" * 50 + "\n")
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         password = inquirer.secret(message="Mot de passe :").execute()
 

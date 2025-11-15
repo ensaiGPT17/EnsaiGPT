@@ -3,13 +3,12 @@ from InquirerPy import inquirer
 from view.session import Session
 
 class StartConversationView(AbstractView):
-    def __init__(self, message: str = ""):
+    def __init__(self, message: str = "Démarrer une conversation"):
         super().__init__(message)
 
     def choisir_menu(self):
         user = Session().user
         username = user.username
-        print("\n" + "-" * 50 + "\nDémarrer une conversation\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
             choices=[

@@ -16,7 +16,6 @@ class HistoricConversationView(AbstractView):
         chat_dao = ChatDAO()
         chat_service = ChatService(chat_dao)
 
-        print("\n" + "-" * 50 + "\nHistorique de conversation\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
             choices=[

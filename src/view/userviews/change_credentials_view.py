@@ -6,7 +6,7 @@ from service.user_service import UserService
 
 
 class ChangeCredentialsView(AbstractView):
-    def __init__(self, message: str = ""):
+    def __init__(self, message: str = "Modifier mes identifiants"):
         super().__init__(message)
 
     def choisir_menu(self):
@@ -15,7 +15,6 @@ class ChangeCredentialsView(AbstractView):
         user_dao = UserDAO()
         user_service = UserService(user_dao)
 
-        print("\n" + "-" * 50 + "\nModifier mes identifiants\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
             choices=[

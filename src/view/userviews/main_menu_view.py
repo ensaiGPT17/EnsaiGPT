@@ -15,7 +15,6 @@ class MainMenuView(AbstractView):
         chat_dao = ChatDAO()
         chat_service = ChatService(chat_dao)
 
-        print("\n" + "-" * 50 + "\nMenu Principal\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
             choices=[

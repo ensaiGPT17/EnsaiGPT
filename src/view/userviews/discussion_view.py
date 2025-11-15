@@ -6,7 +6,7 @@ from model.chat import Chat
 
 class DiscussionView(AbstractView):
     def __init__(self, chat: Chat, liste_message: list[Message], first_time=1):
-        super().__init__('')  # Remplacer 'message' par 'chat' si nécessaire
+        super().__init__('')
         self.conversation = [
             (message.role_author, message.content) for message in liste_message
         ]  # Liste de tuples (role, message)
