@@ -46,7 +46,10 @@ ENSAI_GPT_HOST=
 ```
 
 ### 4. 🧱 Initialiser le schéma de la base de données
-La base de données s'initialisera automatiquement au premier lancement de l'application.
+La base de données s'initialisera automatiquement au premier lancement de l'application. Vous pouvez toutefois la réinitialiser en utilisant :
+```bash
+python -m utils.reset_database
+```
 
 
 ### 5. 🧪 (Optionnel) Lancer les tests unitaires
