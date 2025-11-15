@@ -46,11 +46,12 @@ ENSAI_GPT_HOST=
 ```
 
 Puis ajoutez .env dans les variables d'environnement :
-Bash / Zsh : 
+
+Bash / Zsh
 ```bash
 export DOTENV=".env"
 ```
-PowerShell : 
+PowerShell
 ```powershell
 $ENV:DOTENV = ".env"
  ```
@@ -67,11 +68,11 @@ python -m pytest
 
 **Ajoutez 'src/' aux chemins** (PYTHONPATH) : 
 
-Bash / Zsh :
+Bash / Zsh
 ```bash
 export PYTHONPATH="src"
 ```
-PowerShell : 
+PowerShell
 ```powershell
 $ENV:PYTHONPATH = "src"
  ```
