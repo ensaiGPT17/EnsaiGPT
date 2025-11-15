@@ -60,6 +60,12 @@ class ChangeCredentialsView(AbstractView):
             if res.code == 200:
                 # user confirmé, il peut changer le MOT DE PASSE
                 new_password = inquirer.secret(message="Rentrez votre nouveau mot de passe: ").execute()
+                new_password_confirm = inquirer.secret(message="Confirmez le mot de "
+                                                               "passe : ").execute()
+                if new_password != new_password_confirm:
+                    from view.userviews.main_menu_view import MainMenuView
+                    return MainMenuView(f"Erreur : Les mots de passe ne correspondent pas.")
+
                 res_chgt_password = user_service.change_password(user.id_user, password, new_password)
                 if res_chgt_password.code==200:
                     # reussite chgt mdp test OK

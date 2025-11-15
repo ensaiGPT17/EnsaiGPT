@@ -26,6 +26,10 @@ class SignUpView(AbstractView):
     def choisir_menu(self):
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         password = inquirer.secret(message="Mot de passe :").execute()
+        password_confirm = inquirer.secret(message="Confirmez le mot de passe :").execute()
+
+        if password != password_confirm:
+            return HomeView(f"Erreur : Les mots de passe ne correspondent pas.")
 
         user_dao = UserDAO()
         user_service = UserService(user_dao)
