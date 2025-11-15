@@ -44,14 +44,16 @@ POSTGRES_PORT=
 
 ENSAI_GPT_HOST=
 ```
-Puis ajoutez .env dans les variables d'environnement :
 
-PowerShell : ```bash
-$ENV:DOTENV = ".env"
- ```
-Bash / Zsh : ```bash
+Puis ajoutez .env dans les variables d'environnement :
+Bash / Zsh : 
+```bash
 export DOTENV=".env"
 ```
+PowerShell : 
+```powershell
+$ENV:DOTENV = ".env"
+ ```
 
 ### 4. 🧪 (Optionnel) Lancer les tests unitaires
 
@@ -64,12 +66,15 @@ python -m pytest
 ### 5. ▶️ Lancer l’application
 
 **Ajoutez 'src/' aux chemins** (PYTHONPATH) : 
-PowerShell : ```bash
-$ENV:PYTHONPATH = "src"
- ```
-Bash / Zsh : ```bash
+
+Bash / Zsh :
+```bash
 export PYTHONPATH="src"
 ```
+PowerShell : 
+```powershell
+$ENV:PYTHONPATH = "src"
+ ```
 
 Une fois toutes les étapes précédentes effectuées, lance le programme principal:
 ```bash
