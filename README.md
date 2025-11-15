@@ -45,14 +45,8 @@ POSTGRES_PORT=
 ENSAI_GPT_HOST=
 ```
 
-### 4. 🧱 Initialiser le schéma de la base de données
-**La base de données s'initialisera automatiquement au premier lancement** de l'application. Vous pouvez toutefois la réinitialiser en utilisant :
-```bash
-python -m utils.reset_database
-```
 
-
-### 5. 🧪 (Optionnel) Lancer les tests unitaires
+### 4. 🧪 (Optionnel) Lancer les tests unitaires
 
 Pour vérifier que tout fonctionne correctement, exécute les tests avec pytest :
 
@@ -60,9 +54,16 @@ Pour vérifier que tout fonctionne correctement, exécute les tests avec pytest 
 pytest
 ```
 
-### 6. ▶️ Lancer l’application
+### 5. ▶️ Lancer l’application
 
 Une fois toutes les étapes précédentes effectuées, lance le programme principal en étant dans */src*:
 ```bash
 python -m main
 ```
+
+### 6. 🧱 (Optionnel) Réinitialiser le schéma de la base de données
+**La base de données s'initialisera automatiquement au premier lancement** de l'application. Vous pouvez toutefois la réinitialiser en utilisant :
+```bash
+python -m utils.reset_database
+```
+
