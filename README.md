@@ -7,7 +7,7 @@ Projet 2A ENSAI
 
 ## ⚙️ Préparation avant exécution
 
-Avant de lancer le projet, suis attentivement les étapes suivantes :
+Placez vous à la racine du projet, puis suivez attentivement les étapes suivantes :
 
 ### 1. 🐍 Créer et activer un environnement virtuel
 
@@ -26,14 +26,14 @@ source venv/bin/activate
 
 ### 2. 📦 Installer les dépendances
 
-Installe les bibliothèques nécessaires à partir du fichier requirements.txt :
+Installez les bibliothèques nécessaires à partir du fichier requirements.txt :
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. 🗄️ Configurer la base de données PostgreSQL
-Crée un fichier .env à la racine du projet et ajoute-y les informations suivantes :
+### 3. 🗄️ Configurer la base de données PostgreSQL et l'API
+Créez un fichier .env à la racine du projet et ajoutez-y les informations suivantes :
 
 ```bash
 POSTGRES_HOST= 
@@ -44,19 +44,34 @@ POSTGRES_PORT=
 
 ENSAI_GPT_HOST=
 ```
+Puis ajoutez .env dans les variables d'environnement :
 
+PowerShell : ```bash
+$ENV:DOTENV = ".env"
+ ```
+Bash / Zsh : ```bash
+export DOTENV=".env"
+```
 
 ### 4. 🧪 (Optionnel) Lancer les tests unitaires
 
-Pour vérifier que tout fonctionne correctement, exécute les tests avec pytest :
+Pour vérifier que tout fonctionne correctement, vous pouvez exécuter les tests avec pytest :
 
 ```bash
-pytest
+python -m pytest
 ```
 
 ### 5. ▶️ Lancer l’application
 
-Une fois toutes les étapes précédentes effectuées, lance le programme principal en étant dans */src*:
+**Ajoutez 'src/' aux chemins** (PYTHONPATH) : 
+PowerShell : ```bash
+$ENV:PYTHONPATH = "src"
+ ```
+Bash / Zsh : ```bash
+export PYTHONPATH="src"
+```
+
+Une fois toutes les étapes précédentes effectuées, lance le programme principal:
 ```bash
 python -m main
 ```
