@@ -17,6 +17,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from model.user import User
 
+
 class ChatService:
     CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
     CHAT_GET_SUCCESS = (200, "Récupération de conversation réussie")

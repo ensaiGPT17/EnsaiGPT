@@ -77,7 +77,7 @@ class MainMenuView(AbstractView):
                 elif status == 401 or status == 404:
                     return MainMenuView("Mot de passe erroné!\n Retour au Menu Princiapl")
             else:
-                return MainMenuView("Retour au Menu Princiapl")
+                return MainMenuView("Retour au Menu Principal")
 
         elif choix == "Modifier mes identifiants":
             from view.userviews.change_credentials_view import ChangeCredentialsView
