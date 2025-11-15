@@ -133,7 +133,8 @@ class ChatService:
                                             date_sending=datetime.now(),
                                             role_author="assistant",
                                             content=assistant_response)[1]
-        # messages_updated = self.message_service.get_messages_by_chat(chat.id_chat)
+        chat.last_date = datetime.now()
+        self.chat_dao.update(chat.id_chat, chat)
         history.append(assistant_response_saved)
         return history
 
