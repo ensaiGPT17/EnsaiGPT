@@ -16,7 +16,7 @@ if __name__ == "__main__":
     if not os.path.exists(INIT_FILE):
         print("Initialisation de la base...")
         ResetDatabase().lancer()
-        open(INIT_FILE, "w").close()  # creer le fichier .initialized
+        open(INIT_FILE, "w").close()  # creer le fichier .db_initialized
 
     current_view = HomeView("Bienvenue")
     nb_erreurs = 0
