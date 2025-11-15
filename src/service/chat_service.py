@@ -53,7 +53,7 @@ class ChatService:
         chats = self.chat_dao.list_chats_id_user(id_user)
         if chats is None:
             return None
-        chats.sort(key=lambda m: m.last_date)
+        chats.sort(key=lambda m: m.last_date, reverse=True)
         return chats
 
     @log
