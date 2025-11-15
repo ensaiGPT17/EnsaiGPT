@@ -6,49 +6,31 @@ from dao.chat_dao import ChatDAO
 from datetime import datetime
 from model.chat import Chat
 
+
 class StatisticView(AbstractView):
     def __init__(self, message: str = ""):
         super().__init__(message)
 
     def choisir_menu(self):
         user = Session().user
-        username = user.username
         chat_dao = ChatDAO()
         chat_service = ChatService(chat_dao)
 
-        print("\n" + "-" * 50 + "\nAfficher les statistiques\n" + "-" * 50 + "\n")
-        choix = inquirer.select(
-            message=f"Que voulez-vous faire {username} ?",
-            choices=[
-                "Afficher le nombre de conversations",
-                "Afficher le nombre de messages envoyés",
-                "Retour"               
-            ],
+        stats = chat_service.get_user_statistics(user.id_user)
+
+        print("Statistiques :\n")
+        print(f"Nombre de conversations      : {stats['nb_conversations']}")
+        print(f"Nombre total de messages     : {stats['nb_messages']}")
+        print(f"Moyenne de messages par chat : {stats['avg_messages_per_chat']}")
+        print(f"Date de la première conversation : {stats['first_chat_date']}")
+        print(f"Date de la dernière conversation  : {stats['last_chat_date']}")
+
+        choix_action = inquirer.select(
+            message="",
+            choices=["Retour"],
+            qmark=""
         ).execute()
 
-        if choix == "Afficher le nombre de conversations":
-            chats = chat_service.get_chats_by_id_user(user.id_user)
-            nb_conv = len(chats) if chats is not None else 0
-            print (f"Nombre de conversations: {nb_conv}")
-            choix_action = inquirer.select(
-                    message=f"Que voulez-vous?",
-                    choices=["Retour"]
-                ).execute()
-
-            if choix_action == "Retour":
-                return self 
-
-        elif choix == "Afficher le nombre de messages envoyés":
-            nb_messages = chat_service.counts_user_message(user.id_user)
-            print(f"Nombre de messages échangés au total:{nb_messages}")
-            choix_action = inquirer.select(
-                    message=f"Que voulez-vous?",
-                    choices=["Retour"]
-                ).execute()
-
-            if choix_action == "Retour":
-                return self 
-
-        elif choix == "Retour":
+        if choix_action == "Retour":
             from view.userviews.main_menu_view import MainMenuView
-            return MainMenuView("Retour au menu principal")
+            return MainMenuView("Menu principal")

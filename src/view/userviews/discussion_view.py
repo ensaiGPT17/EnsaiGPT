@@ -22,9 +22,10 @@ class DiscussionView(AbstractView):
         for role, msg in self.conversation:
             if role == "assistant":
                 print("Assistant 🤖:")
-            else:
+                print(msg)
+            elif role == "user":
                 print("Vous 👤:")
-            print(msg)
+                print(msg)
             print("-"*50)
 
     def choisir_menu(self):

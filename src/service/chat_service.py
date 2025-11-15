@@ -417,6 +417,47 @@ class ChatService:
 
         return filepath
 
+    @log
+    def get_user_statistics(self, id_user: int) -> dict[str, any]:
+        """
+        Retourne des statistiques enrichies pour un utilisateur.
+
+        Renvoie un dictionnaire avec :
+        - 'nb_conversations'       : nombre de conversations
+        - 'nb_messages'            : nombre total de messages
+        - 'avg_messages_per_chat'  : moyenne de messages par conversation
+        - 'first_chat_date'        : date de la première conversation ou None
+        - 'last_chat_date'         : date de la dernière conversation ou None
+        - 'last_chat_title'        : titre de la dernière conversation ou None
+        """
+        stats = {
+            "nb_conversations": 0,
+            "nb_messages": 0,
+            "avg_messages_per_chat": 0,
+            "first_chat_date": None,
+            "last_chat_date": None,
+        }
+
+        chats = self.get_chats_by_id_user(id_user)
+
+        if not chats:
+            return stats
+
+        stats["nb_conversations"] = len(chats)
+        stats["nb_messages"] = self.counts_user_message(id_user) - 1
+        stats["first_chat_date"] = min(chat.date_start for chat in chats).strftime(
+            "%Y-%m-%d %H:%M")
+        stats["last_chat_date"] = max(chat.last_date for chat in chats).strftime(
+            "%Y-%m-%d %H:%M")
+
+        # Titre de la dernière conversation (par date)
+
+        # Moyenne de messages par conversation
+        stats["avg_messages_per_chat"] = round(
+            stats["nb_messages"] / stats["nb_conversations"], 2
+        )
+
+        return stats
     
     def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
                                top_p: float, temperature: float) -> ResponseService:
