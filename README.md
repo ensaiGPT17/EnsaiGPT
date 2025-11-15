@@ -76,7 +76,7 @@ PowerShell :
 $ENV:PYTHONPATH = "src"
  ```
 
-Une fois toutes les étapes précédentes effectuées, lance le programme principal:
+Une fois toutes les étapes précédentes effectuées, vous pouvez lancer le programme principal:
 ```bash
 python -m main
 ```
