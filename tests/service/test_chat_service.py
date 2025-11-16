@@ -76,8 +76,7 @@ def test_delete_all_chats(chat_service):
     # Suppression
     response: ResponseService = chat_service.delete_all_chats(user_id)
     assert response.code == 200
-    assert "Suppression de liste de conversations réussie" in response.code.lower()
-
+    assert "Suppression de liste de conversations réussie" in response.content
     chats_after = chat_service.get_chats_by_id_user(user_id)
     assert chats_after is None or len(chats_after) == 0
 
