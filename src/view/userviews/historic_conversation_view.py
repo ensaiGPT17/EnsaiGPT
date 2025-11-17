@@ -28,27 +28,7 @@ class HistoricConversationView(AbstractView):
 
         if choix == "Voir l'historique":
             from view.userviews.list_conversation_view import ListConversationView
-<<<<<<< HEAD
-
-            res = ChatService(ChatDAO()).get_chats_by_id_user(user.id_user) 
-            """            
-            max_tokens = 4000
-            top_p = 0.5
-            temperature = 0.5
-
-            res = [
-            Chat(50, 2, "Conversation sur l'IA et les technologies", 
-                datetime.now(), datetime.now(), max_tokens, top_p, temperature),
-            Chat(50, 2, "Projet Machine Learning", 
-                datetime.now(), datetime.now(), max_tokens, top_p, temperature),
-            Chat(50, 2, "Discussion sur les statistiques", 
-                datetime.now(), datetime.now(), max_tokens, top_p, temperature),
-            Chat(50, 2, "Analyse de données et Visualisation", 
-                datetime.now(), datetime.now(), max_tokens, top_p, temperature)
-            ] """
-=======
             res = chat_service.get_chats_by_id_user(user.id_user)
->>>>>>> cb49ffd35fad76e04eee354b2e047ce033174784
 
             return ListConversationView(message="Voir l'historique", conv_list=res, last_view=0)
         elif choix == "Rechercher une conversation":

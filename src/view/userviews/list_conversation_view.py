@@ -24,25 +24,6 @@ class ListConversationView(AbstractView):
 
         # Formatage de la liste des conversations avec un compteur i et des underscores ajustés
 
-<<<<<<< HEAD
-        total_width = 100
-        formated_conv_list = []
-        for i, conv in enumerate(self.conv_list, start=1):
-            # Assurer que la date soit un objet datetime
-            if isinstance(conv.last_date, tuple):  # Si c'est un tuple
-                formatted_date = conv.last_date[0].strftime("%Y-%m-%d %H:%M:%S")
-            else:
-                formatted_date = conv.last_date.strftime("%Y-%m-%d %H:%M:%S")
-            
-            # Calculer le nombre d'underscores nécessaires pour aligner la date
-            num_underscores = total_width - len(f"{i}- {conv.title[:40]}") - len(formatted_date)
-            
-            # Si le titre est trop long, le tronquer à 40 caractères (ou toute autre valeur que tu préfères)
-            formatted_item = f"{i}- {conv.title[:40]}" + "_" * num_underscores + f"{formatted_date}"
-            
-            formated_conv_list.append(formatted_item)
-        formated_conv_list.append("Retour")
-=======
         if len(self.conv_list) != 0:
             total_width = 80
             formated_conv_list = []
@@ -61,7 +42,6 @@ class ListConversationView(AbstractView):
                 
                 formated_conv_list.append(formatted_item)
             formated_conv_list.append("Retour")
->>>>>>> cb49ffd35fad76e04eee354b2e047ce033174784
 
             # Afficher la liste à l'utilisateur et lui permettre de choisir une conversation
             choix = inquirer.select(

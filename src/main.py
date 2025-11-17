@@ -1,22 +1,38 @@
 import logging
 import dotenv
+import os
 
 from utils.log_init import initialiser_logs
 from view.home.home_view import HomeView
 from utils.reset_database import ResetDatabase
-import os
 
 if __name__ == "__main__":
-    # On charge les variables d'envionnement
+    # Charger les variables d'environnement
     dotenv.load_dotenv(override=True)
 
     initialiser_logs("Application")
 
-    INIT_FILE = os.path.join("data", ".db_initialized")
+    INIT_DIR = os.path.join("data")
+    if not os.path.exists(INIT_DIR):
+        os.makedirs(INIT_DIR)  # créer le dossier data s'il n'existe pas
+
+    INIT_FILE = os.path.join(INIT_DIR, ".db_initialized")
     if not os.path.exists(INIT_FILE):
         print("Initialisation de la base...")
-        ResetDatabase().lancer()
-        open(INIT_FILE, "w").close()  # creer le fichier .db_initialized
+        ResetDatabase().lancer(test_dao=False)
+        open(INIT_FILE, "w").close()  # créer le fichier .db_initialized
+
+
+    if not os.path.exists(INIT_FILE):
+        print("Initialisation de la base...")
+
+        # Initialiser le schéma principal
+        ResetDatabase().lancer(test_dao=False)
+
+        # Facultatif : initialiser un schéma test séparé
+        # ResetDatabase().lancer(test_dao=True)
+
+        open(INIT_FILE, "w").close()  # créer le fichier .db_initialized
 
     current_view = HomeView("Bienvenue")
     nb_erreurs = 0
@@ -40,8 +56,7 @@ if __name__ == "__main__":
                 "Consultez les logs pour plus d'informations."
             )
 
-    # Lorsque l on quitte l application
+    # Fin de l'application
     print("----------------------------------")
     print("Au revoir")
-
     logging.info("Fin de l'application")
