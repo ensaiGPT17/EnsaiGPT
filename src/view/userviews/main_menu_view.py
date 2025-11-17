@@ -2,6 +2,8 @@
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from view.session import Session
+from service.chat_service import ChatService
+from dao.chat_dao import ChatDAO
 
 class MainMenuView(AbstractView):
     def __init__(self, message: str = ""):
@@ -10,7 +12,9 @@ class MainMenuView(AbstractView):
     def choisir_menu(self):
         user = Session().user
         username = user.username
-        print("\n" + "-" * 50 + "\nMenu Principal\n" + "-" * 50 + "\n")
+        chat_dao = ChatDAO()
+        chat_service = ChatService(chat_dao)
+
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
             choices=[
@@ -71,16 +75,15 @@ class MainMenuView(AbstractView):
                     from view.home.home_view import HomeView
                     return HomeView(message)
                 elif status == 401 or status == 404:
-                    from view.userviews.main_menu_view import MainMenuView
                     return MainMenuView("Mot de passe erroné!\n Retour au Menu Princiapl")
             else:
-                from view.userviews.main_menu_view import MainMenuView
-                return MainMenuView("Retour au Menu Princiapl")
+                return MainMenuView("Retour au Menu Principal")
 
         elif choix == "Modifier mes identifiants":
             from view.userviews.change_credentials_view import ChangeCredentialsView
             return ChangeCredentialsView("Modifier mes identifiants")
         elif choix == "Afficher les statistiques":
-            print("Fonctionnalitée non implémentée")
-            return self
-
+            from view.userviews.statistics_view import StatisticView
+            return StatisticView("Affichage des statistiques")
+            
+            

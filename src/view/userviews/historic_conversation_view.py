@@ -13,18 +13,22 @@ class HistoricConversationView(AbstractView):
     def choisir_menu(self):
         user = Session().user
         username = user.username
-        print("\n" + "-" * 50 + "\nHistorique de conversation\n" + "-" * 50 + "\n")
+        chat_dao = ChatDAO()
+        chat_service = ChatService(chat_dao)
+
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
             choices=[
                 "Voir l'historique",
                 "Rechercher une conversation",
+                "Supprimer toutes conversations",
                 "Retour"               
             ],
         ).execute()
 
         if choix == "Voir l'historique":
             from view.userviews.list_conversation_view import ListConversationView
+<<<<<<< HEAD
 
             res = ChatService(ChatDAO()).get_chats_by_id_user(user.id_user) 
             """            
@@ -42,11 +46,25 @@ class HistoricConversationView(AbstractView):
             Chat(50, 2, "Analyse de données et Visualisation", 
                 datetime.now(), datetime.now(), max_tokens, top_p, temperature)
             ] """
+=======
+            res = chat_service.get_chats_by_id_user(user.id_user)
+>>>>>>> cb49ffd35fad76e04eee354b2e047ce033174784
 
             return ListConversationView(message="Voir l'historique", conv_list=res, last_view=0)
         elif choix == "Rechercher une conversation":
             from view.userviews.search_conversation_view import SearchConversationView
             return SearchConversationView("Rechercher une conversation")
+        elif choix == "Supprimer toutes conversations":
+            res = chat_service.delete_all_chats(user.id_user)
+            if res.code == 200:
+                message = "Succès"
+                from view.userviews.main_menu_view import MainMenuView
+                return MainMenuView(message=message + "\n" + res.content)
+            else:
+                message = "Erreur interne"
+                from view.userviews.main_menu_view import MainMenuView
+                return MainMenuView(message=message + "\n" + res.content)
+            
         elif choix == "Retour":
             from view.userviews.main_menu_view import MainMenuView
             return MainMenuView("Menu Principal")

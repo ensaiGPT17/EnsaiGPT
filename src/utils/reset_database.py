@@ -1,3 +1,8 @@
+import os
+import logging
+from unittest import mock
+import dotenv
+
 from utils.singleton import Singleton
 from dao.db_connection import DBConnection
 from utils.log_decorator import log
@@ -5,32 +10,53 @@ from utils.log_decorator import log
 
 class ResetDatabase(metaclass=Singleton):
     """
-    Reinitialisation de la base de données
+    Réinitialisation de la base de données (mode normal ou mode test DAO)
     """
 
     @log
-    def lancer(self):
-        print("Ré-initialisation de la base de données")
+    def lancer(self, test_dao=False):
+        """Réinitialise le schéma de la base.
+        Si test_dao=True : utilise le schéma projet_test_dao et pop_db_test.sql
+        """
 
-        init_db = open("./data/init_db.sql", encoding="utf-8")
-        init_db_as_string = init_db.read()
+        if test_dao:
+            # On force le schéma dédié aux tests DAO
+            mock.patch.dict(os.environ, {"POSTGRES_SCHEMA": "projet_test_dao"}).start()
+            pop_data_path = "./data/pop_db_test.sql"
+        else:
+            pop_data_path = "./data/pop_db.sql"
 
-        pop_db = open("./data/pop_db.sql", encoding="utf-8")
-        pop_db_as_string = pop_db.read()
+        # Charge le .env pour récupérer POSTGRES_SCHEMA
+        dotenv.load_dotenv()
+        schema = os.environ["POSTGRES_SCHEMA"]
+
+        # Scripts SQL
+        with open("./data/init_db.sql", encoding="utf-8") as f:
+            init_db_sql = f.read()
+
+        with open(pop_data_path, encoding="utf-8") as f:
+            pop_db_sql = f.read()
+
+        # Recréation du schéma
+        recreate_schema = f"""
+            DROP SCHEMA IF EXISTS {schema} CASCADE;
+            CREATE SCHEMA {schema};
+        """
 
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(init_db_as_string)
-                    cursor.execute(pop_db_as_string)
-        except Exception as e:
-            print(e)
-            raise
+                    cursor.execute(recreate_schema)
+                    cursor.execute(init_db_sql)
+                    cursor.execute(pop_db_sql)
 
-        print("Ré-initialisation de la base de données - Terminée")
+        except Exception as e:
+            logging.error(e)
+            raise
 
         return True
 
 
 if __name__ == "__main__":
     ResetDatabase().lancer()
+    ResetDatabase().lancer(test_dao=True)

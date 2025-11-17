@@ -3,12 +3,20 @@ import dotenv
 
 from utils.log_init import initialiser_logs
 from view.home.home_view import HomeView
+from utils.reset_database import ResetDatabase
+import os
 
 if __name__ == "__main__":
     # On charge les variables d'envionnement
     dotenv.load_dotenv(override=True)
 
     initialiser_logs("Application")
+
+    INIT_FILE = os.path.join("data", ".db_initialized")
+    if not os.path.exists(INIT_FILE):
+        print("Initialisation de la base...")
+        ResetDatabase().lancer()
+        open(INIT_FILE, "w").close()  # creer le fichier .db_initialized
 
     current_view = HomeView("Bienvenue")
     nb_erreurs = 0

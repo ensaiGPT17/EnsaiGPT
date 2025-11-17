@@ -4,24 +4,26 @@ import logging.config
 import yaml
 
 
-def initialiser_logs(nom: str, config_file: str = "../logging_config.yml"):
-    """
-    Initialiser les logs à partir du fichier de configuration YAML.
-    Args:
-        nom (str): Nom du programme ou module pour le log.
-        config_file (str): Chemin du fichier de configuration YAML.
-    """
-    # Création du dossier logs à la racine si non existant
-    os.makedirs("logs", exist_ok=True)
+def initialiser_logs(nom: str):
+    # Chemin absolu du fichier YAML à la racine du projet
+    config_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "logging_config.yml"))
 
-    # Vérification de l'existence du fichier de config
     if not os.path.exists(config_file):
         raise FileNotFoundError(f"Le fichier de configuration {config_file} est introuvable.")
 
-    # Lecture du fichier YAML de configuration
     with open(config_file, encoding="utf-8") as stream:
         config = yaml.load(stream, Loader=yaml.FullLoader)
 
+    # Crée le dossier logs à la racine du projet
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    logs_dir = os.path.join(project_root, "logs")
+    os.makedirs(logs_dir, exist_ok=True)
+
+    # Chemin absolu du fichier log
+    log_file = os.path.join(logs_dir, "my_application.log")
+    config["handlers"]["file"]["filename"] = log_file
+
+    # Application de la config
     logging.config.dictConfig(config)
 
     logging.info("-" * 50)

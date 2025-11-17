@@ -29,9 +29,9 @@ class ChatDAO(metaclass=Singleton):
             title=result["title"],
             date_start=result["date_start"],
             last_date=result["last_date"],
-            max_tokens=result["max_tokens"],
-            temperature=result["temperature"],
-            top_p=result["top_p"]
+            max_tokens=int(result["max_tokens"]),
+            temperature=float(result["temperature"]),
+            top_p=float(result["top_p"])
         )
 
     def insert(self, chat: Chat) -> Optional[Chat]:
@@ -58,9 +58,9 @@ class ChatDAO(metaclass=Singleton):
                     id_user=result["id_user"],
                     date_start=result["date_start"],
                     last_date=result["last_date"],
-                    max_tokens=result["max_tokens"],
-                    temperature=result["temperature"],
-                    top_p=result["top_p"]
+                    max_tokens=int(result["max_tokens"]),
+                    temperature=float(result["temperature"]),
+                    top_p=float(result["top_p"])
         )
 
     def delete(self, id_chat: int) -> bool:
@@ -112,9 +112,9 @@ class ChatDAO(metaclass=Singleton):
                 title=row["title"],
                 date_start=row["date_start"],
                 last_date=row["last_date"],
-                max_tokens=row["max_tokens"],
-                temperature=row['temperature'],
-                top_p=row["top_p"]
+                max_tokens=int(row["max_tokens"]),
+                temperature=float(row['temperature']),
+                top_p=float(row["top_p"])
             ))
         return chats
 
@@ -143,9 +143,9 @@ class ChatDAO(metaclass=Singleton):
                 title=row["title"],
                 date_start=row["date_start"],
                 last_date=row["last_date"],
-                max_tokens=row["max_tokens"],
-                temperature=row['temperature'],
-                top_p=row["top_p"]
+                max_tokens=int(row["max_tokens"]),
+                temperature=float(row['temperature']),
+                top_p=float(row["top_p"])
             ))
         return chats
 
@@ -160,6 +160,7 @@ class ChatDAO(metaclass=Singleton):
         if result is None:
             return None
         return result["count"]
+
 
     def search_by_title(self, id_user:int, mot_cle:str) -> Optional[List[Chat]]:
         """Liste toutes les conversations d'un utilisateur dont le titre contient le mot-clé"""
@@ -188,9 +189,9 @@ class ChatDAO(metaclass=Singleton):
                 title=row["title"],
                 date_start=row["date_start"],
                 last_date=row["last_date"],
-                max_tokens=row["max_tokens"],
-                temperature=row['temperature'],
-                top_p=row["top_p"]
+                max_tokens=int(row["max_tokens"]),
+                temperature=float(row['temperature']),
+                top_p=float(row["top_p"])
             ))
         return chats
 
@@ -220,18 +221,60 @@ class ChatDAO(metaclass=Singleton):
                 title=row["title"],
                 date_start=row["date_start"],
                 last_date=row["last_date"],
-                max_tokens=row["max_tokens"],
-                temperature=row['temperature'],
-                top_p=row["top_p"]
+                max_tokens=int(row["max_tokens"]),
+                temperature=float(row['temperature']),
+                top_p=float(row["top_p"])
             ))
         return chats
+
+    def delete_all_chats(self, id_user: int):
+        """
+        Supprime toutes les conversations d'un utilisateur.
+
+        Paramètres
+        ----------
+        id_user : int
+            Identifiant de l'utilisateur dont les conversations doivent être supprimées.
+
+        Retour
+        ------
+        bool
+            True  : si la suppression s'est effectuée sans erreur.
+            False : en cas d'échec ou d'exception.
+        """
+        query = """
+            DELETE FROM ensaiGPT.chats
+            WHERE id_user = %s;
+        """
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(query, (id_user,))
+                    connection.commit()
+            return True
+
+        except Exception:
+            # Optionnel : logger l'exception
+            return False
+
+
 
 
 """
 if __name__ == "__main__":
+
+
+    chat_dao = ChatDAO()
+    #  Recup conversation
+
+    chat1 = chat_dao.get_chat(1)
+
+    print(f"CONV: {chat1.title} -- et derniere fois: {chat1.last_date}")
+    print(type(chat1.temperature))
+    print(type(chat1.max_tokens))
+    
     from datetime import datetime
-
-
     date ="2025-09-30"
     date = datetime.strptime(date, "%Y-%m-%d")
     print(date)

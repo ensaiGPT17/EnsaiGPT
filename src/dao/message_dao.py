@@ -89,8 +89,8 @@ class MessageDAO(metaclass=Singleton):
         print(res)
         if res:
             return Message(
-                id_message=res['id_message'],
-                id_chat=res['id_chat'],
+                id_message=int(res['id_message']),
+                id_chat=int(res['id_chat']),
                 date_sending=res['date_sending'],
                 role_author=res['role_author'],
                 content=res['content']
@@ -125,8 +125,8 @@ class MessageDAO(metaclass=Singleton):
         messages = [
             Message(
                 
-                id_message=row['id_message'],
-                id_chat=row['id_chat'],
+                id_message=int(row['id_message']),
+                id_chat=int(row['id_chat']),
                 date_sending=row['date_sending'],
                 role_author=row['role_author'],
                 content=row['content']

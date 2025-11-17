@@ -6,7 +6,7 @@ from service.user_service import UserService
 
 
 class ChangeCredentialsView(AbstractView):
-    def __init__(self, message: str = ""):
+    def __init__(self, message: str = "Modifier mes identifiants"):
         super().__init__(message)
 
     def choisir_menu(self):
@@ -15,7 +15,6 @@ class ChangeCredentialsView(AbstractView):
         user_dao = UserDAO()
         user_service = UserService(user_dao)
 
-        print("\n" + "-" * 50 + "\nModifier mes identifiants\n" + "-" * 50 + "\n")
         choix = inquirer.select(
             message=f"Que voulez-vous faire {username} ?",
             choices=[
@@ -61,6 +60,12 @@ class ChangeCredentialsView(AbstractView):
             if res.code == 200:
                 # user confirmé, il peut changer le MOT DE PASSE
                 new_password = inquirer.secret(message="Rentrez votre nouveau mot de passe: ").execute()
+                new_password_confirm = inquirer.secret(message="Confirmez le mot de "
+                                                               "passe : ").execute()
+                if new_password != new_password_confirm:
+                    from view.userviews.main_menu_view import MainMenuView
+                    return MainMenuView(f"Erreur : Les mots de passe ne correspondent pas.")
+
                 res_chgt_password = user_service.change_password(user.id_user, password, new_password)
                 if res_chgt_password.code==200:
                     # reussite chgt mdp test OK

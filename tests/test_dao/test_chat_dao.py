@@ -2,7 +2,7 @@ import pytest
 from dao.chat_dao import ChatDAO
 from utils.reset_database import ResetDatabase
 from model.chat import Chat
-from datetime import date
+from datetime import datetime, date
 
 
 @pytest.fixture
@@ -103,7 +103,7 @@ def test_list_chats_id_user(chat_dao):
     print("\nRésultats retournés par list_chats_id_user(1):")
     for c in chats:
         print(f"id_chat={c.id_chat}, id_user={c.id_user}, title={c.title}")
-    assert all(c.id_user == (user_id,) for c in chats) # c'est une solution pas efficace,(probleme de tuple) je vais revoir ça (yassine)
+    assert all(c.id_user == user_id for c in chats) # c'est une solution pas efficace,(probleme de tuple) je vais revoir ça (yassine)
 
 
 
@@ -116,6 +116,78 @@ def test_count_chats(chat_dao):
 
     assert isinstance(count_before, int)
     assert count_after == count_before + 1
+
+def test_search_by_title_found(chat_dao):
+    """Doit retourner les chats contenant un mot-clé dans le titre."""
+    # Insertion de quelques chats
+    chat_dao.insert(Chat(None, 1, "Discussion GPT Test", datetime.now(), datetime.now(), 512, 0.7, 0.9))
+    chat_dao.insert(Chat(None, 1, "Autre conversation", datetime.now(), datetime.now(), 256, 0.6, 0.8))
+    chat_dao.insert(Chat(None, 1, "GPT Historique", datetime.now(), datetime.now(), 256, 0.6, 0.8))
+
+    # Recherche par mot-clé "GPT"
+    results = chat_dao.search_by_title(1, "gpt")
+
+    assert results is not None
+    assert isinstance(results, list)
+    assert all(isinstance(c, Chat) for c in results)
+    assert all("gpt" in c.title.lower() for c in results)
+    assert len(results) >= 2  # on devrait retrouver au moins 2 chats
+
+
+def test_search_by_title_not_found(chat_dao):
+    """Doit retourner None si aucun titre ne correspond."""
+    # Aucune conversation avec ce mot-clé
+    chat_dao.insert(Chat(None, 1, "Conversation classique", datetime.now(), datetime.now(), 512, 0.7, 0.9))
+
+    results = chat_dao.search_by_title(1, "inexistant")
+
+    assert results is None
+
+
+def test_search_by_date_found(chat_dao):
+    """Doit retourner les chats dont la date correspond à la recherche."""
+    # On crée deux chats avec des dates précises
+
+    chat_dao.insert(Chat(None, 1, "Chat d'aujourd'hui", None, None, 512, 0.7, 0.9))
+
+    """date="2025-11-06" """
+    dt = date.today()
+    """dt = datetime.strptime(date, "%Y-%m-%d")"""
+    
+    results = chat_dao.search_by_date(1, dt)
+    assert results is not None
+    assert isinstance(results, list)
+    assert len(results) == 1
+    assert results[0].title == "Chat d'aujourd'hui"
+
+
+def test_search_by_date_not_found(chat_dao):
+    """Doit retourner None si aucune conversation à cette date."""
+    chat_dao.insert(Chat(None, 1, "Chat ancien", datetime(2024, 10, 1), datetime(2024, 10, 1), 256, 0.5, 0.9))
+
+    results = chat_dao.search_by_date(1, datetime(2025, 1, 1))
+    assert results is None
+
+def test_delete_all_chats(chat_dao):
+    """Test la suppression de toutes les conversations d'un utilisateur."""
+    user_id = 1
+
+    # Insertion de quelques chats pour l'utilisateur
+    chat_dao.insert(Chat(None, user_id, "Chat 1", datetime.now(), datetime.now(), 256, 0.9, 0.5))
+    chat_dao.insert(Chat(None, user_id, "Chat 2", datetime.now(), datetime.now(), 256, 0.8, 0.6))
+
+    # Vérifie qu'il y a bien des chats avant suppression
+    chats_before = chat_dao.list_chats_id_user(user_id)
+    assert chats_before is not None
+    assert len(chats_before) >= 2
+
+    # Appel de la méthode delete_all_chats
+    result = chat_dao.delete_all_chats(user_id)
+    assert result is True
+
+    # Vérifie qu'il ne reste plus aucun chat pour cet utilisateur
+    chats_after = chat_dao.list_chats_id_user(user_id)
+    assert chats_after is None or len(chats_after) == 0
 
 
 if __name__ == "__main__":

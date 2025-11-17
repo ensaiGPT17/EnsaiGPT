@@ -16,7 +16,7 @@ class AbstractView(ABC):
         """Affiche le message / en-tête. NE PAS appeler choisir_menu ici."""
         self.nettoyer_console()
         if self.message:
-            print(self.message)
+            print("\n" + "-" * 50 + f"\n{self.message}\n" + "-" * 50 + "\n")
         print()
 
     @abstractmethod

@@ -131,3 +131,7 @@ dmypy.json
 
 # Ruff stuff
 .ruff_cache
+
+logs/
+exports/
+.db_initialized

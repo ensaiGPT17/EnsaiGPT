@@ -13,7 +13,7 @@ VALUES
 -- Conversations
 --------------------------------------------------------------
 
-INSERT INTO ensaiGPT.chat (id_user, title, date_start, last_date, max_tokens, top_p, temperature)
+INSERT INTO ensaiGPT.chats (id_user, title, date_start, last_date, max_tokens, top_p, temperature)
 VALUES
     (1, 'Data Analysis Project', '2025-09-28', '2025-09-30', 4096, 0.9, 0.7),
     (1, 'Operations Research Help', '2025-10-01', '2025-10-02', 4096, 1.0, 0.8),
@@ -24,7 +24,7 @@ VALUES
 -- Messages
 --------------------------------------------------------------
 
-INSERT INTO ensaiGPT.message (id_chat, date_sending, role_author, content)
+INSERT INTO ensaiGPT.messages (id_chat, date_sending, role_author, content)
 VALUES
     -- Conversation 1 (Bruno)
     (1, '2025-09-28', 'user', 'Hi, can you help me analyze sales data using Python?'),
@@ -47,4 +47,3 @@ VALUES
     (4, '2025-09-29', 'assistant', 'Begin with linear regression, it’s intuitive and widely used.'),
     (4, '2025-09-30', 'user', 'Should I learn NumPy and Pandas first?'),
     (4, '2025-09-30', 'assistant', 'Yes, definitely. They’re essential for data manipulation and analysis.');
-
