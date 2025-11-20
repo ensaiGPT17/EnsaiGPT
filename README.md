@@ -1,39 +1,41 @@
-Projet 2A ENSAI
-
 # 💬 Projet ENSAI GPT
 
 ....
 ---
 
-## ⚙️ Préparation avant exécution
+## ⚙️ Preparation before execution
 
-Placez vous à la racine du projet, puis suivez attentivement les étapes suivantes :
+Place yourself at the root of the project, then carefully follow the steps below:
 
-### 1. 🐍 Créer et activer un environnement virtuel
+### 1. (Recommended) Create and activate a virtual environment
 
-Il est recommandé d’utiliser un environnement virtuel pour isoler les dépendances du projet.
+It is recommended to use a virtual environment to isolate the project dependencies.
 
-```bash
-# Création de l’environnement
+Creating the environment:
+```
 python -m venv venv
+```
+Activate: 
 
-# Activation sous Windows
-venv\Scripts\activate
-
-# Activation sous macOS / Linux
+Bash / Zsh
+```bash
 source venv/bin/activate
 ```
+PowerShell
+```powershell
+.\venv\Scripts\activate
+```
 
-### 2. 📦 Installer les dépendances
 
-Installez les bibliothèques nécessaires à partir du fichier requirements.txt :
+### 2. Install the dependencies
 
+Install the required libraries from the requirements.txt file:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. 🗄️ Configurer la base de données PostgreSQL et l'API
-Créez un fichier .env à la racine du projet et ajoutez-y les informations suivantes :
+### 3. Configure the PostgreSQL database and the API
+Create a .env file at the root of the project and add the following information:
 
 ```bash
 POSTGRES_HOST= 
@@ -45,7 +47,7 @@ POSTGRES_PORT=
 ENSAI_GPT_HOST=
 ```
 
-Puis ajoutez .env dans les variables d'environnement :
+Then add .env to the environment variables:
 
 Bash / Zsh
 ```bash
@@ -56,9 +58,9 @@ PowerShell
 $ENV:DOTENV = ".env"
  ```
 
-### 4. 🧪 (Optionnel) Lancer les tests unitaires
+### 4. (Optional) Run the tests
 
-Pour vérifier que tout fonctionne correctement, vous pouvez exécuter les tests avec pytest :
+To check that everything is working correctly, you can run the tests with pytest:
 
 ```bash
 python -m pytest
@@ -66,7 +68,7 @@ python -m pytest
 
 ### 5. ▶️ Lancer l’application
 
-**Ajoutez 'src/' aux chemins** (PYTHONPATH) : 
+**Add 'src/' to the paths** (PYTHONPATH) : 
 
 Bash / Zsh
 ```bash
@@ -77,13 +79,14 @@ PowerShell
 $ENV:PYTHONPATH = "src"
  ```
 
-Une fois toutes les étapes précédentes effectuées, vous pouvez lancer le programme principal:
+Once all the previous steps are completed, you can run the main program:
 ```bash
 python -m main
 ```
 
-### 6. 🧱 (Optionnel) Réinitialiser le schéma de la base de données
-**La base de données s'initialisera automatiquement au premier lancement** de l'application. Vous pouvez toutefois la réinitialiser en utilisant :
+### 6. 🧱 (Optional) Reset the database schema
+**The database will initialize automatically on the first launch** of the application. However, you can reset it using:
+
 ```bash
 python -m utils.reset_database
 ```
