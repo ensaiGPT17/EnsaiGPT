@@ -35,6 +35,15 @@ class ChatService:
     CHATS_CLEARED_SUCCES = (200, "Suppression de liste de conversations réussie")
 
     def __init__(self, chat_dao: ChatDAO = ChatDAO()):
+        """
+        Constructeur du service ChatService.
+
+        Paramètres
+        ----------
+        chat_dao : ChatDAO, optionnel
+            DAO permettant l'accès aux données des conversations.
+            Par défaut : une instance standard de ChatDAO.
+        """
         self.chat_dao = chat_dao
         self.message_service = MessageService(MessageDAO())
         self.client = EnsaiGPTClient()
@@ -42,14 +51,35 @@ class ChatService:
     @log
     def get_chat(self, id_chat: int) -> Chat:
         """
-        Récupère une conversation spécifique.
+        Récupère une conversation spécifique par son identifiant.
+
+        Paramètres
+        ----------
+        id_chat : int
+            Identifiant de la conversation.
+
+        Retour
+        ------
+        Chat
+            La conversation correspondante.
         """
         return self.chat_dao.get_chat(id_chat)
 
     @log
     def get_chats_by_id_user(self, id_user: int) -> Optional[List[Chat]]:
         """
-        Retourne toutes les conversations d’un utilisateur, triées par dates.
+        Récupère toutes les conversations d’un utilisateur.
+
+        Paramètres
+        ----------
+        id_user : int
+            Identifiant de l'utilisateur.
+
+        Retour
+        ------
+        Optional[List[Chat]]
+            Liste triée des conversations (ordre : last_date décroissant),
+            ou None si aucune conversation n’est trouvée.
         """
         chats = self.chat_dao.list_chats_id_user(id_user)
         if chats is None:
@@ -59,6 +89,20 @@ class ChatService:
 
     @log
     def request_title(self, id_chat: int) -> str:
+        """
+        Demande automatiquement un titre court pour une conversation,
+        en ajoutant un message interne puis en interrogeant l’API.
+
+        Paramètres
+        ----------
+        id_chat : int
+            Identifiant de la conversation.
+
+        Retour
+        ------
+        str
+            Titre généré automatiquement.
+        """
         history = self.message_service.get_messages_by_chat(id_chat)
         history.append(self.message_service.title_request())
         chat = self.get_chat(id_chat)
@@ -72,7 +116,29 @@ class ChatService:
                     max_tokens=512, top_p=1.0, temperature=0.7,
                     system_message="Tu es un assistant utile.") -> Chat:
         """
-        Crée une nouvelle conversation.
+        Crée une nouvelle conversation et génère automatiquement la première réponse de l'assistant.
+
+        Étapes :
+        - Création du chat
+        - Ajout d’un message système
+        - Ajout du premier message utilisateur
+        - Génération de la réponse assistant
+        - Génération automatique du titre
+
+        Paramètres
+        ----------
+        user_first_message_content : str
+            Contenu du premier message envoyé par l’utilisateur.
+        id_user : int
+            Identifiant de l’utilisateur.
+        max_tokens, top_p, temperature : paramètres du modèle.
+        system_message : str
+            Message système envoyé en premier.
+
+        Retour
+        ------
+        Chat
+            La conversation nouvellement créée et mise à jour.
         """
         new_chat = Chat(
             id_chat=-1,
@@ -124,6 +190,23 @@ class ChatService:
     @log
     def send_message(self, chat: Chat, history: List[Message], content: str) -> \
             List[Message]:
+        """
+        Envoie un message dans un chat, puis génère la réponse de l'assistant.
+
+        Paramètres
+        ----------
+        chat : Chat
+            Conversation en cours.
+        history : List[Message]
+            Historique actuel des messages.
+        content : str
+            Contenu du message envoyé par l’utilisateur.
+
+        Retour
+        ------
+        List[Message]
+            Historique mis à jour (message utilisateur + réponse assistant).
+        """
 
         user_message_sent = self.message_service.create_message(id_chat=chat.id_chat,
                                             date_sending=datetime.now(),
@@ -141,7 +224,19 @@ class ChatService:
 
     @log
     def delete_chat(self, id_chat: int) -> ResponseService:
-        """Supprime une conversation."""
+        """
+        Supprime une conversation.
+
+        Paramètres
+        ----------
+        id_chat : int
+            Identifiant du chat à supprimer.
+
+        Retour
+        ------
+        ResponseService
+            Résultat de l'opération (succès ou erreur).
+        """
         deleted = self.chat_dao.delete(id_chat)
         if deleted:
             return ResponseService(*self.CHAT_DELETE_SUCCESS)
@@ -150,8 +245,20 @@ class ChatService:
     @log
     def search_chat_by_title(self, id_user: int, search: str) -> List[Chat]:
         """
-        Recherche des conversations par titre, triées grâce à la distance de
-        Levenshtein.
+        Recherche les conversations d’un utilisateur selon leur titre,
+        en utilisant une similarité par distance de Levenshtein.
+
+        Paramètres
+        ----------
+        id_user : int
+            Identifiant utilisateur.
+        search : str
+            Mot-clé recherché.
+
+        Retour
+        ------
+        List[Chat]
+            Conversations triées par similarité décroissante.
         """
         all_chats = self.chat_dao.list_chats_id_user(id_user)
         if not all_chats:
@@ -182,7 +289,21 @@ class ChatService:
 
     @log
     def search_chat_by_date(self, id_user: int, search_date: str) -> List[Chat]:
-        """Recherche les conversations créées à une certaine date."""
+        """
+        Recherche les conversations créées à une date spécifique.
+
+        Paramètres
+        ----------
+        id_user : int
+            Identifiant de l’utilisateur.
+        search_date : str
+            Date au format 'YYYY-MM-DD'.
+
+        Retour
+        ------
+        List[Chat]
+            Conversations triées par date décroissante.
+        """
         date = datetime.strptime(search_date, "%Y-%m-%d")
         all_chats = self.chat_dao.search_by_date(id_user, date)
         if all_chats is None:
@@ -217,6 +338,19 @@ class ChatService:
     
     @log
     def counts_user_message(self, id_user: int):
+        """
+        Compte le nombre total de messages envoyés par un utilisateur.
+
+        Paramètres
+        ----------
+        id_user : int
+            Identifiant de l’utilisateur.
+
+        Retour
+        ------
+        int
+            Nombre total de messages (somme des messages de chaque chat).
+        """
         chats = self.get_chats_by_id_user(id_user=id_user)
 
         if chats is None:
@@ -233,9 +367,23 @@ class ChatService:
 
             return nombre_total_de_message + 1
 
-
     def split_text(self, text, max_len=95):
-        """Coupe proprement un long texte pour l'affichage dans un PDF."""
+        """
+        Coupe un long texte en plusieurs lignes à longueur maximale définie.
+        Utilisé pour l’affichage propre des messages dans le PDF.
+
+        Paramètres
+        ----------
+        text : str
+            Texte à découper.
+        max_len : int
+            Longueur maximale par ligne.
+
+        Retour
+        ------
+        List[str]
+            Liste de lignes de texte.
+        """
         words = text.split()
         lines = []
         current = ""
@@ -252,21 +400,32 @@ class ChatService:
 
         return lines
 
-    
     @log 
     def export_chat_to_PDF(self, user: User, id_chat: int, messages: List[Message], file_path: str = "exports/"):
         """
-        Exporte une conversation en PDF avec :
-        - Id de l' utilisateur
-        - Id du Chat
-        - Messages échangés
-        Le tout dans un style minimaliste propre.
+        Exporte une conversation en PDF.
 
-        Params :
-            chat      : objet Chat (doit contenir : id, id_user, title, date_creation, date_update, tokens, temp, top_p)
-            user      : objet User (doit contenir : id, firstname, lastname, email)
-            messages  : liste d'objets Message ou dictionnaires {sender, content, timestamp}
-            file_path : chemin de sortie optionnel (sinon = exports/conversation_{id}.pdf)
+        Le PDF contient :
+        - les informations utilisateur,
+        - les informations du chat,
+        - tous les messages de la conversation,
+        - une mise en page propre et minimaliste.
+
+        Paramètres
+        ----------
+        user : User
+            Utilisateur associé au chat.
+        id_chat : int
+            Identifiant du chat à exporter.
+        messages : List[Message]
+            Liste des messages de la conversation.
+        file_path : str
+            Dossier de sortie (par défaut : "exports/").
+
+        Retour
+        ------
+        str
+            Chemin complet du fichier PDF exporté.
         """
 
         # Créer dossier par défaut si nécessaire
@@ -366,7 +525,29 @@ class ChatService:
 
     def export_chat_to_TXT(self, user: User, id_chat: int, messages: list[Message], file_path: str = "exports/") -> str:
         """
-        Exporte proprement une conversation en fichier .txt
+        Exporte une conversation au format texte (.txt).
+
+        Contenu exporté :
+        - Informations utilisateur
+        - Informations du chat
+        - Liste chronologique des messages
+        - Mise en forme lisible
+
+        Paramètres
+        ----------
+        user : User
+            Utilisateur concerné.
+        id_chat : int
+            Identifiant du chat.
+        messages : List[Message]
+            Messages de la conversation.
+        file_path : str
+            Dossier de sortie.
+
+        Retour
+        ------
+        str
+            Chemin complet du fichier généré.
         """
         # Créer dossier par défaut si nécessaire
 
@@ -422,15 +603,23 @@ class ChatService:
     @log
     def get_user_statistics(self, id_user: int) -> dict[str, any]:
         """
-        Retourne des statistiques enrichies pour un utilisateur.
+        Retourne des statistiques détaillées pour un utilisateur :
 
-        Renvoie un dictionnaire avec :
-        - 'nb_conversations'       : nombre de conversations
-        - 'nb_messages'            : nombre total de messages
-        - 'avg_messages_per_chat'  : moyenne de messages par conversation
-        - 'first_chat_date'        : date de la première conversation ou None
-        - 'last_chat_date'         : date de la dernière conversation ou None
-        - 'last_chat_title'        : titre de la dernière conversation ou None
+        - nb_conversations : int
+        - nb_messages : int
+        - avg_messages_per_chat : float
+        - first_chat_date : str (YYYY-MM-DD HH:MM)
+        - last_chat_date  : str (YYYY-MM-DD HH:MM)
+
+        Paramètres
+        ----------
+        id_user : int
+            Identifiant utilisateur.
+
+        Retour
+        ------
+        dict
+            Dictionnaire contenant les statistiques calculées.
         """
         stats = {
             "nb_conversations": 0,
