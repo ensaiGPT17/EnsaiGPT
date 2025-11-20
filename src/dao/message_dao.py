@@ -1,5 +1,4 @@
 from typing import Optional, List
-from datetime import datetime
 from model.message import Message
 from dao.db_connection import DBConnection
 from utils.singleton import Singleton
@@ -136,59 +135,3 @@ class MessageDAO(metaclass=Singleton):
         ]
 
         return messages
-
-
-"""
-if __name__ == "__main__":
-
-    print("=== TEST DE LA CLASSE MessageDAO ===")
-    message_dao = MessageDAO()
-
-    # Variables de test
-    id_chat_test = 2
-    role_author_test = "assistant"
-    content_test = "Bonjour, ceci est un message de test."
-    content_update = "Message mis à jour."
-
-    #  - Création d’un message
-    print("\n--- Création d’un message ---")
-    new_message = message_dao.create_message(
-        id_chat=id_chat_test,
-        date_sending=datetime.now(),
-        role_author=role_author_test,
-        content=content_test
-    )
-    if new_message:
-        print(f"Message inséré avec succès : id={new_message.id_message}, contenu='{new_message.content}'")
-    else:
-        print("Échec de création du message")
-
-    #  - Récupération par ID
-    print("\n--- Récupération par ID ---")
-    if new_message:
-        fetched = message_dao.get_message_by_id(new_message.id_message)
-        print(f"Message récupéré : {fetched.content if fetched else 'Aucun message trouvé'}")
-
-    # 3 - Récupération par chat
-    print("\n--- Liste des messages du chat ---")
-    messages = message_dao.get_messages_by_chat(id_chat_test)
-    if messages:
-        for m in messages:
-            print(f"[{m.date_sending}] {m.role_author} : {m.content}")
-    else:
-        print("Aucun message trouvé pour ce chat")
-
-
-    # 4️⃣ - Suppression du message
-    print("\n--- Suppression du message ---")
-    if new_message:
-        deleted = message_dao.delete_message(new_message.id_message-1)
-        print("Message supprimé avec succès" if deleted else "Échec de suppression")
-
-
-    #  - Vérification après suppression
-    print("\n--- Vérification après suppression ---")
-    if new_message:
-        message_check = message_dao.get_message_by_id(new_message.id_message-1)
-        print("Message encore présent" if message_check else "Message bien supprimé")
-"""

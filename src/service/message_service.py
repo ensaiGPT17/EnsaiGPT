@@ -81,7 +81,7 @@ class MessageService:
         ------
         Tuple[ResponseService, Optional[Message]]
             - Un objet ResponseService indiquant succès ou échec.
-            - Le message créé, ou None si la création échoue.
+            - Le message créé ou None si la création échoue.
         """
         # appel messageDAO
         message = self.message_dao.insert(Message(-1, id_chat, date_sending, role_author, content))

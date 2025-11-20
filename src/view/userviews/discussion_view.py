@@ -4,8 +4,9 @@ from view.session import Session
 from model.message import Message
 from model.chat import Chat
 
+
 class DiscussionView(AbstractView):
-    def __init__(self, chat: Chat, liste_message: list[Message], first_time=1):
+    def __init__(self, chat: Chat, liste_message: list[Message]):
         super().__init__('')
         self.conversation = [
             (message.role_author, message.content) for message in liste_message
@@ -44,35 +45,20 @@ class DiscussionView(AbstractView):
             ).execute()
 
             if choix == "Envoyer un message":
-                """
-                message_user = inquirer.text(message="Votre message :").execute()
-                self.conversation.append(("user", message_user))
-
-                # Simulation de réponse de l’assistant (placeholder)
-                message_assistant = f"Réponse à : '{message_user}'"  # À remplacer par un vrai modèle si besoin
-                self.conversation.append(("assistant", message_assistant))
-                """
-                
                 from service.chat_service import ChatService
                 from dao.chat_dao import ChatDAO
-                from service.message_service import MessageService
-                from dao.message_dao import MessageDAO
 
                 message_user = inquirer.text(message="Votre message :").execute()
                 self.conversation.append(("user", message_user))
 
                 chat_service = ChatService(ChatDAO())
-                message_service = MessageService(MessageDAO())
-
-                #new_chat = chat_service.create_chat(message_user, user.id_user)
 
                 message_list = chat_service.send_message(
                     chat=self.chat,
                     history=self.liste_messages,
                     content=message_user
                 )
-                return DiscussionView(chat=self.chat, liste_message=message_list, first_time=1)
-
+                return DiscussionView(chat=self.chat, liste_message=message_list)
 
             elif choix == "Quitter la discussion":
                 from view.userviews.main_menu_view import MainMenuView

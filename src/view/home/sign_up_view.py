@@ -1,15 +1,9 @@
-from view.abstract_view import AbstractView
-from service.user_service import UserService
 from dao.user_dao import UserDAO
-from InquirerPy import inquirer
-from model.user import User
-
-
-# view/home/sign_up_view.py
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from service.user_service import UserService
 from view.home.home_view import HomeView
+
 
 def is_valid_password(pw: str) -> bool:
     return (
@@ -19,6 +13,7 @@ def is_valid_password(pw: str) -> bool:
         and any(c.isdigit() for c in pw)
     )
 
+
 class SignUpView(AbstractView):
     def __init__(self, message: str = ""):
         super().__init__(message)
@@ -26,7 +21,8 @@ class SignUpView(AbstractView):
     def choisir_menu(self):
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         password = inquirer.secret(message="Mot de passe :").execute()
-        password_confirm = inquirer.secret(message="Confirmez le mot de passe :").execute()
+        password_confirm = inquirer.secret(message="Confirmez le mot de passe "
+                                                   ":").execute()
 
         if password != password_confirm:
             return HomeView(f"Erreur : Les mots de passe ne correspondent pas.")
@@ -41,7 +37,8 @@ class SignUpView(AbstractView):
             # utilisateur crée avec succes
             return HomeView(f"{res.content}\nVous pouvez vous connecter à présent!")
         elif status == 409:
-            return HomeView(f"Erreur: {res.content}\nLe pseudo {username} est déjà utilisé.")
+            return HomeView(f"Erreur: {res.content}\nLe pseudo {username} est déjà "
+                            f"utilisé.")
         elif status == 400:
             return HomeView(f"Erreur: {res.content}") 
         else:

@@ -22,7 +22,6 @@ if __name__ == "__main__":
         ResetDatabase().lancer(test_dao=False)
         open(INIT_FILE, "w").close()  # créer le fichier .db_initialized
 
-
     if not os.path.exists(INIT_FILE):
         print("Initialisation de la base...")
 

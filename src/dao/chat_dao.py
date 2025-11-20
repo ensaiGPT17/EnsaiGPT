@@ -68,16 +68,16 @@ class ChatDAO(metaclass=Singleton):
             La conversation insérée avec son ID mis à jour ou None si l'insertion échoue.
         """
         query = f"""
-            INSERT INTO {self.schema}.chats (id_user, title, date_start, last_date, max_tokens, 
-            temperature, top_p)
+            INSERT INTO {self.schema}.chats (id_user, title, date_start, last_date, 
+            max_tokens, temperature, top_p)
             VALUES (%s, %s, NOW(), NOW(), %s, %s, %s)
             RETURNING id_chat, id_user, title, date_start, last_date, max_tokens, 
             temperature, top_p
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
-                cursor.execute(query, (chat.id_user, chat.title, chat.max_tokens, chat.temperature, 
-                chat.top_p))
+                cursor.execute(query, (chat.id_user, chat.title, chat.max_tokens,
+                                       chat.temperature, chat.top_p))
                 result = cursor.fetchone()
 
         if result is None:
@@ -349,7 +349,7 @@ class ChatDAO(metaclass=Singleton):
         Retour
         ------
         bool
-            True  : si la suppression s'est effectuée sans erreur.
+            True : si la suppression s'est effectuée sans erreur.
             False : en cas d'échec ou d'exception.
         """
         query = f"""
@@ -367,93 +367,3 @@ class ChatDAO(metaclass=Singleton):
         except Exception:
             # Optionnel : logger l'exception
             return False
-
-
-
-
-"""
-if __name__ == "__main__":
-
-
-    chat_dao = ChatDAO()
-    #  Recup conversation
-
-    chat1 = chat_dao.get_chat(1)
-
-    print(f"CONV: {chat1.title} -- et derniere fois: {chat1.last_date}")
-    print(type(chat1.temperature))
-    print(type(chat1.max_tokens))
-    
-    from datetime import datetime
-    date ="2025-09-30"
-    date = datetime.strptime(date, "%Y-%m-%d")
-    print(date)
-    conv = ChatDAO().search_by_date(1,date)
-    print(conv)
-    for i in conv: 
-        print(f"CONV: {i.title} -- et derniere fois: {i.last_date}")
-
-    print("=== TEST DE LA CLASSE ChatDAO ===")
-    
-    chat_dao = ChatDAO()
-    #  Recup conversation
-
-    chat1 = chat_dao.get_chat(1)
-
-    print(f"CONV: {chat1.title} -- et derniere fois: {chat1.last_date}")
-
-    # 2. Li
-    id_chat = 100
-    max_tokens = 500
-    temp = 0.5
-    top_p = 0.9
-    id_user = 3
-    title="Coucogdgdfg gdfgdu"
-
-    chat_to_insert = Chat(
-        id_chat=id_chat,
-        id_user=id_user,
-        title=title,
-        date_start=datetime.now(),
-        last_date=datetime.now(),
-        max_tokens=max_tokens,
-        temperature=temp,
-        top_p=top_p
-    )
-    chat_dao.insert(chat=chat_to_insert)
-
-    #3 - update chat
-    id_chat = 9
-    updated_chat = Chat(
-        id_chat=id_chat,
-        id_user=id_user,
-        title="TITRE du nouveau id",
-        date_start=datetime.now(),
-        last_date=datetime.now(),
-        max_tokens=max_tokens,
-        temperature=temp,
-        top_p=top_p
-    )
-    chat_dao.update(id_chat=id_chat, chat_updated=updated_chat)
-
-    # Deete chat 
-    #chat_dao.delete(9)
-
-    # toutes les conversations
-    liste = chat_dao.get_all()
-
-    for conv in liste:
-        print(f"ID: {conv.id_chat} --- TITRE: {conv.title}")
-
-    print(" --------- --------------- ----------------")
-    
-    # toutes les conversations d'un user
-    id_user = 2
-    liste = chat_dao.list_chats_id_user(id_user=id_user)
-
-    for conv in liste:
-        print(f"ID: {conv.id_chat} --- TITRE: {conv.title}")
-
-    print(" --------- --------------- ----------------")
-    print(chat_dao.count_chats())
-"""

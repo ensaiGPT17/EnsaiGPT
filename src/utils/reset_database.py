@@ -31,7 +31,6 @@ class ResetDatabase(metaclass=Singleton):
         init_db_test_path = os.path.join(BASE_DIR, "data", "init_db_test.sql")
         pop_db_test_path = os.path.join(BASE_DIR, "data", "pop_db_test.sql")
 
-
         # Choix du schéma et du fichier de peuplement
         if test_dao:
             init_path = init_db_test_path
@@ -77,5 +76,3 @@ class ResetDatabase(metaclass=Singleton):
 if __name__ == "__main__":
     # Réinitialisation du schéma réel
     ResetDatabase().lancer(test_dao=False)
-    # Réinitialisation du schéma test
-    #ResetDatabase().lancer(test_dao=True)

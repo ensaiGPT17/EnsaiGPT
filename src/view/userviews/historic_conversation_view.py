@@ -1,10 +1,9 @@
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from view.session import Session
-from model.chat import Chat
-from datetime import datetime
 from service.chat_service import ChatService
 from dao.chat_dao import ChatDAO
+
 
 class HistoricConversationView(AbstractView):
     def __init__(self, message: str = ""):
@@ -30,7 +29,8 @@ class HistoricConversationView(AbstractView):
             from view.userviews.list_conversation_view import ListConversationView
             res = chat_service.get_chats_by_id_user(user.id_user)
 
-            return ListConversationView(message="Voir l'historique", conv_list=res, last_view=0)
+            return ListConversationView(message="Voir l'historique", conv_list=res,
+                                        last_view=0)
         elif choix == "Rechercher une conversation":
             from view.userviews.search_conversation_view import SearchConversationView
             return SearchConversationView("Rechercher une conversation")

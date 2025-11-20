@@ -3,10 +3,9 @@ from InquirerPy import inquirer
 from view.session import Session
 from service.chat_service import ChatService
 from dao.chat_dao import ChatDAO
-from model.chat import Chat
-from datetime import datetime
 from service.message_service import MessageService
 from dao.message_dao import MessageDAO
+
 
 class ListConversationView(AbstractView):
     def __init__(self, message: str = "", conv_list=None, last_view = 0):
@@ -22,7 +21,7 @@ class ListConversationView(AbstractView):
 
         print("\n" + "-" * 50 + "\nHistorique de conversation\n" + "-" * 50 + "\n")
 
-        # Formatage de la liste des conversations avec un compteur i et des underscores ajustés
+        # Formatage de la liste des conversations avec un compteur i et des underscores
 
         if len(self.conv_list) != 0:
             total_width = 80

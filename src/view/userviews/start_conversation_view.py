@@ -2,6 +2,7 @@ from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from view.session import Session
 
+
 class StartConversationView(AbstractView):
     def __init__(self, message: str = "Démarrer une conversation"):
         super().__init__(message)

@@ -1,15 +1,15 @@
-# view/userviews/discussion_view.py
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from view.session import Session
 
+
 class FirstMessageView(AbstractView):
     def __init__(
-        self, message: str = "", 
-        max_tokens=512, 
-        top_p=1.0, 
-        temperature=0.7, 
-        system_message ="Tu es un assistant utile."):
+            self, message: str = "",
+            max_tokens=512,
+            top_p=1.0,
+            temperature=0.7,
+            system_message="Tu es un assistant utile."):
 
         super().__init__(message)
         self.conversation = []  # liste de tuples (role, message)
@@ -19,10 +19,10 @@ class FirstMessageView(AbstractView):
         self.system = system_message
 
     def afficher_conversation(self):
-        print("\n" + "-"*50)
+        print("\n" + "-" * 50)
         print("Discussion".center(50))
-        
-        print("-"*50 + "\n")
+
+        print("-" * 50 + "\n")
 
         for role, msg in self.conversation:
             if role == "assistant":
@@ -30,7 +30,7 @@ class FirstMessageView(AbstractView):
             else:
                 print("Vous 👤:")
             print(msg)
-            print("-"*50)
+            print("-" * 50)
 
     def choisir_menu(self):
         user = Session().user
@@ -67,11 +67,13 @@ class FirstMessageView(AbstractView):
                 temperature=self.temperature,
                 system_message=self.system
             )
-            message_list_of_new_chat = message_service.get_messages_by_chat(new_chat.id_chat)
-            
+            message_list_of_new_chat = message_service.get_messages_by_chat(
+                new_chat.id_chat)
+
             message_list_of_new_chat = message_list_of_new_chat[1:]
-            return DiscussionView(chat=new_chat, liste_message=message_list_of_new_chat, first_time=1)
-            
+            return DiscussionView(chat=new_chat, liste_message=message_list_of_new_chat)
+
         elif choix == "Retour":
             from view.userviews.start_conversation_view import StartConversationView
-            return StartConversationView(f"Retour au menu demarrer une conversation, {username}.")
+            return StartConversationView(
+                f"Retour au menu démarrer une conversation, {username}.")

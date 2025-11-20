@@ -12,8 +12,8 @@ def hash_password(password: str, salt: bytes = None) -> str:
     if not salt:
         salt = bcrypt.gensalt()  # génère un sel aléatoire
 
-    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed.decode('utf-8')  # convertir en str pour stocker
+    hashed_pass = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_pass.decode('utf-8')  # convertir en str pour stocker
 
 
 def check_password(entered_password: str, stored_hash: str) -> bool:
@@ -43,19 +43,3 @@ def password_is_secure(password: str) -> bool:
     if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
         return False
     return True
-
-
-if __name__ == "__main__":
-    pwd = "mot_de_passe_Br#@1"
-    if password_is_secure(pwd):
-        hashed = hash_password(pwd)
-        print("Mot de passe sécurisé et hashé :", hashed)
-    else:
-        print("Mot de passe trop faible")
-
-    # checker si le mot de passe est dejà la, je vais l'utiliser
-    # lors de la connexion
-    # pour éviter de polluer avec ce genre de code -> faire des logs ?
-
-    if check_password(pwd, hashed):
-        print("Connexion réussie !")

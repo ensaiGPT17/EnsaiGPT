@@ -3,8 +3,7 @@ from InquirerPy import inquirer
 from view.session import Session
 from service.chat_service import ChatService
 from dao.chat_dao import ChatDAO
-from datetime import datetime
-from model.chat import Chat
+
 
 class SearchConversationView(AbstractView):
     def __init__(self, message: str = ""):

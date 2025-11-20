@@ -18,14 +18,14 @@ class HomeView(AbstractView):
 
         choix = inquirer.select(
             message="Que voulez-vous faire?",
-            choices=["Se connecter", "Creer un compte", "Quitter"],
+            choices=["Se connecter", "Créer un compte", "Quitter"],
         ).execute()
 
         match choix:
             case "Se connecter":
                 from view.home.sign_in_view import SignInView
                 return SignInView("Connexion à l'application.")
-            case "Creer un compte":
+            case "Créer un compte":
                 from view.home.sign_up_view import SignUpView
                 return SignUpView("Création de compte.")
             case "Quitter":

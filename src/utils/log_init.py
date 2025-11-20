@@ -9,7 +9,8 @@ def initialiser_logs(nom: str):
     config_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "logging_config.yml"))
 
     if not os.path.exists(config_file):
-        raise FileNotFoundError(f"Le fichier de configuration {config_file} est introuvable.")
+        raise FileNotFoundError(f"Le fichier de configuration {config_file} est "
+                                f"introuvable.")
 
     with open(config_file, encoding="utf-8") as stream:
         config = yaml.load(stream, Loader=yaml.FullLoader)

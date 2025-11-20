@@ -1,9 +1,9 @@
-# view/userviews/principal_menu_view.py
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
 from view.session import Session
 from service.chat_service import ChatService
 from dao.chat_dao import ChatDAO
+
 
 class MainMenuView(AbstractView):
     def __init__(self, message: str = ""):
@@ -31,7 +31,8 @@ class MainMenuView(AbstractView):
             from view.userviews.start_conversation_view import StartConversationView
             return StartConversationView("Démarrer une conversation")
         elif choix == "Historique de conversation":
-            from view.userviews.historic_conversation_view import HistoricConversationView
+            from view.userviews.historic_conversation_view import \
+                HistoricConversationView
             return HistoricConversationView("Historique de conversation")
         elif choix == "Se déconnecter":
             # Confirmation avant la déconnexion
@@ -75,7 +76,8 @@ class MainMenuView(AbstractView):
                     from view.home.home_view import HomeView
                     return HomeView(message)
                 elif status == 401 or status == 404:
-                    return MainMenuView("Mot de passe erroné!\n Retour au Menu Princiapl")
+                    return MainMenuView("Mot de passe erroné!\n Retour au Menu "
+                                        "Principal")
             else:
                 return MainMenuView("Retour au Menu Principal")
 

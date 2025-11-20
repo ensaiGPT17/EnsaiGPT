@@ -49,7 +49,8 @@ def log(func):
         args_list = list(args[1:]) + list(kwargs.values())
         param_names = func.__code__.co_varnames[1 : func.__code__.co_argcount]
         for i, name in enumerate(param_names):
-            if i < len(args_list) and name.lower() in ["password", "passwd", "pwd", "pass", "mot_de_passe", "mdp"]:
+            if i < len(args_list) and name.lower() in ["password", "passwd", "pwd",
+                                                       "pass", "mot_de_passe", "mdp"]:
                 args_list[i] = "*****"
         args_list = tuple(args_list)
 

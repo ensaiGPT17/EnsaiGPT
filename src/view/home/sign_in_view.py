@@ -27,7 +27,8 @@ class SignInView(AbstractView):
             # ouvir la session
             Session().connexion(user=connected_user)
 
-            message = f"{res.content}\nVous êtes connecté sous le pseudo {connected_user.username}"
+            message = f"{res.content}\nVous êtes connecté sous le pseudo" \
+                      f" {connected_user.username}"
 
             from view.userviews.main_menu_view import MainMenuView
             return MainMenuView(message)

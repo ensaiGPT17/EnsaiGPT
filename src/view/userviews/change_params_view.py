@@ -1,13 +1,14 @@
 from view.abstract_view import AbstractView
 from InquirerPy import inquirer
-from view.session import Session
+
 
 class ChangeConvParamsView(AbstractView):
     """
     Vue permettant de changer les paramètres d'une conversation LLM :
     max_tokens, top_p, temperature.
     
-    Cette vue permet à l'utilisateur de personnaliser les paramètres de la conversation avec un modèle de langage.
+    Cette vue permet à l'utilisateur de personnaliser les paramètres de la
+    conversation avec un modèle de langage.
     """
     def __init__(self, message: str = "", max_tokens: int = 512,
                  top_p: float = 1.0, temperature: float = 0.7):
@@ -29,8 +30,9 @@ class ChangeConvParamsView(AbstractView):
 
     def choisir_menu(self):
         """
-        Affiche un menu interactif permettant à l'utilisateur de changer les paramètres de la conversation
-        :max_tokens, top_p et temperature. Les nouveaux paramètres sont ensuite affichés et confirmés.
+        Affiche un menu interactif permettant à l'utilisateur de changer les
+        paramètres de la conversation : max_tokens, top_p et temperature. Les
+        nouveaux paramètres sont ensuite affichés et confirmés.
         """
         # Affichage d'un message d'introduction pour l'utilisateur
         print("\n" + "-"*50 + "\nModifier les paramètres de la conversation\n" + "-"*50 + "\n")
@@ -43,9 +45,11 @@ class ChangeConvParamsView(AbstractView):
         print("\n>>> Nombre maximum de tokens générés :")
         print("Cela détermine la longueur maximale de la réponse générée.")
         self.max_tokens = inquirer.number(
-            message=f"[Actuel : {self.max_tokens}] - Entrez un nouveau nombre de tokens (min 1) :",
+            message=f"[Actuel : {self.max_tokens}] - Entrez un nouveau nombre de "
+                    f"tokens (min 1, max 2048) :",
             default=self.max_tokens,
-            min_allowed=1
+            min_allowed=1,
+            max_allowed=2048
         ).execute()
 
         # Modification du paramètre top_p

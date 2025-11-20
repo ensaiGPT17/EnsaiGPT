@@ -1,28 +1,27 @@
+import os
+from datetime import datetime
 from model.chat import Chat
 from model.message import Message
 from model.user import User
 from dao.chat_dao import ChatDAO
 from service.response_service import ResponseService
-from datetime import datetime
 from typing import Optional, List
 from api.chat_client import EnsaiGPTClient
 from service.message_service import MessageService
 from dao.message_dao import MessageDAO
 from utils.log_decorator import log
 import Levenshtein
-import os
-from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
-from model.user import User
 
 
 class ChatService:
     CHAT_GET_ERROR = (500, "Erreur interne lors de la recupération de la conversation ")
     CHAT_GET_SUCCESS = (200, "Récupération de conversation réussie")
     CHATS_GET_BY_ID_SUCCES = (200, "Récupération réussie")
-    CHATS_GET_BY_ID_ERROR = (500, "Erreur interne lors de la recupération des conversations")
+    CHATS_GET_BY_ID_ERROR = (500, "Erreur interne lors de la recupération des "
+                                  "conversations")
     CHAT_CREATE_SUCCESS = (200, "creation de la conversation reussie")
     CHAT_CREATE_ERROR = (500, "echec de la creation de la conversation")
     CHAT_DELETE_ERROR = (500, "echec suppression conversation")
@@ -116,7 +115,8 @@ class ChatService:
                     max_tokens=512, top_p=1.0, temperature=0.7,
                     system_message="Tu es un assistant utile.") -> Chat:
         """
-        Crée une nouvelle conversation et génère automatiquement la première réponse de l'assistant.
+        Crée une nouvelle conversation et génère automatiquement la première réponse
+        de l'assistant.
 
         Étapes :
         - Création du chat
@@ -155,17 +155,17 @@ class ChatService:
 
         # Message systeme
         self.message_service.create_message(
-            id_chat=chat_inserted.id_chat, 
-            date_sending=datetime.now(), 
-            role_author="system", 
+            id_chat=chat_inserted.id_chat,
+            date_sending=datetime.now(),
+            role_author="system",
             content=system_message
         )
 
         # message user
         self.message_service.create_message(
-            id_chat=chat_inserted.id_chat, 
-            date_sending=datetime.now(), 
-            role_author="user", 
+            id_chat=chat_inserted.id_chat,
+            date_sending=datetime.now(),
+            role_author="user",
             content=user_first_message_content
         )
 
@@ -175,9 +175,9 @@ class ChatService:
 
         # reponse assistant
         self.message_service.create_message(
-            id_chat=chat_inserted.id_chat, 
-            date_sending=datetime.now(), 
-            role_author="assistant", 
+            id_chat=chat_inserted.id_chat,
+            date_sending=datetime.now(),
+            role_author="assistant",
             content=assistant_response
         )
 
@@ -209,11 +209,13 @@ class ChatService:
         """
 
         user_message_sent = self.message_service.create_message(id_chat=chat.id_chat,
-                                            date_sending=datetime.now(),
-                                            role_author="user", content=content)[1]
+                                                                date_sending=datetime.now(),
+                                                                role_author="user",
+                                                                content=content)[1]
         history.append(user_message_sent)
         assistant_response = self.client.generate(chat, history)
-        assistant_response_saved = self.message_service.create_message(id_chat=chat.id_chat,
+        assistant_response_saved = \
+        self.message_service.create_message(id_chat=chat.id_chat,
                                             date_sending=datetime.now(),
                                             role_author="assistant",
                                             content=assistant_response)[1]
@@ -265,7 +267,7 @@ class ChatService:
             return []
 
         search_words = search.lower().split()
-        similarity_threshold = 0.6  # seuil (vérifier s'il n'est pas trop haut)
+        similarity_threshold = 0.1
 
         scored_results = []
 
@@ -277,9 +279,12 @@ class ChatService:
                 best_ratio = max(Levenshtein.ratio(sw, tw) for tw in title_words)
                 total_score += best_ratio
 
-            avg_score = total_score/len(search)
+            if len(search) != 0:
+                avg_score = total_score / len(search)
+            else:
+                avg_score = 0
 
-            if avg_score >= similarity_threshold or True:
+            if avg_score >= similarity_threshold:
                 scored_results.append((avg_score, chat))
 
         # Trier par similarité décroissante
@@ -335,7 +340,6 @@ class ChatService:
             return ResponseService(*self.CHATS_CLEARED_ERROR)
         return ResponseService(*self.CHATS_CLEARED_SUCCES)
 
-    
     @log
     def counts_user_message(self, id_user: int):
         """
@@ -360,7 +364,7 @@ class ChatService:
             message_dao = MessageDAO()
             nombre_total_de_message = -1
 
-            chats_ids = [c.id_chat for c in chats]        
+            chats_ids = [c.id_chat for c in chats]
             for id in chats_ids:
                 messages = message_dao.get_messages_by_chat(id_chat=id)
                 nombre_total_de_message += len(messages)
@@ -400,8 +404,9 @@ class ChatService:
 
         return lines
 
-    @log 
-    def export_chat_to_PDF(self, user: User, id_chat: int, messages: List[Message], file_path: str = "exports/"):
+    @log
+    def export_chat_to_PDF(self, user: User, id_chat: int, messages: List[Message],
+                           file_path: str = "exports/"):
         """
         Exporte une conversation en PDF.
 
@@ -434,7 +439,8 @@ class ChatService:
         if not os.path.exists(file_path):
             os.makedirs(file_path)
 
-        safe_title = "".join(c for c in chat.title if c.isalnum() or c in (" ", "_")).rstrip()
+        safe_title = "".join(
+            c for c in chat.title if c.isalnum() or c in (" ", "_")).rstrip()
         filename = f"conversation_{chat.id_chat}_{safe_title}.pdf"
         file_path = os.path.join(file_path, filename)
 
@@ -442,7 +448,6 @@ class ChatService:
         pdf = canvas.Canvas(file_path, pagesize=A4)
         width, height = A4
 
-        
         y = height - 50
 
         # ---------- HEADER ----------
@@ -474,7 +479,8 @@ class ChatService:
         pdf.drawString(40, y,
                        f"Début         : {chat.date_start.strftime('%Y-%m-%d %H:%M')}")
         y -= 15
-        pdf.drawString(40, y, f"Derniere maj    : {chat.last_date.strftime('%Y-%m-%d %H:%M')}")
+        pdf.drawString(40, y,
+                       f"Derniere maj    : {chat.last_date.strftime('%Y-%m-%d %H:%M')}")
         y -= 15
         pdf.drawString(40, y, f"Tokens         : {chat.max_tokens}")
         y -= 15
@@ -523,7 +529,8 @@ class ChatService:
         pdf.save()
         return file_path
 
-    def export_chat_to_TXT(self, user: User, id_chat: int, messages: list[Message], file_path: str = "exports/") -> str:
+    def export_chat_to_TXT(self, user: User, id_chat: int, messages: list[Message],
+                           file_path: str = "exports/") -> str:
         """
         Exporte une conversation au format texte (.txt).
 
@@ -649,7 +656,7 @@ class ChatService:
         )
 
         return stats
-    
+
     def update_parameters_chat(self, id_chat: int, context: str, max_tokens: int,
                                top_p: float, temperature: float) -> ResponseService:
         """

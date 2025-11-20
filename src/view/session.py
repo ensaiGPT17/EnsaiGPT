@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from utils.singleton import Singleton
 from model.user import User
 
