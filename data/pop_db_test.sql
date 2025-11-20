@@ -3,7 +3,7 @@
 --------------------------------------------------------------
 
 -- On insère d’abord quelques utilisateurs
-INSERT INTO ensaiGPT.users (username, hashed_password)
+INSERT INTO ensaiGPTTEST.users (username, hashed_password)
 VALUES
     ('bruno', '1234'),
     ('sarah_dev', 'hashed_pwd_456'),
@@ -13,7 +13,7 @@ VALUES
 -- Conversations
 --------------------------------------------------------------
 
-INSERT INTO ensaiGPT.chats (id_user, title, date_start, last_date, max_tokens, top_p, temperature)
+INSERT INTO ensaiGPTTEST.chats (id_user, title, date_start, last_date, max_tokens, top_p, temperature)
 VALUES
     (1, 'Data Analysis Project', '2025-09-28', '2025-09-30', 4096, 0.9, 0.7),
     (1, 'Operations Research Help', '2025-10-01', '2025-10-02', 4096, 1.0, 0.8),
@@ -24,7 +24,7 @@ VALUES
 -- Messages
 --------------------------------------------------------------
 
-INSERT INTO ensaiGPT.messages (id_chat, date_sending, role_author, content)
+INSERT INTO ensaiGPTTEST.messages (id_chat, date_sending, role_author, content)
 VALUES
     -- Conversation 1 (Bruno)
     (1, '2025-09-28', 'user', 'Hi, can you help me analyze sales data using Python?'),

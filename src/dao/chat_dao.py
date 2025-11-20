@@ -5,14 +5,14 @@ from utils.singleton import Singleton
 from datetime import datetime
 
 class ChatDAO(metaclass=Singleton):
-    def __init__(self):
-        pass
+    def __init__(self, schema: str = "ensaiGPT"):
+        self.schema = schema
 
     def get_chat(self, id_chat: int) -> Optional[Chat]:
         """Récupère une conversation par son id."""
-        query = """
+        query = f"""
             SELECT id_chat, id_user, title, date_start, last_date, max_tokens, temperature, top_p
-            FROM ensaiGPT.chats
+            FROM {self.schema}.chats
             WHERE id_chat = %s
         """
         with DBConnection().connection as connection:
@@ -36,8 +36,8 @@ class ChatDAO(metaclass=Singleton):
 
     def insert(self, chat: Chat) -> Optional[Chat]:
         """Insère une nouvelle conversation et renvoie l'objet avec son id."""
-        query = """
-            INSERT INTO ensaiGPT.chats (id_user, title, date_start, last_date, max_tokens, 
+        query = f"""
+            INSERT INTO {self.schema}.chats (id_user, title, date_start, last_date, max_tokens, 
             temperature, top_p)
             VALUES (%s, %s, NOW(), NOW(), %s, %s, %s)
             RETURNING id_chat, id_user, title, date_start, last_date, max_tokens, 
@@ -65,7 +65,7 @@ class ChatDAO(metaclass=Singleton):
 
     def delete(self, id_chat: int) -> bool:
         """Supprime une conversation."""
-        query = "DELETE FROM ensaiGPT.chats WHERE id_chat = %s"
+        query = f"DELETE FROM {self.schema}.chats WHERE id_chat = %s"
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
                 cursor.execute(query, (id_chat,))
@@ -74,8 +74,8 @@ class ChatDAO(metaclass=Singleton):
 
     def update(self, id_chat: int, chat_updated: Chat) -> Optional[Chat]:
         """Met à jour le titre d’une conversation."""
-        query = """
-            UPDATE ensaiGPT.chats
+        query = f"""
+            UPDATE {self.schema}.chats
             SET title = %s, last_date = NOW()
             WHERE id_chat = %s
         """
@@ -90,10 +90,10 @@ class ChatDAO(metaclass=Singleton):
 
     def get_all(self) -> Optional[List[Chat]]:
         """Retourne toutes les conversations."""
-        query = """
+        query = f"""
             SELECT id_chat, id_user, title, date_start, last_date, max_tokens, 
             temperature, top_p
-            FROM ensaiGPT.chats
+            FROM {self.schema}.chats
             ORDER BY last_date DESC
         """
         with DBConnection().connection as connection:
@@ -120,10 +120,10 @@ class ChatDAO(metaclass=Singleton):
 
     def list_chats_id_user(self, id_user: int) -> Optional[List[Chat]]:
         """Liste toutes les conversations d’un utilisateur."""
-        query = """
+        query = f"""
             SELECT id_chat, id_user, title, date_start, last_date, max_tokens, 
             temperature, top_p
-            FROM ensaiGPT.chats
+            FROM {self.schema}.chats
             WHERE id_user = %s
             ORDER BY last_date DESC
         """
@@ -151,7 +151,7 @@ class ChatDAO(metaclass=Singleton):
 
     def count_chats(self) -> Optional[int]:
         """Compte le nombre total de conversations."""
-        query = "SELECT COUNT(*) FROM ensaiGPT.chats"
+        query = f"SELECT COUNT(*) FROM {self.schema}.chats"
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
                 cursor.execute(query)
@@ -164,10 +164,10 @@ class ChatDAO(metaclass=Singleton):
 
     def search_by_title(self, id_user:int, mot_cle:str) -> Optional[List[Chat]]:
         """Liste toutes les conversations d'un utilisateur dont le titre contient le mot-clé"""
-        query = """
+        query = f"""
             SELECT id_chat, id_user, title, date_start, last_date, max_tokens, 
             temperature, top_p
-            FROM ensaiGPT.chats
+            FROM {self.schema}.chats
             WHERE id_user = %s
             AND LOWER(title) LIKE %s
             ORDER BY last_date DESC
@@ -197,10 +197,10 @@ class ChatDAO(metaclass=Singleton):
 
     def search_by_date(self, id_user:int, date:datetime) -> Optional[List[Chat]]:
         """Liste toutes les conversations d'un utilisateur à la date date"""
-        query = """
+        query = f"""
             SELECT id_chat, id_user, title, date_start, last_date, max_tokens, 
             temperature, top_p
-            FROM ensaiGPT.chats
+            FROM {self.schema}.chats
             WHERE id_user = %s
             AND DATE(last_date) = %s
             ORDER BY last_date DESC
@@ -242,8 +242,8 @@ class ChatDAO(metaclass=Singleton):
             True  : si la suppression s'est effectuée sans erreur.
             False : en cas d'échec ou d'exception.
         """
-        query = """
-            DELETE FROM ensaiGPT.chats
+        query = f"""
+            DELETE FROM {self.schema}.chats
             WHERE id_user = %s;
         """
 

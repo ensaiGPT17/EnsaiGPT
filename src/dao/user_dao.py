@@ -5,13 +5,13 @@ from utils.singleton import Singleton
 
 
 class UserDAO (metaclass=Singleton):
-    def __init__(self):
-        pass
+    def __init__(self, schema: str = "ensaiGPT"):
+        self.schema = schema
 
     def get_user(self, id_user: int) -> Optional[User]:
-        query = """
+        query = f"""
             SELECT id_user, username, hashed_password
-            FROM ensaiGPT.users
+            FROM {self.schema}.users
             WHERE id_user = %s
         """
         with DBConnection().connection as connection:
@@ -27,9 +27,9 @@ class UserDAO (metaclass=Singleton):
 
     def get_user_by_username(self, username: str) -> Optional[User]:
         """Permet d'avoir l'utilisateur grâce à son nom d'utilisateur"""
-        query = """
+        query = f"""
             SELECT id_user, username, hashed_password
-            FROM ensaiGPT.users
+            FROM {self.schema}.users
             WHERE username = %s
         """
         with DBConnection().connection as connection:
@@ -47,8 +47,8 @@ class UserDAO (metaclass=Singleton):
         """
         Ajoute un utilisateur à la base de données et met à jour son id_user.
         """
-        query = """
-            INSERT INTO ensaiGPT.users (username, hashed_password)
+        query = f"""
+            INSERT INTO {self.schema}.users (username, hashed_password)
             VALUES (%s, %s)
             RETURNING id_user
         """
@@ -64,7 +64,7 @@ class UserDAO (metaclass=Singleton):
 
     def delete(self, id_user: int) -> bool:
         """Supprime un utilisateur de la bdd."""
-        query = "DELETE FROM ensaiGPT.users WHERE id_user = %s"
+        query = f"DELETE FROM {self.schema}.users WHERE id_user = %s"
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
                 cursor.execute(query, (id_user,))
@@ -74,8 +74,8 @@ class UserDAO (metaclass=Singleton):
 
     def update(self, id_user: int, user_updated: User) -> Optional[User]:
         """Modifie un utilisateur de la bdd."""
-        query = """
-            UPDATE ensaiGPT.users
+        query = f"""
+            UPDATE {self.schema}.users
             SET username = %s, hashed_password = %s
             WHERE id_user = %s
         """
@@ -95,9 +95,9 @@ class UserDAO (metaclass=Singleton):
     def get_all(self) -> Optional[List[User]]:
         """Renvoie la liste des utilisateurs."""
         users = []
-        query = """
+        query = f"""
             SELECT id_user, username, hashed_password
-            FROM ensaiGPT.users
+            FROM {self.schema}.users
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
@@ -116,8 +116,8 @@ class UserDAO (metaclass=Singleton):
 
     def username_exists(self, username: str) -> bool:
         """Permet de savoir si un nom d'utilisateur est déjà pris."""
-        query = """
-            SELECT 1 FROM ensaiGPT.users
+        query = f"""
+            SELECT 1 FROM {self.schema}.users
             WHERE username = %s
             LIMIT 1;
         """
@@ -129,8 +129,8 @@ class UserDAO (metaclass=Singleton):
 
     def count_users(self) -> Optional[int]:
         """Renvoie le nombre d'utilisateurs dans la base de données."""
-        query = """
-            SELECT COUNT(*) FROM ensaiGPT.users ;
+        query = f"""
+            SELECT COUNT(*) FROM {self.schema}.users ;
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:

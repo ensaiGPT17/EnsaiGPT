@@ -6,8 +6,8 @@ from utils.singleton import Singleton
 
 
 class MessageDAO(metaclass=Singleton):
-    def __init__(self):
-        pass
+    def __init__(self, schema: str = "ensaiGPT"):
+        self.schema = schema
 
     def insert(self, message: Message) -> Optional[Message]:
         """Ajouter un nouveau message à la base de données
@@ -21,8 +21,8 @@ class MessageDAO(metaclass=Singleton):
         Optional[Message]
             L'objet Message créé ou None en cas d'erreur
         """
-        query = """
-                INSERT INTO ensaiGPT.messages (id_chat, date_sending, role_author, 
+        query = f"""
+                INSERT INTO {self.schema}.messages (id_chat, date_sending, role_author, 
                 content)
                 VALUES (%s, %s, %s, %s)
                 RETURNING id_message;
@@ -54,8 +54,8 @@ class MessageDAO(metaclass=Singleton):
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
-                query = """
-                    DELETE FROM ensaiGPT.messages
+                query = f"""
+                    DELETE FROM {self.schema}.messages
                     WHERE id_message = %s
                 """
                 cursor.execute(query, (id_message,))
@@ -78,9 +78,9 @@ class MessageDAO(metaclass=Singleton):
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
-                query = """
+                query = f"""
                     SELECT id_message, id_chat, date_sending, role_author, content
-                    FROM ensaiGPT.messages
+                    FROM {self.schema}.messages
                     WHERE id_message = %s
                 """
                 cursor.execute(query, (id_message,))
@@ -113,9 +113,9 @@ class MessageDAO(metaclass=Singleton):
         """
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
-                query = """
+                query = f"""
                     SELECT id_message, id_chat, date_sending, role_author, content
-                    FROM ensaiGPT.messages
+                    FROM {self.schema}.messages
                     WHERE id_chat = %s
                     ORDER BY date_sending ASC;
                 """

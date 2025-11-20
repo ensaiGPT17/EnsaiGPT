@@ -21,7 +21,7 @@ def setup_test_environment():
 @pytest.fixture
 def user_dao():
     """Retourne une instance propre de UserDAO"""
-    return UserDAO()
+    return UserDAO(schema="ensaiGPTTEST")
 
 
 # --------------------------------------------------------
