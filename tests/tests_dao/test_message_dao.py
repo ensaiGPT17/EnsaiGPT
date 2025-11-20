@@ -31,7 +31,7 @@ def message_dao():
 def test_insert_message(message_dao):
     """Test l'insertion d'un message"""
     msg = Message(
-        id_message=None,
+        id_message=0,
         id_chat=1,
         date_sending=datetime.now(),
         role_author="user",
@@ -49,7 +49,7 @@ def test_insert_message(message_dao):
 def test_delete_message(message_dao):
     """Test la suppression d'un message"""
     msg = Message(
-        None, 1, datetime.now(), "assistant", "Message à supprimer"
+        0, 1, datetime.now(), "assistant", "Message à supprimer"
     )
     inserted = message_dao.insert(msg)
 
@@ -64,7 +64,7 @@ def test_delete_message(message_dao):
 def test_get_message_by_id(message_dao):
     """Test récupération par id"""
     msg = Message(
-        None, 1, datetime.now(), "user", "Message pour get_by_id"
+        0, 1, datetime.now(), "user", "Message pour get_by_id"
     )
     inserted = message_dao.insert(msg)
 
@@ -87,11 +87,11 @@ def test_get_messages_by_chat(message_dao):
     chat_id = 1
 
     msg1 = Message(
-        None, chat_id, datetime(2025, 1, 1, 10, 0),
+        0, chat_id, datetime(2025, 1, 1, 10, 0),
         "user", "Message 1"
     )
     msg2 = Message(
-        None, chat_id, datetime(2025, 1, 1, 10, 5),
+        0, chat_id, datetime(2025, 1, 1, 10, 5),
         "assistant", "Message 2"
     )
 

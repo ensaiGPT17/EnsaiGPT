@@ -1,5 +1,5 @@
 import pytest
-from datetime import datetime, date
+from datetime import date
 
 from dao.chat_dao import ChatDAO
 from utils.reset_database import ResetDatabase
@@ -217,8 +217,10 @@ def test_delete_all_chats(chat_dao):
     """Supprimer toutes les conversations d'un utilisateur."""
     user_id = 1
 
-    chat_dao.insert(Chat(None, user_id, "Chat 1", datetime.now(), datetime.now(), 256, 0.9, 0.5))
-    chat_dao.insert(Chat(None, user_id, "Chat 2", datetime.now(), datetime.now(), 256, 0.8, 0.6))
+    chat_dao.insert(Chat(0, user_id, "Chat 1", datetime.now(), datetime.now(), 256,
+                         0.9, 0.5))
+    chat_dao.insert(Chat(0, user_id, "Chat 2", datetime.now(), datetime.now(), 256,
+                         0.8, 0.6))
 
     before = chat_dao.list_chats_id_user(user_id)
     assert before is not None

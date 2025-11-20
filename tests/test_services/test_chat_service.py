@@ -3,19 +3,10 @@ from unittest.mock import MagicMock
 from datetime import datetime
 from model.chat import Chat
 from model.message import Message
-from service.chat_service import ChatService
-from service.response_service import ResponseService
-
-
-
-import pytest
-from unittest.mock import MagicMock
-from datetime import datetime
-from model.chat import Chat
-from model.message import Message
 from model.user import User
 from service.chat_service import ChatService
 from service.response_service import ResponseService
+
 
 # -----------------------------
 # FIXTURE CHAT SERVICE MOCK

@@ -41,7 +41,7 @@ def test_username_exists_false(user_dao):
 def test_insert_user(user_dao):
     """Insertion d’un utilisateur"""
     new_user = User(
-        id_user=None,
+        id_user=0,
         username="alice",
         hashed_password="hashedpwd123"
     )
@@ -56,7 +56,7 @@ def test_insert_user(user_dao):
 
 def test_get_user(user_dao):
     """Récupération par ID"""
-    user = user_dao.insert(User(None, "bob", "pwd"))
+    user = user_dao.insert(User(0, "bob", "pwd"))
     fetched = user_dao.get_user(user.id_user)
 
     assert fetched is not None
@@ -66,7 +66,7 @@ def test_get_user(user_dao):
 
 def test_get_user_by_username(user_dao):
     """Récupération par username"""
-    user_dao.insert(User(None, "charlie", "xyz"))
+    user_dao.insert(User(0, "charlie", "xyz"))
     user = user_dao.get_user_by_username("charlie")
 
     assert user is not None
@@ -75,7 +75,7 @@ def test_get_user_by_username(user_dao):
 
 def test_update_user(user_dao):
     """Mise à jour utilisateur"""
-    user = user_dao.insert(User(None, "denis", "pwd"))
+    user = user_dao.insert(User(0, "denis", "pwd"))
     updated_user = User(
         id_user=user.id_user,
         username="denis_new",
@@ -92,7 +92,7 @@ def test_update_user(user_dao):
 
 def test_delete_user(user_dao):
     """Suppression utilisateur"""
-    user = user_dao.insert(User(None, "edgar", "pwd"))
+    user = user_dao.insert(User(0, "edgar", "pwd"))
     deleted = user_dao.delete(user.id_user)
 
     assert deleted is True

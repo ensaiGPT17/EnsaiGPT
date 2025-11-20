@@ -1,4 +1,3 @@
-# tests/conftest.py
 import pytest
 from dao.user_dao import UserDAO
 from dao.chat_dao import ChatDAO
