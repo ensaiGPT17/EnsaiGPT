@@ -1,4 +1,4 @@
-# 💬 Projet ENSAI GPT
+# ENSAI GPT
 
 ....
 ---
@@ -66,7 +66,7 @@ To check that everything is working correctly, you can run the tests with pytest
 python -m pytest
 ```
 
-### 5. ▶️ Lancer l’application
+### 5. Run the application
 
 **Add 'src/' to the paths** (PYTHONPATH) : 
 
