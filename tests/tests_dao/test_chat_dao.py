@@ -22,7 +22,7 @@ def setup_test_environment():
 @pytest.fixture
 def chat_dao():
     """Retourne une instance propre de UserDAO"""
-    return ChatDAO()
+    return ChatDAO(schema="ensaiGPTTEST")
 
 # -----------------------------------------------------
 # GET CHAT
