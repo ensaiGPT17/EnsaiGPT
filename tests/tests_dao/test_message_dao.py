@@ -22,7 +22,7 @@ def setup_test_environment():
 @pytest.fixture
 def message_dao():
     """Retourne une instance propre de MessageDAO"""
-    return MessageDAO()
+    return MessageDAO(schema="ensaiGPTTEST")
 
 
 # --------------------------------------------------------

@@ -28,49 +28,43 @@ class ResetDatabase(metaclass=Singleton):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         init_db_path = os.path.join(BASE_DIR, "data", "init_db.sql")
         pop_db_path = os.path.join(BASE_DIR, "data", "pop_db.sql")
+        init_db_test_path = os.path.join(BASE_DIR, "data", "init_db_test.sql")
         pop_db_test_path = os.path.join(BASE_DIR, "data", "pop_db_test.sql")
 
 
         # Choix du schéma et du fichier de peuplement
         if test_dao:
-            schema = "ensaiGPTTEST"
+            init_path = init_db_test_path
             pop_path = pop_db_test_path
         else:
-            schema = "ensaiGPT"
+            init_path = init_db_path
             pop_path = pop_db_path
 
         # Vérification de l'existence des fichiers
-        if not os.path.exists(init_db_path) or not os.path.exists(pop_path):
+        if not os.path.exists(init_path) or not os.path.exists(pop_path):
             raise FileNotFoundError(
                 f"Le fichier SQL d'initialisation ou de peuplement est introuvable.\n"
-                f"init_db: {init_db_path}\npop_db: {pop_path}"
+                f"init_db: {init_path}\npop_db: {pop_path}"
             )
 
         # Lecture des fichiers SQL
-        with open(init_db_path, encoding="utf-8") as f:
+        with open(init_path, encoding="utf-8") as f:
             init_db_sql = f.read()
 
         with open(pop_path, encoding="utf-8") as f:
             pop_db_sql = f.read()
 
-        # Recréation du schéma
-        recreate_schema_sql = f"""
-            DROP SCHEMA IF EXISTS {schema} CASCADE;
-            CREATE SCHEMA {schema};
-        """
-
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(recreate_schema_sql)
                     cursor.execute(init_db_sql)
                     cursor.execute(pop_db_sql)
 
         except Exception as e:
-            logging.error(f"Erreur lors de la réinitialisation du schéma {schema}: {e}")
+            logging.error(f"Erreur lors de la réinitialisation du schéma : {e}")
             raise
 
-        logging.info(f"Schéma {schema} réinitialisé avec succès.")
+        logging.info(f"Schéma réinitialisé avec succès.")
 
         if test_dao:
             print("Ré-initialisation de la base de données de TEST - Terminée")
@@ -84,4 +78,4 @@ if __name__ == "__main__":
     # Réinitialisation du schéma réel
     ResetDatabase().lancer(test_dao=False)
     # Réinitialisation du schéma test
-    ResetDatabase().lancer(test_dao=True)
+    #ResetDatabase().lancer(test_dao=True)
