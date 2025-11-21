@@ -62,7 +62,8 @@ class MessageService:
         return messages
 
     @log
-    def create_message(self, id_chat: int, date_sending: datetime, role_author: str, content: str):
+    def create_message(self, id_chat: int, date_sending: datetime, role_author: str,
+                       content: str):
         """
         Crée un nouveau message pour un chat donné.
 
