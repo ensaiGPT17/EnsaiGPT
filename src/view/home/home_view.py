@@ -4,6 +4,14 @@ from InquirerPy import inquirer
 
 class HomeView(AbstractView):
     def __init__(self, message):
+        """
+        Constructeur de la classe HomeView.
+
+        Parameters
+        ----------
+        message : str
+            Message affiché en en-tête lors de l'affichage de la vue.
+        """
         super().__init__(message)
 
     def choisir_menu(self):

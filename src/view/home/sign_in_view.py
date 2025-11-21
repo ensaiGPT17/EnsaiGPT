@@ -8,9 +8,30 @@ from view.home.home_view import HomeView
 
 class SignInView(AbstractView):
     def __init__(self, message: str = ""):
+        """
+        Constructeur de la classe SignInView.
+
+        Parameters
+        ----------
+        message : str, optional
+            Message à afficher en en-tête de la vue.
+        """
         super().__init__(message)
 
     def choisir_menu(self):
+        """
+        Gère le processus de connexion de l'utilisateur.
+
+        Demande le nom d'utilisateur et le mot de passe,
+        authentifie l'utilisateur via UserService,
+        puis ouvre une Session en cas de succès.
+
+        Returns
+        -------
+        AbstractView
+            - MainMenuView si la connexion réussit,
+            - HomeView si l'authentification échoue.
+        """
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         password = inquirer.secret(message="Mot de passe :").execute()
 

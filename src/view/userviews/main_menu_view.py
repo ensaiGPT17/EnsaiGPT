@@ -7,9 +7,28 @@ from dao.chat_dao import ChatDAO
 
 class MainMenuView(AbstractView):
     def __init__(self, message: str = ""):
+        """
+        Constructeur de la classe MainMenuView.
+
+        Parameters
+        ----------
+        message : str
+            Message optionnel à afficher lors de l'initialisation.
+        """
         super().__init__(message)
 
     def choisir_menu(self):
+        """
+        Affiche le menu principal interactif.
+
+        L'utilisateur peut choisir une action dans le menu et la vue suivante
+        est retournée selon son choix.
+
+        Returns
+        -------
+        AbstractView
+            Vue suivante selon le choix de l'utilisateur.
+        """
         user = Session().user
         username = user.username
         chat_dao = ChatDAO()

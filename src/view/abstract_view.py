@@ -2,13 +2,25 @@ from abc import ABC, abstractmethod
 
 
 class AbstractView(ABC):
-    """Modèle de Vue"""
+    """
+    Modèle abstrait représentant une vue de l'application.
+    """
 
     def __init__(self, message=""):
+        """
+        Constructeur de la classe AbstractView.
+
+        Parameters
+        ----------
+        message : str
+            Message d'en-tête affiché lors du rendu de la vue.
+        """
         self.message = message
 
     def nettoyer_console(self):
-        """Insérer des lignes vides pour simuler un nettoyage"""
+        """
+        Insère des lignes vides dans la console afin de simuler un nettoyage visuel.
+        """
         for _ in range(30):
             print("")
 

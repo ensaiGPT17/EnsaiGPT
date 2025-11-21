@@ -7,9 +7,35 @@ from service.user_service import UserService
 
 class ChangeCredentialsView(AbstractView):
     def __init__(self, message: str = "Modifier mes identifiants"):
+        """
+        Constructeur de la classe ChangeCredentialsView.
+
+        Parameters
+        ----------
+        message : str, optional
+            Message affiché en en-tête lors de l'affichage de la vue.
+            Par défaut : "Modifier mes identifiants".
+        """
         super().__init__(message)
 
     def choisir_menu(self):
+        """
+        Gère le processus de modification des identifiants d'un utilisateur.
+
+        Affiche un menu proposant de changer le nom d'utilisateur,
+        de changer le mot de passe, ou de revenir au menu principal.
+        Chaque action requiert la saisie du mot de passe actuel pour
+        authentification avant modification.
+
+        Returns
+        -------
+        AbstractView
+            - MainMenuView si l'opération réussit ou si l'utilisateur choisit
+              de revenir au menu principal,
+            - HomeView ou MainMenuView avec un message d'erreur si une
+              authentification échoue ou si un problème survient
+              lors du changement de nom d'utilisateur ou de mot de passe.
+        """
         user = Session().user
         username = user.username
         user_dao = UserDAO()

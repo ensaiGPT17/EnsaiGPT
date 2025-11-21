@@ -13,12 +13,18 @@ class ChangeConvParamsView(AbstractView):
     def __init__(self, message: str = "", max_tokens: int = 512,
                  top_p: float = 1.0, temperature: float = 0.7):
         """
-        Constructeur pour initialiser les paramètres de la conversation.
+        Constructeur de la classe ChangeConvParamsView.
 
-        :param message: Message optionnel à afficher lors de l'initialisation.
-        :param max_tokens: Nombre maximum de tokens générés, par défaut 4096.
-        :param top_p: Paramètre de nucleus sampling, par défaut 1.0.
-        :param temperature: Température de génération de texte, par défaut 0.7.
+        Parameters
+        ----------
+        message : str, optional
+            Message affiché lors de l'affichage de la vue (par défaut : "").
+        max_tokens : int, optional
+            Nombre maximum de tokens générés pour la réponse (par défaut : 512).
+        top_p : float, optional
+            Paramètre de nucleus sampling pour contrôler la diversité des réponses (par défaut : 1.0).
+        temperature : float, optional
+            Paramètre de créativité/variabilité des réponses (par défaut : 0.7).
         """
         super().__init__(message)
 
@@ -30,9 +36,19 @@ class ChangeConvParamsView(AbstractView):
 
     def choisir_menu(self):
         """
-        Affiche un menu interactif permettant à l'utilisateur de changer les
-        paramètres de la conversation : max_tokens, top_p et temperature. Les
-        nouveaux paramètres sont ensuite affichés et confirmés.
+        Affiche un menu interactif pour modifier les paramètres de la conversation.
+
+        L'utilisateur peut :
+        - Modifier max_tokens (longueur maximale de la réponse)
+        - Modifier top_p (diversité des réponses)
+        - Modifier temperature (créativité/variabilité)
+        - Modifier la phrase d'instruction système (system)
+
+        Returns
+        -------
+        AbstractView
+            Vue suivante (FirstMessageView) avec les nouveaux paramètres
+            appliqués pour la conversation.
         """
         # Affichage d'un message d'introduction pour l'utilisateur
         print("\n" + "-"*50 + "\nModifier les paramètres de la conversation\n" + "-"*50 + "\n")

@@ -9,11 +9,35 @@ from dao.message_dao import MessageDAO
 
 class ListConversationView(AbstractView):
     def __init__(self, message: str = "", conv_list=None, last_view = 0):
+        """
+        Constructeur de la classe ListConversationView.
+
+        Parameters
+        ----------
+        message : str
+            Message optionnel à afficher lors de l'initialisation.
+        conv_list : list, optional
+            Liste des conversations à afficher (par défaut None).
+        last_view : int, optional
+            Indique la vue précédente pour le retour (par défaut 0).
+        """
         super().__init__(message)
         self.conv_list = conv_list if conv_list is not None else []
         self.last_view = last_view
 
     def choisir_menu(self):
+        """
+        Affiche le menu interactif pour gérer les conversations listées.
+
+        L'utilisateur peut choisir :
+        - Une conversation pour la reprendre, la supprimer ou l'exporter
+        - Retourner au menu précédent
+
+        Returns
+        -------
+        AbstractView
+            Vue suivante selon le choix de l'utilisateur.
+        """
         user = Session().user
         username = user.username
         chat_dao = ChatDAO()

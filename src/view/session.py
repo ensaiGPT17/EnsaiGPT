@@ -11,22 +11,49 @@ class Session(metaclass=Singleton):
     """
 
     def __init__(self):
-        """Création de la session"""
+        """
+        Constructeur de la classe Session.
+
+        Initialise une session vide, sans utilisateur connecté.
+        
+        Parameters
+        ----------
+        Aucun
+        """
         self.user = None
         self.connexion_date = None
 
     def connexion(self, user: User):
-        """Enregistement des données en session"""
+        """
+        Enregistre les informations d'un utilisateur lors de sa connexion.
+
+        Parameters
+        ----------
+        user : User
+            L'utilisateur qui vient de se connecter.
+        """
         self.user = user
         self.connexion_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     def deconnexion(self):
-        """Suppression des données de la session"""
+        """
+        Supprime les informations de l'utilisateur lors de sa déconnexion.
+
+        Réinitialise complètement la session.
+        """
         self.id_user = None
         self.connexion_date = None
 
     def afficher(self) -> str:
-        """Afficher les informations de connexion"""
+        """
+        Renvoie une représentation textuelle des informations de session.
+
+        Returns
+        -------
+        str
+            Informations détaillées concernant l'utilisateur connecté
+            et la date de connexion.
+        """
         res = "Actuellement en session :\n"
         res += "-------------------------\n"
         for att in list(self.__dict__.items()):

@@ -16,11 +16,31 @@ class EnsaiGPTClient:
                          "'ENSAI_GPT_HOST'.")
 
     def __init__(self, base_url: str = host):
+        """
+        Constructeur de la classe EnsaiGPTClient.
+
+        Parameters
+        ----------
+        base_url : str
+            URL de base de l’API EnsaiGPT utilisée pour envoyer les requêtes.
+        """
         self.base_url = base_url.rstrip("/")  # Enlève le slash final si présent
 
     def generate(self, chat: Chat, history: List[Message]) -> str:
         """
         Envoie un message utilisateur au modèle et retourne la réponse générée.
+
+        Parameters
+        ----------
+        chat : Chat
+            Objet contenant les paramètres de génération (temperature, top_p, max_tokens).
+        history : List[Message]
+            Liste des messages précédents de la conversation, utilisés comme contexte.
+
+        Returns
+        -------
+        str
+            Contenu textuel de la réponse générée par le modèle.
         """
 
         # Vérification des types avant de créer le payload

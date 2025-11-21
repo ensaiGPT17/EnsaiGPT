@@ -7,9 +7,26 @@ from dao.chat_dao import ChatDAO
 
 class StatisticView(AbstractView):
     def __init__(self, message: str = ""):
+        """
+        Constructeur de la classe StatisticView.
+
+        Parameters
+        ----------
+        message : str
+            Message optionnel à afficher lors de l'initialisation.
+        """
         super().__init__(message)
 
     def choisir_menu(self):
+        """
+        Affiche les statistiques de l'utilisateur et propose de revenir
+        au menu principal.
+
+        Returns
+        -------
+        AbstractView
+            Vue suivante selon le choix de l'utilisateur (ici le menu principal).
+        """
         user = Session().user
         chat_dao = ChatDAO()
         chat_service = ChatService(chat_dao)

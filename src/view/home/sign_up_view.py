@@ -16,9 +16,31 @@ def is_valid_password(pw: str) -> bool:
 
 class SignUpView(AbstractView):
     def __init__(self, message: str = ""):
+        """
+        Constructeur de la classe SignUpView.
+
+        Parameters
+        ----------
+        message : str, optional
+            Message affiché en en-tête lors de l'affichage de la vue.
+        """
         super().__init__(message)
 
     def choisir_menu(self):
+        """
+        Gère le processus d'inscription d'un nouvel utilisateur.
+
+        Demande le nom d'utilisateur ainsi que deux saisies du mot de passe,
+        vérifie leur correspondance puis tente de créer le nouvel utilisateur
+        via le UserService.
+
+        Returns
+        -------
+        AbstractView
+            - HomeView avec un message de succès si l’inscription réussit,
+            - HomeView avec un message d’erreur si un problème survient
+              (pseudo déjà pris, mot de passe insuffisant ou erreur interne).
+        """
         username = inquirer.text(message="Nom d'utilisateur :").execute()
         print("Le mot de passe doit contenir au moins 8 caractères, ainsi qu'une "
               "majuscule, une miniscule, un chiffre et un caractère spécial.")

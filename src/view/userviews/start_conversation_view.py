@@ -5,9 +5,26 @@ from view.session import Session
 
 class StartConversationView(AbstractView):
     def __init__(self, message: str = "Démarrer une conversation"):
+        """
+        Constructeur de la classe StartConversationView.
+
+        Parameters
+        ----------
+        message : str
+            Message optionnel à afficher lors de l'initialisation.
+        """
         super().__init__(message)
 
     def choisir_menu(self):
+        """
+        Affiche le menu de démarrage de conversation et exécute l'action
+        choisie par l'utilisateur.
+
+        Returns
+        -------
+        AbstractView
+            Vue suivante selon le choix de l'utilisateur.
+        """
         user = Session().user
         username = user.username
         choix = inquirer.select(

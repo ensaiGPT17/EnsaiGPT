@@ -7,9 +7,30 @@ from dao.chat_dao import ChatDAO
 
 class SearchConversationView(AbstractView):
     def __init__(self, message: str = ""):
+        """
+        Constructeur de la classe SearchConversationView.
+
+        Parameters
+        ----------
+        message : str
+            Message optionnel à afficher lors de l'initialisation.
+        """
         super().__init__(message)
 
     def choisir_menu(self):
+        """
+        Affiche le menu de recherche et exécute l'action choisie par l'utilisateur.
+
+        L'utilisateur peut :
+        - Rechercher par mot-clé
+        - Rechercher par date
+        - Retourner au menu précédent
+
+        Returns
+        -------
+        AbstractView
+            Vue suivante selon le choix et le résultat de la recherche.
+        """
         user = Session().user
         username = user.username
         chat_dao = ChatDAO()

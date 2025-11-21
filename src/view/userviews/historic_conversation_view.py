@@ -7,9 +7,28 @@ from dao.chat_dao import ChatDAO
 
 class HistoricConversationView(AbstractView):
     def __init__(self, message: str = ""):
+        """
+        Constructeur de la classe HistoricConversationView.
+
+        Parameters
+        ----------
+        message : str
+            Message optionnel à afficher lors de l'initialisation.
+        """
         super().__init__(message)
 
     def choisir_menu(self):
+        """
+        Affiche le menu interactif pour gérer les conversations historiques.
+
+        L'utilisateur peut choisir de voir l'historique, rechercher une conversation,
+        supprimer toutes ses conversations ou revenir au menu principal.
+
+        Returns
+        -------
+        AbstractView
+            Vue suivante selon le choix de l'utilisateur.
+        """
         user = Session().user
         username = user.username
         chat_dao = ChatDAO()

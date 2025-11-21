@@ -10,6 +10,22 @@ class FirstMessageView(AbstractView):
             top_p=1.0,
             temperature=0.7,
             system_message="Tu es un assistant utile."):
+        """
+        Constructeur de la classe FirstMessageView.
+
+        Parameters
+        ----------
+        message : str
+            Message optionnel à afficher lors de l'initialisation.
+        max_tokens : int
+            Nombre maximal de tokens générés pour la conversation.
+        top_p : float
+            Paramètre de nucleus sampling pour contrôler la diversité des réponses.
+        temperature : float
+            Paramètre de créativité des réponses.
+        system_message : str
+            Message système guidant le comportement de l'assistant.
+        """
 
         super().__init__(message)
         self.conversation = []  # liste de tuples (role, message)
@@ -19,6 +35,12 @@ class FirstMessageView(AbstractView):
         self.system = system_message
 
     def afficher_conversation(self):
+        """
+        Affiche la conversation actuelle dans la console.
+
+        Les messages de l'utilisateur et de l'assistant sont affichés
+        avec des labels et séparés par des lignes.
+        """
         print("\n" + "-" * 50)
         print("Discussion".center(50))
 
@@ -33,6 +55,18 @@ class FirstMessageView(AbstractView):
             print("-" * 50)
 
     def choisir_menu(self):
+        """
+        Affiche le menu interactif pour envoyer le premier message.
+
+        L'utilisateur peut :
+        - Envoyer un premier message et créer une nouvelle conversation
+        - Retourner au menu précédent
+
+        Returns
+        -------
+        AbstractView
+            Vue suivante selon le choix de l'utilisateur.
+        """
         user = Session().user
         username = user.username
 
