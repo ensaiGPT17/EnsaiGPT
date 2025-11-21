@@ -7,7 +7,8 @@ INSERT INTO ensaiGPT.users (username, hashed_password)
 VALUES
     ('bruno', '1234'),
     ('sarah_dev', 'hashed_pwd_456'),
-    ('marc_ai', 'hashed_pwd_789');
+    ('marc_ai', 'hashed_pwd_789'),
+    ('', '1234');
 
 --------------------------------------------------------------
 -- Conversations

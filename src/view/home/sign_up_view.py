@@ -20,6 +20,8 @@ class SignUpView(AbstractView):
 
     def choisir_menu(self):
         username = inquirer.text(message="Nom d'utilisateur :").execute()
+        print("Le mot de passe doit contenir au moins 8 caractères, ainsi qu'une "
+              "majuscule, une miniscule, un chiffre et un caractère spécial.")
         password = inquirer.secret(message="Mot de passe :").execute()
         password_confirm = inquirer.secret(message="Confirmez le mot de passe "
                                                    ":").execute()
