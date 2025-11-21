@@ -21,7 +21,7 @@ class StartConversationView(AbstractView):
 
         if choix == "Continuer":
             from view.userviews.first_message_view import FirstMessageView
-            return FirstMessageView("votre premier message")
+            return FirstMessageView("Votre premier message")
         elif choix == "Configurer les paramètres":
             from view.userviews.change_params_view import ChangeConvParamsView
             return ChangeConvParamsView("Configurer les paramètres")
