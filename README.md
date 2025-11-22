@@ -38,7 +38,7 @@
 
 - **Deletion**
   - Delete individual conversations or all conversations at once to manage storage and privacy.
-  - You can also delete your account.
+  - Users can also delete their account.
 
 ---
 
