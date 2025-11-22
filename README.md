@@ -2,7 +2,7 @@
 
 ## Presentation of the Application
 
-**ensaiGPT** is a conversational AI application designed to provide an interactive experience for all users. Built around a language model accessible via an API, the application allows users to engage in conversations with an AI assistant, manage their conversation history, and customize the assistant's behavior.
+**ensaiGPT** is a conversational AI application designed to provide an interactive experience for all users. Built around a language model accessible via an API and a PostegreSQL service, the application allows users to engage in conversations with an AI assistant, manage their conversation history, and customize the assistant's behavior.
 
 ### Key Features
 
